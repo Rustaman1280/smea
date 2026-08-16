@@ -9,6 +9,7 @@ import { CanteenModule } from './modules/canteen/canteen.module';
 import { ExtracurricularModule } from './modules/extracurricular/extracurricular.module';
 import { SubjectsModule } from './modules/subjects/subjects.module';
 import { ProjectTrackerModule } from './modules/project-tracker/project-tracker.module';
+import { InventoryModule } from './modules/inventory/inventory.module';
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import { ProjectTrackerModule } from './modules/project-tracker/project-tracker.
     ExtracurricularModule,
     SubjectsModule,
     ProjectTrackerModule,
+    InventoryModule,
   ],
 })
 export class AppModule {}
