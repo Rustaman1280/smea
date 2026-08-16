@@ -690,7 +690,7 @@ function KantinDashboard({ user, demoInfo }: { user: any; demoInfo: any }) {
         <CardContent>
           <Link href="/kantin">
             <Button variant="gradient" className="from-amber-600 to-amber-700">
-              Menuju Showcase Kantin Lengkap →
+              Menuju E-Kantin Lengkap →
             </Button>
           </Link>
         </CardContent>
@@ -980,7 +980,7 @@ function AdminExecutiveDashboard({ user, demoInfo }: { user: any; demoInfo: any 
           />
           <ModuleCard
             href="/kantin"
-            title="4. Showcase Kantin"
+            title="4. E-Kantin"
             desc="Katalog menu digital per stand kantin & update status stok habis real-time."
             badge="Modul 4"
             icon={UtensilsCrossed}

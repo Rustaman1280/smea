@@ -82,7 +82,7 @@ const NAV_ITEMS: NavItem[] = [
     ],
   },
   {
-    title: "4. Showcase Kantin",
+    title: "4. E-Kantin",
     href: "/kantin",
     icon: UtensilsCrossed,
     accentColor: "text-amber-600 bg-amber-100",

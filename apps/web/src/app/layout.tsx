@@ -1,6 +1,14 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { QueryProvider } from "@/components/providers/query-provider";
+import { Inter } from 'next/font/google';
+
+const inter = Inter({
+  subsets: ['latin'],
+  weight: ['300', '400', '500'],
+  variable: '--font-sans',
+  display: 'swap',
+});
 
 export const metadata: Metadata = {
   title: "Superapp SMKN 1 Garut - Platform Terpadu Sekolah Kejuruan",
@@ -14,7 +22,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="id" className="h-full">
+    <html lang="id" className={`h-full ${inter.variable}`}>
       <body className="min-h-screen bg-slate-50 font-sans text-slate-900 antialiased selection:bg-sky-100 selection:text-sky-900">
         <QueryProvider>{children}</QueryProvider>
       </body>

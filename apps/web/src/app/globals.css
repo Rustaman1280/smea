@@ -53,13 +53,25 @@
   * {
     @apply border-border;
   }
+
   body {
     @apply bg-slate-50/70 text-slate-900 antialiased;
     font-feature-settings: "rlig" 1, "calt" 1;
-    background-image: 
+    background-image:
       radial-gradient(at 100% 0%, rgba(2, 132, 199, 0.04) 0px, transparent 50%),
       radial-gradient(at 0% 100%, rgba(15, 23, 42, 0.03) 0px, transparent 50%);
     background-attachment: fixed;
+
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6,
+    b,
+    strong {
+      font-weight: 500;
+    }
   }
 }
 

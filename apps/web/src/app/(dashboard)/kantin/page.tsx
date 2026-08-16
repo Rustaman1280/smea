@@ -183,7 +183,7 @@ export default function KantinPage() {
         <div>
           <div className="flex items-center gap-2">
             <h1 className="text-2xl font-bold tracking-tight text-slate-900">
-              4. Showcase Kantin Sekolah
+              4. E-Kantin
             </h1>
             <Badge variant="warning">Modul 4</Badge>
           </div>
@@ -255,11 +255,10 @@ export default function KantinPage() {
             <button
               key={cat.key}
               onClick={() => setSelectedCategory(cat.key)}
-              className={`px-3.5 py-1.5 rounded-xl text-xs font-bold whitespace-nowrap transition-all ${
-                selectedCategory === cat.key
-                  ? "bg-amber-600 text-white shadow-sm shadow-amber-300"
-                  : "bg-white border border-slate-200 text-slate-600 hover:bg-slate-50"
-              }`}
+              className={`px-3.5 py-1.5 rounded-xl text-xs font-bold whitespace-nowrap transition-all ${selectedCategory === cat.key
+                ? "bg-amber-600 text-white shadow-sm shadow-amber-300"
+                : "bg-white border border-slate-200 text-slate-600 hover:bg-slate-50"
+                }`}
             >
               {cat.label}
             </button>
@@ -284,9 +283,8 @@ export default function KantinPage() {
         {filteredMenus.map((menu) => (
           <Card
             key={menu.id}
-            className={`relative overflow-hidden transition-all duration-200 flex flex-col justify-between ${
-              !menu.isAvailable ? "opacity-75 bg-slate-50 border-slate-200" : "hover:border-amber-400 hover:shadow-md"
-            }`}
+            className={`relative overflow-hidden transition-all duration-200 flex flex-col justify-between ${!menu.isAvailable ? "opacity-75 bg-slate-50 border-slate-200" : "hover:border-amber-400 hover:shadow-md"
+              }`}
           >
             <div>
               <div className="flex items-start justify-between gap-2 pb-2">

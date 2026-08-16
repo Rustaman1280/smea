@@ -94,7 +94,7 @@ const config: Config = {
         sm: "calc(var(--radius) - 4px)",
       },
       fontFamily: {
-        sans: ["var(--font-sans)", "system-ui", "-apple-system", "sans-serif"],
+        sans: ["var(--font-sans)", "system-ui", "sans-serif"],
         mono: ["var(--font-mono)", "ui-monospace", "monospace"],
       },
       boxShadow: {
@@ -102,6 +102,17 @@ const config: Config = {
         razor: "0 4px 20px -2px rgba(15, 23, 42, 0.08)",
         glow: "0 0 25px -5px rgba(2, 132, 199, 0.25)",
       },
+      fontWeight: {
+        thin: '100',
+        extralight: '200',
+        light: '300',
+        normal: '400',
+        medium: '500',
+        semibold: '500',  // Bawaan Tailwind: 600 -> diubah ke 500
+        bold: '500',      // Bawaan Tailwind: 700 -> diubah ke 500
+        extrabold: '500', // Bawaan Tailwind: 800 -> diubah ke 500
+        black: '500',
+      }
     },
   },
   plugins: [],
