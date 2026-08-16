@@ -6,6 +6,7 @@ import { AttendanceModule } from './modules/attendance/attendance.module';
 import { TeacherAttendanceModule } from './modules/teacher-attendance/teacher-attendance.module';
 import { DisciplineModule } from './modules/discipline/discipline.module';
 import { CanteenModule } from './modules/canteen/canteen.module';
+import { ExtracurricularModule } from './modules/extracurricular/extracurricular.module';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { CanteenModule } from './modules/canteen/canteen.module';
     TeacherAttendanceModule,
     DisciplineModule,
     CanteenModule,
+    ExtracurricularModule,
   ],
 })
 export class AppModule {}
