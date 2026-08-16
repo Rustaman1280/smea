@@ -11,6 +11,7 @@ import { SubjectsModule } from './modules/subjects/subjects.module';
 import { ProjectTrackerModule } from './modules/project-tracker/project-tracker.module';
 import { InventoryModule } from './modules/inventory/inventory.module';
 import { VoucherModule } from './modules/voucher/voucher.module';
+import { NotificationsModule } from './modules/notifications/notifications.module';
 
 @Module({
   imports: [
@@ -26,6 +27,7 @@ import { VoucherModule } from './modules/voucher/voucher.module';
     ProjectTrackerModule,
     InventoryModule,
     VoucherModule,
+    NotificationsModule,
   ],
 })
 export class AppModule {}

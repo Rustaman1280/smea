@@ -323,6 +323,12 @@ export enum TaskColumn {
   DONE = 'DONE',
 }
 
+export enum TaskPriority {
+  LOW = 'LOW',
+  MEDIUM = 'MEDIUM',
+  HIGH = 'HIGH',
+}
+
 export interface VocationalProject {
   id: string;
   title: string;
