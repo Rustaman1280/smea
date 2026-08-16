@@ -4,11 +4,20 @@ import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useAuthStore, DEMO_ACCOUNTS } from "@/stores/auth-store";
 import { UserRole } from "@superapp/types";
-import { GraduationCap, ArrowRight, Sparkles, Lock, Mail } from "lucide-react";
+import {
+  ArrowRight,
+  Sparkles,
+  Lock,
+  Mail,
+  CheckCircle2,
+  Shield,
+  Compass,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { AukletLogo } from "@/components/ui/auklet-logo";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -24,7 +33,6 @@ export default function LoginPage() {
     setError("");
 
     try {
-      // Find matching demo account or login
       const matched = Object.values(DEMO_ACCOUNTS).find(
         (a) => a.email === identifier || a.profile.username === identifier
       );
@@ -33,7 +41,6 @@ export default function LoginPage() {
         login(matched.profile, "demo-jwt-token-manual");
         router.push("/");
       } else {
-        // Fallback default
         switchRole(UserRole.SISWA);
         router.push("/");
       }
@@ -50,77 +57,93 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-50 via-sky-50/50 to-indigo-50/30 p-4 sm:p-6">
-      <div className="w-full max-w-4xl space-y-6">
+    <div className="min-h-screen flex items-center justify-center p-4 sm:p-6 bg-gradient-to-br from-slate-950 via-slate-900 to-sky-950 text-slate-100">
+      <div className="w-full max-w-5xl space-y-6">
         {/* Header Branding */}
-        <div className="text-center space-y-2">
-          <div className="inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-tr from-sky-600 to-indigo-600 text-white shadow-lg shadow-sky-200">
-            <GraduationCap className="h-8 w-8" />
+        <div className="text-center space-y-3">
+          <div className="inline-flex items-center justify-center p-2 rounded-2xl bg-slate-900/80 border border-sky-500/30 backdrop-blur-md shadow-lg shadow-sky-950/40">
+            <AukletLogo size="lg" variant="colored" />
           </div>
-          <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-slate-900">
-            Superapp SMKN 1 Garut
+          <h1 className="text-2xl sm:text-4xl font-black tracking-tight text-white">
+            auklet SMK Super App
           </h1>
-          <p className="text-sm text-slate-500 max-w-md mx-auto">
-            Satu pintu akses platform akademik, absensi digital, tugas, konseling, sarpras, kantin, dan ISP sekolah.
+          <p className="text-xs sm:text-sm text-slate-300 max-w-lg mx-auto leading-relaxed">
+            Platform terpadu akademik, presensi QR, tugas LMS, bimbingan konseling, inventaris sarpras, kantin sehat, dan ISP hotspot sekolah.
           </p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
           {/* Manual Login Card */}
-          <Card className="md:col-span-5 border-slate-200/80 shadow-lg shadow-slate-100">
+          <Card className="md:col-span-5 border-slate-800 bg-slate-900/90 text-slate-100 backdrop-blur-md shadow-2xl shadow-black/40">
             <CardHeader>
-              <CardTitle>Masuk Akun SSO</CardTitle>
-              <CardDescription>
-                Masukkan email/username dan password akun sekolah
+              <CardTitle className="text-lg text-white">Masuk Akun SSO</CardTitle>
+              <CardDescription className="text-xs text-slate-400">
+                Gunakan email/NISN/NIP dan kata sandi akun sekolah
               </CardDescription>
             </CardHeader>
             <CardContent>
               <form onSubmit={handleManualLogin} className="space-y-4">
                 {error && (
-                  <div className="rounded-xl bg-rose-50 border border-rose-200 p-3 text-xs text-rose-600">
+                  <div className="rounded-xl bg-rose-500/20 border border-rose-500/40 p-3 text-xs text-rose-300">
                     {error}
                   </div>
                 )}
-                <Input
-                  label="Email / Username"
-                  type="text"
-                  value={identifier}
-                  onChange={(e) => setIdentifier(e.target.value)}
-                  placeholder="nisn / nip / email"
-                  required
-                />
-                <Input
-                  label="Kata Sandi"
-                  type="password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  placeholder="••••••••"
-                  required
-                />
+                <div className="space-y-1.5">
+                  <label className="block text-xs font-semibold text-slate-300">
+                    Email / NISN / NIP
+                  </label>
+                  <input
+                    type="text"
+                    value={identifier}
+                    onChange={(e) => setIdentifier(e.target.value)}
+                    placeholder="siswa@smkn1garut.sch.id"
+                    className="w-full h-11 rounded-xl border border-slate-700 bg-slate-950 px-3.5 text-sm text-white focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-sky-500"
+                    required
+                  />
+                </div>
+
+                <div className="space-y-1.5">
+                  <label className="block text-xs font-semibold text-slate-300">
+                    Kata Sandi
+                  </label>
+                  <input
+                    type="password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    placeholder="••••••••"
+                    className="w-full h-11 rounded-xl border border-slate-700 bg-slate-950 px-3.5 text-sm text-white focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-sky-500"
+                    required
+                  />
+                </div>
+
                 <Button
                   type="submit"
                   variant="gradient"
-                  className="w-full"
+                  className="w-full from-sky-500 to-sky-600 hover:from-sky-600 hover:to-sky-700 font-bold"
                   isLoading={isLoading}
                 >
-                  Masuk ke Superapp
+                  Masuk ke Portal Sekolah
                   <ArrowRight className="h-4 w-4" />
                 </Button>
+
+                <p className="text-[11px] text-center text-slate-400">
+                  Password demo default: <code className="text-sky-300 font-mono">password123</code>
+                </p>
               </form>
             </CardContent>
           </Card>
 
-          {/* Quick 1-Click Role Login Picker for Evaluation */}
-          <Card className="md:col-span-7 border-sky-100 bg-sky-50/40">
+          {/* Quick 1-Click Role Login Picker */}
+          <Card className="md:col-span-7 border-sky-900/60 bg-gradient-to-br from-slate-900/90 to-sky-950/40 text-slate-100 backdrop-blur-md shadow-2xl">
             <CardHeader className="pb-3">
               <div className="flex items-center gap-2">
-                <Sparkles className="h-4 w-4 text-sky-600" />
-                <CardTitle className="text-base text-sky-950">
+                <Sparkles className="h-4 w-4 text-amber-400" />
+                <CardTitle className="text-base text-white">
                   Quick Login Demo (Pilih Peran Pengguna)
                 </CardTitle>
               </div>
-              <CardDescription>
-                Klik salah satu kartu di bawah untuk login instan dengan hak akses & antarmuka peran terkait.
+              <CardDescription className="text-xs text-slate-400">
+                Klik salah satu kartu di bawah untuk login instan dan melihat antarmuka khusus masing-masing peran.
               </CardDescription>
             </CardHeader>
             <CardContent className="pt-0">
@@ -129,17 +152,17 @@ export default function LoginPage() {
                   <button
                     key={roleKey}
                     onClick={() => handleQuickRoleLogin(roleKey as UserRole)}
-                    className="flex flex-col items-start p-3 rounded-xl border border-white bg-white/90 shadow-sm hover:border-sky-300 hover:shadow-md hover:bg-sky-50/50 transition-all text-left group"
+                    className="flex flex-col items-start p-3 rounded-2xl border border-slate-800 bg-slate-950/80 hover:border-sky-500/80 hover:bg-slate-900 hover:shadow-lg transition-all text-left group"
                   >
                     <div className="flex items-center justify-between w-full">
-                      <span className="text-xs font-bold text-slate-900 group-hover:text-sky-600 transition-colors">
+                      <span className="text-xs font-bold text-white group-hover:text-sky-400 transition-colors">
                         {account.name}
                       </span>
-                      <Badge variant="default" className="text-[10px] py-0 px-1.5">
+                      <Badge variant="default" className="text-[9px] py-0 px-1.5 bg-sky-500 text-slate-950 font-black">
                         {account.title}
                       </Badge>
                     </div>
-                    <span className="text-[11px] text-slate-500 mt-1 line-clamp-1">
+                    <span className="text-[11px] text-slate-400 mt-1 line-clamp-1">
                       {account.subtitle}
                     </span>
                   </button>

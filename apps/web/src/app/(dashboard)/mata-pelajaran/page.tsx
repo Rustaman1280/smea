@@ -22,6 +22,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Modal } from "@/components/ui/modal";
+import { AccessRestricted } from "@/components/ui/access-restricted";
 
 interface ScheduleItem {
   id: string;
@@ -38,7 +39,6 @@ interface MaterialItem {
   title: string;
   description: string;
   uploadedAt: string;
-  fileUrl?: string;
   linkUrl?: string;
 }
 
@@ -55,10 +55,10 @@ interface AssignmentItem {
 
 const SCHEDULES: ScheduleItem[] = [
   { id: "sc-1", day: "Senin", time: "07:15 - 09:30", subjectName: "Pemrograman Web & Mobile", room: "Lab RPL 2", teacherName: "Budi Santoso, S.Kom" },
-  { id: "sc-2", day: "Senin", time: "09:45 - 12:00", subjectName: "Bahasa Indonesia", room: "Ruang XII RPL 1", teacherName: "Dra. Hj. Nurhayati" },
+  { id: "sc-2", day: "Senin", time: "09:45 - 12:00", subjectName: "Bahasa Indonesia Kejuruan", room: "Ruang XII RPL 1", teacherName: "Dra. Hj. Nurhayati" },
   { id: "sc-3", day: "Selasa", time: "07:15 - 11:30", subjectName: "Pemodelan Perangkat Lunak & UML", room: "Lab RPL 1", teacherName: "Budi Santoso, S.Kom" },
   { id: "sc-4", day: "Rabu", time: "07:15 - 10:15", subjectName: "Basis Data & Cloud Backend", room: "Lab Server", teacherName: "Dedi Supriadi, M.T" },
-  { id: "sc-5", day: "Kamis", time: "07:15 - 09:30", subjectName: "Matematika Kejuruan", room: "Ruang XII RPL 1", teacherName: "Rahmat Hidayat, M.Pd" },
+  { id: "sc-5", day: "Kamis", time: "07:15 - 09:30", subjectName: "Matematika Terapan Kejuruan", room: "Ruang XII RPL 1", teacherName: "Rahmat Hidayat, M.Pd" },
   { id: "sc-6", day: "Jumat", time: "07:15 - 09:15", subjectName: "Pendidikan Agama Islam", room: "Masjid Al-Ikhlas", teacherName: "Ust. M. Ridwan, S.Ag" },
 ];
 
@@ -102,11 +102,31 @@ const INITIAL_ASSIGNMENTS: AssignmentItem[] = [
   },
 ];
 
+const ALLOWED_ROLES = [
+  UserRole.SISWA,
+  UserRole.GURU,
+  UserRole.WALI_KELAS,
+  UserRole.GURU_BK,
+  UserRole.STAFF_TU,
+  UserRole.ADMIN,
+  UserRole.KEPSEK,
+];
+
 export default function MataPelajaranPage() {
   const { user } = useAuthStore();
-  const isTeacher = user?.role === UserRole.GURU || user?.role === UserRole.ADMIN;
 
-  const [activeTab, setActiveTab] = useState<"JADWAL" | "MATERI" | "TUGAS">("TUGAS");
+  if (!user || !ALLOWED_ROLES.includes(user.role)) {
+    return (
+      <AccessRestricted
+        moduleTitle="6. Mata Pelajaran & LMS"
+        allowedRoles={ALLOWED_ROLES}
+      />
+    );
+  }
+
+  const isTeacher = user.role === UserRole.GURU || user.role === UserRole.ADMIN;
+
+  const [activeTab, setActiveTab] = useState<"TUGAS" | "MATERI" | "JADWAL">("TUGAS");
   const [assignments, setAssignments] = useState<AssignmentItem[]>(INITIAL_ASSIGNMENTS);
 
   // Submit Modal States
@@ -163,12 +183,12 @@ export default function MataPelajaranPage() {
         <div>
           <div className="flex items-center gap-2">
             <h1 className="text-2xl font-bold tracking-tight text-slate-900">
-              6. Mata Pelajaran & Mini LMS
+              6. Mata Pelajaran & LMS
             </h1>
             <Badge variant="default">Modul 6</Badge>
           </div>
           <p className="text-sm text-slate-500 mt-1">
-            Jadwal kelas, repositori modul materi pembelajaran digital, dan pengumpulan tugas terstruktur.
+            Jadwal mingguan, repositori modul pembelajaran digital SMK, dan pengumpulan tugas terstruktur.
           </p>
         </div>
 
@@ -176,6 +196,7 @@ export default function MataPelajaranPage() {
           <Button
             variant="default"
             size="sm"
+            className="bg-cyan-600 hover:bg-cyan-700 font-bold shadow-cyan-200"
             onClick={() => setIsCreateModalOpen(true)}
           >
             <Plus className="h-4 w-4" />
@@ -250,7 +271,7 @@ export default function MataPelajaranPage() {
                   </div>
 
                   {ass.score !== undefined && (
-                    <div className="mt-3 p-3 rounded-xl bg-emerald-50/70 border border-emerald-200 space-y-1">
+                    <div className="mt-3 p-3 rounded-2xl bg-emerald-50/80 border border-emerald-200 space-y-1">
                       <div className="flex items-center justify-between">
                         <span className="text-xs font-bold text-emerald-900">
                           Nilai Guru: {ass.score} / 100
@@ -279,6 +300,7 @@ export default function MataPelajaranPage() {
                         setSelectedAssignment(ass);
                         setIsSubmitModalOpen(true);
                       }}
+                      className="font-bold text-xs"
                     >
                       {ass.submitted ? "Perbarui Pengumpulan" : "Kumpul Tugas"}
                     </Button>
@@ -369,7 +391,7 @@ export default function MataPelajaranPage() {
         isOpen={isSubmitModalOpen}
         onClose={() => setIsSubmitModalOpen(false)}
         title={`Kumpul Tugas: ${selectedAssignment?.title || ""}`}
-        description="Lampirkan link hasil pengerjaan tugas (GitHub / Google Drive / Demo Live)."
+        description="Lampirkan link hasil pengerjaan tugas praktikum (GitHub / Google Drive)."
         maxWidth="md"
       >
         <form onSubmit={handleSubmitTask} className="space-y-4 mt-2">
@@ -386,8 +408,8 @@ export default function MataPelajaranPage() {
               Catatan untuk Guru (Opsional)
             </label>
             <textarea
-              className="w-full rounded-xl border border-slate-200 bg-white p-3 text-sm text-slate-900 min-h-[80px]"
-              placeholder="Jelaskan fitur yang sudah selesai atau kendala yang dihadapi..."
+              className="w-full rounded-2xl border border-slate-200 bg-white p-3.5 text-sm text-slate-900 min-h-[80px]"
+              placeholder="Jelaskan fitur yang sudah selesai atau kendala praktikum..."
               value={submissionNote}
               onChange={(e) => setSubmissionNote(e.target.value)}
             />
@@ -397,7 +419,7 @@ export default function MataPelajaranPage() {
             <Button type="button" variant="outline" onClick={() => setIsSubmitModalOpen(false)}>
               Batal
             </Button>
-            <Button type="submit" variant="gradient">
+            <Button type="submit" variant="gradient" className="font-bold">
               <Send className="h-4 w-4" />
               Kirimkan Tugas
             </Button>
@@ -443,7 +465,7 @@ export default function MataPelajaranPage() {
               Deskripsi Soal & Ketentuan
             </label>
             <textarea
-              className="w-full rounded-xl border border-slate-200 bg-white p-3 text-sm text-slate-900 min-h-[90px]"
+              className="w-full rounded-2xl border border-slate-200 bg-white p-3.5 text-sm text-slate-900 min-h-[85px]"
               placeholder="Tuliskan spesifikasi pengerjaan tugas..."
               value={assDesc}
               onChange={(e) => setAssDesc(e.target.value)}

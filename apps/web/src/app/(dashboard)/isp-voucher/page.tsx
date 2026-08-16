@@ -16,6 +16,7 @@ import {
   CreditCard,
   QrCode,
   Sparkles,
+  Printer,
 } from "lucide-react";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -44,15 +45,15 @@ interface PurchasedVoucher {
 
 const PACKAGES: VoucherPackage[] = [
   { id: "pkg-1", name: "Paket Kilat 3 Jam", duration: "3 Jam", speed: "10 Mbps", quota: "2 GB Kuota", price: 1500 },
-  { id: "pkg-2", name: "Paket Harian Unlimited", duration: "24 Jam", speed: "15 Mbps", quota: "Unlimited", price: 3000, badge: "Paling Populer" },
-  { id: "pkg-3", name: "Paket Mingguan Pelajar", duration: "7 Hari", speed: "20 Mbps", quota: "Unlimited", price: 15000 },
-  { id: "pkg-4", name: "Paket Bulanan Prioritas", duration: "30 Hari", speed: "30 Mbps", quota: "Unlimited High Priority", price: 45000, badge: "Best Value" },
+  { id: "pkg-2", name: "Paket Harian Unlimited", duration: "24 Jam", speed: "15 Mbps", quota: "Unlimited Bandwidth", price: 3000, badge: "Paling Populer" },
+  { id: "pkg-3", name: "Paket Mingguan Pelajar", duration: "7 Hari", speed: "20 Mbps", quota: "Unlimited Super Speed", price: 15000 },
+  { id: "pkg-4", name: "Paket Bulanan Prioritas", duration: "30 Hari", speed: "30 Mbps", quota: "Unlimited Prioritas", price: 45000, badge: "Best Value" },
 ];
 
 const INITIAL_PURCHASED: PurchasedVoucher[] = [
   {
     code: "SMK-1H-A9X2",
-    profileName: "1 Hari - Unlimited 15 Mbps",
+    profileName: "Paket Harian Unlimited (15 Mbps)",
     purchasedAt: "16 Agustus 2026, 07:10 WIB",
     expiresAt: "17 Agustus 2026, 07:10 WIB",
     price: 3000,
@@ -115,7 +116,7 @@ export default function IspVoucherPage() {
             <Badge variant="success">Modul 9</Badge>
           </div>
           <p className="text-sm text-slate-500 mt-1">
-            Penjualan voucher internet hotspot sekolah & integrasi manajemen bandwidth Mikrotik/RADIUS.
+            Penjualan voucher Wi-Fi hotspot sekolah, integrasi MikroTik RouterOS TeFa TKJ, dan analitik pendapatan kas.
           </p>
         </div>
 
@@ -123,7 +124,7 @@ export default function IspVoucherPage() {
           <Button
             variant="default"
             size="sm"
-            className="bg-teal-600 hover:bg-teal-700 shadow-teal-100"
+            className="bg-teal-600 hover:bg-teal-700 font-bold shadow-teal-200"
             onClick={() => setIsBatchModalOpen(true)}
           >
             <Plus className="h-4 w-4" />
@@ -135,53 +136,54 @@ export default function IspVoucherPage() {
       {/* OPERATOR ANALYTICS BANNER */}
       {isOperator && (
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-          <Card className="p-4 bg-teal-50/50 border-teal-200">
-            <p className="text-xs font-semibold text-teal-800">Total Voucher Dibuat</p>
-            <h4 className="text-2xl font-bold text-teal-950 mt-1">250 Unit</h4>
+          <Card className="p-4 bg-teal-50/60 border-teal-200">
+            <p className="text-xs font-bold text-teal-900 uppercase">Total Voucher Dibuat</p>
+            <h4 className="text-2xl font-black text-slate-900 mt-1">250 Unit</h4>
           </Card>
-          <Card className="p-4 bg-emerald-50/50 border-emerald-200">
-            <p className="text-xs font-semibold text-emerald-800">Voucher Terjual</p>
-            <h4 className="text-2xl font-bold text-emerald-950 mt-1">182 Unit</h4>
+          <Card className="p-4 bg-emerald-50/60 border-emerald-200">
+            <p className="text-xs font-bold text-emerald-900 uppercase">Voucher Terjual</p>
+            <h4 className="text-2xl font-black text-emerald-700 mt-1">182 Unit</h4>
           </Card>
-          <Card className="p-4 bg-sky-50/50 border-sky-200">
-            <p className="text-xs font-semibold text-sky-800">Stok Tersedia</p>
-            <h4 className="text-2xl font-bold text-sky-950 mt-1">68 Unit</h4>
+          <Card className="p-4 bg-sky-50/60 border-sky-200">
+            <p className="text-xs font-bold text-sky-900 uppercase">Stok Tersedia</p>
+            <h4 className="text-2xl font-black text-sky-700 mt-1">68 Unit</h4>
           </Card>
-          <Card className="p-4 bg-purple-50/50 border-purple-200">
-            <p className="text-xs font-semibold text-purple-800">Total Pendapatan</p>
-            <h4 className="text-xl font-bold text-purple-950 mt-1">{formatCurrency(685000)}</h4>
+          <Card className="p-4 border-purple-200 bg-purple-50/60">
+            <p className="text-xs font-bold text-purple-900 uppercase">Total Omset Kas</p>
+            <h4 className="text-xl font-black text-purple-800 mt-1">{formatCurrency(685000)}</h4>
           </Card>
         </div>
       )}
 
       {/* Active Voucher Code Card (For User) */}
       {purchasedList.length > 0 && (
-        <div className="rounded-3xl border border-teal-200 bg-gradient-to-r from-teal-600 to-emerald-700 p-6 text-white shadow-lg shadow-teal-900/10">
+        <div className="rounded-3xl border border-teal-300 bg-gradient-to-r from-teal-700 via-emerald-800 to-slate-900 p-6 text-white shadow-xl shadow-teal-950/10">
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-            <div className="space-y-1">
-              <div className="inline-flex items-center gap-2 rounded-full bg-white/20 px-3 py-0.5 text-xs font-semibold backdrop-blur-md">
-                <Zap className="h-3.5 w-3.5 text-yellow-300" />
+            <div className="space-y-1.5">
+              <div className="inline-flex items-center gap-2 rounded-full bg-white/20 px-3 py-0.5 text-xs font-bold backdrop-blur-md">
+                <Zap className="h-3.5 w-3.5 text-amber-300" />
                 <span>Voucher Hotspot Anda Aktif</span>
               </div>
-              <h2 className="text-xl font-extrabold tracking-tight">
+              <h2 className="text-xl font-black tracking-tight">
                 {purchasedList[0].profileName}
               </h2>
               <p className="text-xs text-teal-100">
-                Berlaku hingga: <strong>{purchasedList[0].expiresAt}</strong> · SSID: <strong>SMKN1GARUT-STUDENT-5G</strong>
+                Berlaku hingga: <strong>{purchasedList[0].expiresAt}</strong> · SSID Hotspot:{" "}
+                <strong className="text-white font-bold">SMKN1GARUT-STUDENT-5G</strong>
               </p>
             </div>
 
             {/* Code Copy Box */}
-            <div className="flex items-center gap-3 bg-slate-900/40 backdrop-blur-md p-3 rounded-2xl border border-white/20">
+            <div className="flex items-center gap-3 bg-slate-950/60 backdrop-blur-md p-3.5 rounded-2xl border border-white/20 shadow-inner">
               <div>
-                <p className="text-[10px] uppercase font-bold text-teal-200">Kode Voucher Login:</p>
-                <p className="text-xl font-mono font-extrabold tracking-wider text-yellow-300">
+                <p className="text-[10px] uppercase font-bold text-teal-200">Kode Login Hotspot:</p>
+                <p className="text-xl font-mono font-black tracking-widest text-amber-300">
                   {purchasedList[0].code}
                 </p>
               </div>
               <button
                 onClick={() => handleCopy(purchasedList[0].code)}
-                className="p-2.5 rounded-xl bg-white text-slate-900 hover:bg-teal-50 transition-all active:scale-95 shadow-sm"
+                className="p-2.5 rounded-xl bg-white text-slate-900 hover:bg-teal-50 transition-all active:scale-95 shadow-sm font-bold"
                 title="Salin Kode"
               >
                 {copiedCode === purchasedList[0].code ? (
@@ -198,7 +200,7 @@ export default function IspVoucherPage() {
       {/* Package Plans Grid */}
       <div className="space-y-3">
         <h2 className="text-base font-bold text-slate-900">
-          Pilih Paket Internet Wi-Fi Hotspot Sekolah
+          Pilih Paket Internet Wi-Fi Hotspot Sekolah (Teaching Factory TKJ)
         </h2>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -211,18 +213,18 @@ export default function IspVoucherPage() {
             >
               <div>
                 <div className="flex items-center justify-between pb-2">
-                  <span className="text-xs font-semibold text-slate-500">{pkg.duration}</span>
-                  {pkg.badge && <Badge variant="default">{pkg.badge}</Badge>}
+                  <span className="text-xs font-bold text-slate-400 uppercase">{pkg.duration}</span>
+                  {pkg.badge && <Badge variant="default" className="font-bold">{pkg.badge}</Badge>}
                 </div>
 
-                <h3 className="text-base font-bold text-slate-900 mt-1">
+                <h3 className="text-base font-black text-slate-900 mt-1">
                   {pkg.name}
                 </h3>
-                <p className="text-xl font-extrabold text-teal-700 mt-2">
+                <p className="text-xl font-black text-teal-800 mt-2">
                   {formatCurrency(pkg.price)}
                 </p>
 
-                <div className="mt-4 space-y-2 text-xs text-slate-600 bg-slate-50 p-3 rounded-xl border border-slate-100">
+                <div className="mt-4 space-y-2 text-xs text-slate-600 bg-slate-50 p-3 rounded-2xl border border-slate-100">
                   <div className="flex items-center gap-1.5">
                     <Zap className="h-3.5 w-3.5 text-teal-600" />
                     <span>Kecepatan: <strong>{pkg.speed}</strong></span>
@@ -237,7 +239,7 @@ export default function IspVoucherPage() {
               <div className="pt-4 mt-4 border-t border-slate-100">
                 <Button
                   variant="gradient"
-                  className="w-full text-xs from-teal-600 to-emerald-600 hover:from-teal-700 hover:to-emerald-700"
+                  className="w-full text-xs font-bold from-teal-600 to-emerald-600 hover:from-teal-700 hover:to-emerald-700"
                   onClick={() => setSelectedPkg(pkg)}
                 >
                   Beli Voucher Sekarang
@@ -251,8 +253,8 @@ export default function IspVoucherPage() {
       {/* Purchase History Table */}
       <Card>
         <CardHeader>
-          <CardTitle>Riwayat Pembelian Voucher Saya</CardTitle>
-          <CardDescription>Daftar transaksi kode voucher yang pernah dibeli</CardDescription>
+          <CardTitle>Riwayat Transaksi Voucher Saya</CardTitle>
+          <CardDescription>Daftar kode voucher yang pernah diaktifkan</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="overflow-x-auto">
@@ -263,22 +265,22 @@ export default function IspVoucherPage() {
                   <th className="pb-3">Paket</th>
                   <th className="pb-3">Tanggal Beli</th>
                   <th className="pb-3">Harga</th>
-                  <th className="pb-3 text-right">Salin</th>
+                  <th className="pb-3 text-right">Aksi</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-100 text-slate-700">
                 {purchasedList.map((v, i) => (
                   <tr key={i} className="hover:bg-slate-50/80">
                     <td className="py-3 font-mono font-bold text-teal-800">{v.code}</td>
-                    <td className="py-3 font-semibold text-slate-900">{v.profileName}</td>
+                    <td className="py-3 font-bold text-slate-900">{v.profileName}</td>
                     <td className="py-3 text-slate-500">{v.purchasedAt}</td>
-                    <td className="py-3 font-bold text-slate-900">{formatCurrency(v.price)}</td>
+                    <td className="py-3 font-black text-slate-900">{formatCurrency(v.price)}</td>
                     <td className="py-3 text-right">
                       <Button
                         variant="outline"
                         size="sm"
                         onClick={() => handleCopy(v.code)}
-                        className="text-xs h-7 py-0"
+                        className="text-xs h-7 py-0 font-bold"
                       >
                         {copiedCode === v.code ? "Tersalin" : "Salin Kode"}
                       </Button>
@@ -295,18 +297,18 @@ export default function IspVoucherPage() {
       <Modal
         isOpen={!!selectedPkg}
         onClose={() => setSelectedPkg(null)}
-        title="Konfirmasi Pembelian Voucher"
-        description="Pilih metode pembayaran untuk aktivasi kode hotspot instan."
+        title="Konfirmasi Pembelian Voucher Hotspot"
+        description="Pilih metode pembayaran untuk aktivasi instan akun Wi-Fi sekolah."
         maxWidth="md"
       >
         {selectedPkg && (
           <div className="space-y-4 mt-2">
-            <div className="p-4 rounded-xl bg-slate-50 border border-slate-200 flex items-center justify-between">
+            <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200 flex items-center justify-between">
               <div>
                 <p className="font-bold text-slate-900">{selectedPkg.name}</p>
                 <p className="text-xs text-slate-500">Durasi: {selectedPkg.duration} · {selectedPkg.speed}</p>
               </div>
-              <p className="text-lg font-extrabold text-teal-700">{formatCurrency(selectedPkg.price)}</p>
+              <p className="text-lg font-black text-teal-800">{formatCurrency(selectedPkg.price)}</p>
             </div>
 
             <div className="space-y-2">
@@ -318,9 +320,9 @@ export default function IspVoucherPage() {
                 <button
                   type="button"
                   onClick={() => setPayMethod("SALDO")}
-                  className={`p-3 rounded-xl border text-left text-xs font-semibold transition-all ${
+                  className={`p-3 rounded-2xl border text-left text-xs font-bold transition-all ${
                     payMethod === "SALDO"
-                      ? "border-teal-500 bg-teal-50 text-teal-900 ring-1 ring-teal-500"
+                      ? "border-teal-500 bg-teal-50 text-teal-950 ring-1 ring-teal-500"
                       : "border-slate-200 bg-white text-slate-700 hover:bg-slate-50"
                   }`}
                 >
@@ -330,9 +332,9 @@ export default function IspVoucherPage() {
                 <button
                   type="button"
                   onClick={() => setPayMethod("QRIS")}
-                  className={`p-3 rounded-xl border text-left text-xs font-semibold transition-all ${
+                  className={`p-3 rounded-2xl border text-left text-xs font-bold transition-all ${
                     payMethod === "QRIS"
-                      ? "border-teal-500 bg-teal-50 text-teal-900 ring-1 ring-teal-500"
+                      ? "border-teal-500 bg-teal-50 text-teal-950 ring-1 ring-teal-500"
                       : "border-slate-200 bg-white text-slate-700 hover:bg-slate-50"
                   }`}
                 >
@@ -342,9 +344,9 @@ export default function IspVoucherPage() {
                 <button
                   type="button"
                   onClick={() => setPayMethod("CASH")}
-                  className={`p-3 rounded-xl border text-left text-xs font-semibold transition-all ${
+                  className={`p-3 rounded-2xl border text-left text-xs font-bold transition-all ${
                     payMethod === "CASH"
-                      ? "border-teal-500 bg-teal-50 text-teal-900 ring-1 ring-teal-500"
+                      ? "border-teal-500 bg-teal-50 text-teal-950 ring-1 ring-teal-500"
                       : "border-slate-200 bg-white text-slate-700 hover:bg-slate-50"
                   }`}
                 >
@@ -358,8 +360,8 @@ export default function IspVoucherPage() {
               <Button type="button" variant="outline" onClick={() => setSelectedPkg(null)}>
                 Batal
               </Button>
-              <Button type="button" variant="gradient" onClick={handleBuy}>
-                Bayar & Ambil Kode Voucher
+              <Button type="button" variant="gradient" className="font-bold" onClick={handleBuy}>
+                Bayar & Terbitkan Kode
               </Button>
             </div>
           </div>
@@ -370,8 +372,8 @@ export default function IspVoucherPage() {
       <Modal
         isOpen={isBatchModalOpen}
         onClose={() => setIsBatchModalOpen(false)}
-        title="Generate Batch Voucher Baru (Mikrotik)"
-        description="Buat kumpulan kode acak voucher hotspot sesuai profil bandwidth."
+        title="Generate Batch Voucher Baru (MikroTik Sync)"
+        description="Buat kumpulan kode acak voucher hotspot untuk diekspor ke RouterOS."
         maxWidth="md"
       >
         <form
@@ -405,7 +407,7 @@ export default function IspVoucherPage() {
             <select
               value={batchProfile}
               onChange={(e) => setBatchProfile(e.target.value)}
-              className="w-full h-11 rounded-xl border border-slate-200 bg-white px-3 text-sm text-slate-900"
+              className="w-full h-11 rounded-2xl border border-slate-200 bg-white px-3 text-sm text-slate-900"
             >
               <option value="1 Hari - Unlimited 15 Mbps">1 Hari - Unlimited 15 Mbps</option>
               <option value="3 Jam - Kuota 2 GB">3 Jam - Kuota 2 GB</option>
@@ -418,8 +420,8 @@ export default function IspVoucherPage() {
             <Button type="button" variant="outline" onClick={() => setIsBatchModalOpen(false)}>
               Batal
             </Button>
-            <Button type="submit" variant="gradient">
-              Generate & Ekspor ke Mikrotik
+            <Button type="submit" variant="gradient" className="font-bold">
+              Generate & Cetak Lembar Voucher
             </Button>
           </div>
         </form>

@@ -16,12 +16,14 @@ import {
   Laptop,
   Projector,
   FileCheck,
+  AlertCircle,
 } from "lucide-react";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Modal } from "@/components/ui/modal";
+import { AccessRestricted } from "@/components/ui/access-restricted";
 
 interface InventoryAsset {
   id: string;
@@ -32,6 +34,7 @@ interface InventoryAsset {
   total: number;
   available: number;
   condition: ItemCondition;
+  isLowStock?: boolean;
 }
 
 interface BorrowItem {
@@ -50,8 +53,9 @@ const INITIAL_ITEMS: InventoryAsset[] = [
   { id: "i-1", code: "LAB-RPL-001", name: "Laptop ASUS TUF Gaming A15 (RTX 4060)", category: "Alat Lab RPL", location: "Lab Komputer 1 (Lemari A)", total: 20, available: 18, condition: ItemCondition.BAIK },
   { id: "i-2", code: "PROY-EPS-002", name: "Proyektor Epson EB-X500 HDMI", category: "Media Pembelajaran", location: "Ruang Sarpras Utama", total: 10, available: 8, condition: ItemCondition.BAIK },
   { id: "i-3", code: "ROUT-MK-003", name: "Router MikroTik RB750Gr3 Gigabit", category: "Alat Lab TKJ", location: "Lab Jaringan TKJ", total: 15, available: 15, condition: ItemCondition.BAIK },
-  { id: "i-4", code: "TOOL-CRIMP-004", name: "Crimping Tool RJ45 Pro'sKit", category: "Alat Lab TKJ", location: "Lab Jaringan TKJ", total: 30, available: 24, condition: ItemCondition.BAIK },
+  { id: "i-4", code: "TOOL-CRIMP-004", name: "Crimping Tool RJ45 Pro'sKit", category: "Alat Lab TKJ", location: "Lab Jaringan TKJ", total: 30, available: 2, condition: ItemCondition.BAIK, isLowStock: true },
   { id: "i-5", code: "ARDU-KIT-005", name: "Kit Praktik IoT ESP32 & Sensor Pack", category: "Alat Lab RPL", location: "Lab Hardware IoT", total: 25, available: 20, condition: ItemCondition.BAIK },
+  { id: "i-6", code: "CAM-DSLR-006", name: "Kamera DSLR Canon EOS 200D II (DKV)", category: "Alat Praktik DKV", location: "Studio Foto DKV", total: 5, available: 1, condition: ItemCondition.DALAM_PERBAIKAN, isLowStock: true },
 ];
 
 const INITIAL_BORROWS: BorrowItem[] = [
@@ -79,9 +83,28 @@ const INITIAL_BORROWS: BorrowItem[] = [
   },
 ];
 
+const ALLOWED_ROLES = [
+  UserRole.SISWA,
+  UserRole.GURU,
+  UserRole.PETUGAS_SARPRAS,
+  UserRole.STAFF_TU,
+  UserRole.ADMIN,
+  UserRole.KEPSEK,
+];
+
 export default function InventarisPage() {
   const { user } = useAuthStore();
-  const isSarpras = user?.role === UserRole.PETUGAS_SARPRAS || user?.role === UserRole.ADMIN;
+
+  if (!user || !ALLOWED_ROLES.includes(user.role)) {
+    return (
+      <AccessRestricted
+        moduleTitle="8. Inventaris Sarpras"
+        allowedRoles={ALLOWED_ROLES}
+      />
+    );
+  }
+
+  const isSarpras = user.role === UserRole.PETUGAS_SARPRAS || user.role === UserRole.ADMIN;
 
   const [activeTab, setActiveTab] = useState<"ITEMS" | "BORROWS">("ITEMS");
   const [items, setItems] = useState<InventoryAsset[]>(INITIAL_ITEMS);
@@ -103,8 +126,8 @@ export default function InventarisPage() {
       id: `b-${Date.now()}`,
       itemName: item.name,
       itemCode: item.code,
-      borrowerName: user?.name || "Pengguna",
-      borrowerRole: user?.role || "SISWA",
+      borrowerName: user.name,
+      borrowerRole: user.role,
       quantity: parseInt(borrowQty) || 1,
       expectedDate: borrowDate,
       status: BorrowStatus.PENDING,
@@ -134,7 +157,7 @@ export default function InventarisPage() {
             <Badge variant="warning">Modul 8</Badge>
           </div>
           <p className="text-sm text-slate-500 mt-1">
-            Katalog barang aset sekolah, alur checkout peminjaman sarana lab, dan histori maintenance.
+            Katalog aset peralatan lab/bengkel kejuruan SMK, alur peminjaman alat praktik, dan peringatan stok menipis.
           </p>
         </div>
 
@@ -142,13 +165,34 @@ export default function InventarisPage() {
           <Button
             variant="default"
             size="sm"
-            className="bg-orange-600 hover:bg-orange-700 shadow-orange-100"
+            className="bg-orange-600 hover:bg-orange-700 font-bold shadow-orange-200"
             onClick={() => setIsBorrowModalOpen(true)}
           >
             <Plus className="h-4 w-4" />
             Ajukan Pinjam Alat
           </Button>
         </div>
+      </div>
+
+      {/* Low-stock Alerts Banner if applicable */}
+      <div className="rounded-3xl border border-orange-200 bg-gradient-to-r from-orange-500/15 via-amber-500/10 to-transparent p-4 flex items-center justify-between gap-3 shadow-sm">
+        <div className="flex items-center gap-3">
+          <div className="h-10 w-10 rounded-2xl bg-orange-600 text-white flex items-center justify-center shadow-sm">
+            <AlertCircle className="h-5 w-5" />
+          </div>
+          <div>
+            <h3 className="text-xs sm:text-sm font-black text-slate-900">
+              Peringatan Ketersediaan Sarpras: 2 Barang Perlu Perhatian
+            </h3>
+            <p className="text-[11px] text-slate-600 mt-0.5">
+              Crimping Tool RJ45 (Sisa 2 Unit) & Kamera DSLR DKV (Sisa 1 Unit - Dalam Perbaikan).
+            </p>
+          </div>
+        </div>
+
+        <Badge variant="warning" className="hidden sm:inline-flex font-bold">
+          Prioritas Sarpras
+        </Badge>
       </div>
 
       {/* Tabs */}
@@ -181,17 +225,35 @@ export default function InventarisPage() {
           {items.map((item) => (
             <Card
               key={item.id}
-              className="border-slate-200 hover:border-orange-300 hover:shadow-md transition-all flex flex-col justify-between"
+              className="border-slate-200 hover:border-orange-400 hover:shadow-md transition-all flex flex-col justify-between"
             >
               <div>
                 <div className="flex items-start justify-between gap-2 pb-2">
-                  <span className="font-mono text-xs font-bold text-orange-800 bg-orange-50 px-2 py-0.5 rounded border border-orange-200">
+                  <span className="font-mono text-xs font-black text-orange-900 bg-orange-100/70 px-2 py-0.5 rounded-md border border-orange-200">
                     {item.code}
                   </span>
-                  <Badge variant="success">{item.condition}</Badge>
+                  <div className="flex items-center gap-1">
+                    {item.isLowStock && (
+                      <Badge variant="destructive" className="text-[9px] font-bold">
+                        Stok Menipis
+                      </Badge>
+                    )}
+                    <Badge
+                      variant={
+                        item.condition === ItemCondition.BAIK
+                          ? "success"
+                          : item.condition === ItemCondition.DALAM_PERBAIKAN
+                          ? "warning"
+                          : "destructive"
+                      }
+                      className="font-bold"
+                    >
+                      {item.condition}
+                    </Badge>
+                  </div>
                 </div>
 
-                <h3 className="text-base font-bold text-slate-900 mt-2">
+                <h3 className="text-base font-extrabold text-slate-900 mt-2">
                   {item.name}
                 </h3>
                 <p className="text-xs text-slate-500 mt-1">
@@ -204,7 +266,7 @@ export default function InventarisPage() {
                   <span className="text-[10px] uppercase font-bold text-slate-400 block">
                     Ketersediaan
                   </span>
-                  <span className="text-sm font-extrabold text-slate-800">
+                  <span className="text-sm font-black text-slate-800">
                     {item.available} / {item.total} Unit
                   </span>
                 </div>
@@ -217,6 +279,7 @@ export default function InventarisPage() {
                     setIsBorrowModalOpen(true);
                   }}
                   disabled={item.available <= 0}
+                  className="font-bold text-xs"
                 >
                   {item.available > 0 ? "Pinjam Alat" : "Stok Kosong"}
                 </Button>
@@ -234,7 +297,7 @@ export default function InventarisPage() {
               <div>
                 <CardTitle>Riwayat & Pengajuan Peminjaman Sarpras</CardTitle>
                 <CardDescription>
-                  Daftar transaksi checkout barang oleh siswa dan bapak/ibu guru
+                  Daftar transaksi peminjaman barang oleh siswa dan dewan guru
                 </CardDescription>
               </div>
             </div>
@@ -276,6 +339,7 @@ export default function InventarisPage() {
                               ? "success"
                               : "secondary"
                           }
+                          className="font-bold"
                         >
                           {b.status}
                         </Badge>
@@ -287,7 +351,7 @@ export default function InventarisPage() {
                               <Button
                                 variant="default"
                                 size="sm"
-                                className="bg-emerald-600 hover:bg-emerald-700 text-xs py-1 h-7"
+                                className="bg-emerald-600 hover:bg-emerald-700 text-xs py-1 h-7 font-bold"
                                 onClick={() => handleUpdateBorrowStatus(b.id, BorrowStatus.BORROWED)}
                               >
                                 Setujui
@@ -297,7 +361,7 @@ export default function InventarisPage() {
                               <Button
                                 variant="outline"
                                 size="sm"
-                                className="text-xs py-1 h-7 border-emerald-300 text-emerald-700 hover:bg-emerald-50"
+                                className="text-xs py-1 h-7 border-emerald-300 text-emerald-700 hover:bg-emerald-50 font-bold"
                                 onClick={() => handleUpdateBorrowStatus(b.id, BorrowStatus.RETURNED)}
                               >
                                 <RotateCcw className="h-3 w-3" />
@@ -321,7 +385,7 @@ export default function InventarisPage() {
         isOpen={isBorrowModalOpen}
         onClose={() => setIsBorrowModalOpen(false)}
         title="Formulir Peminjaman Sarpras"
-        description="Ajukan permohonan pinjam alat praktikum / media pembelajaran."
+        description="Ajukan permohonan pinjam alat praktikum lab kejuruan."
         maxWidth="md"
       >
         <form onSubmit={handleCreateBorrow} className="space-y-4 mt-2">
@@ -332,7 +396,7 @@ export default function InventarisPage() {
             <select
               value={selectedItemId}
               onChange={(e) => setSelectedItemId(e.target.value)}
-              className="w-full h-11 rounded-xl border border-slate-200 bg-white px-3 text-sm text-slate-900"
+              className="w-full h-11 rounded-2xl border border-slate-200 bg-white px-3 text-sm text-slate-900"
             >
               {items.map((it) => (
                 <option key={it.id} value={it.id}>
@@ -365,8 +429,8 @@ export default function InventarisPage() {
               Tujuan Peminjaman & Lokasi Pemakaian
             </label>
             <textarea
-              className="w-full rounded-xl border border-slate-200 bg-white p-3 text-sm text-slate-900 min-h-[80px]"
-              placeholder="Contoh: Praktik jaringan di lab perpustakaan..."
+              className="w-full rounded-2xl border border-slate-200 bg-white p-3.5 text-sm text-slate-900 min-h-[80px]"
+              placeholder="Contoh: Praktikum jaringan di lab TKJ..."
               value={borrowPurpose}
               onChange={(e) => setBorrowPurpose(e.target.value)}
               required
@@ -377,7 +441,7 @@ export default function InventarisPage() {
             <Button type="button" variant="outline" onClick={() => setIsBorrowModalOpen(false)}>
               Batal
             </Button>
-            <Button type="submit" variant="gradient">
+            <Button type="submit" variant="gradient" className="font-bold">
               Kirimkan Pengajuan Pinjam
             </Button>
           </div>
