@@ -7,6 +7,7 @@ import { TeacherAttendanceModule } from './modules/teacher-attendance/teacher-at
 import { DisciplineModule } from './modules/discipline/discipline.module';
 import { CanteenModule } from './modules/canteen/canteen.module';
 import { ExtracurricularModule } from './modules/extracurricular/extracurricular.module';
+import { SubjectsModule } from './modules/subjects/subjects.module';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { ExtracurricularModule } from './modules/extracurricular/extracurricular
     DisciplineModule,
     CanteenModule,
     ExtracurricularModule,
+    SubjectsModule,
   ],
 })
 export class AppModule {}
