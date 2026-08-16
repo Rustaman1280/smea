@@ -10,6 +10,7 @@ import { ExtracurricularModule } from './modules/extracurricular/extracurricular
 import { SubjectsModule } from './modules/subjects/subjects.module';
 import { ProjectTrackerModule } from './modules/project-tracker/project-tracker.module';
 import { InventoryModule } from './modules/inventory/inventory.module';
+import { VoucherModule } from './modules/voucher/voucher.module';
 
 @Module({
   imports: [
@@ -24,6 +25,7 @@ import { InventoryModule } from './modules/inventory/inventory.module';
     SubjectsModule,
     ProjectTrackerModule,
     InventoryModule,
+    VoucherModule,
   ],
 })
 export class AppModule {}
