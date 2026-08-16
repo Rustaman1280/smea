@@ -1,0 +1,29 @@
+{
+  "name": "superapp-smkn1garut",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Superapp SMKN 1 Garut - Platform Terpadu Siswa, Guru, dan Staff",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev": "turbo run dev",
+    "build": "turbo run build",
+    "lint": "turbo run lint",
+    "format": "prettier --write \"**/*.{ts,tsx,md,json}\"",
+    "db:generate": "npm --prefix apps/api run prisma:generate",
+    "db:push": "npm --prefix apps/api run prisma:push",
+    "db:seed": "npm --prefix apps/api run prisma:seed",
+    "dev:api": "npm --prefix apps/api run start:dev",
+    "dev:web": "npm --prefix apps/web run dev"
+  },
+  "devDependencies": {
+    "turbo": "^2.4.0",
+    "prettier": "^3.5.0",
+    "typescript": "^5.7.3"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  }
+}

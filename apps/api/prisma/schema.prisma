@@ -1,0 +1,709 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ==========================================
+// ENUMS
+// ==========================================
+
+enum Role {
+  SISWA
+  GURU
+  GURU_BK
+  WALI_KELAS
+  PEMBINA_EKSKUL
+  STAFF_TU
+  PETUGAS_SARPRAS
+  OPERATOR_KANTIN
+  OPERATOR_ISP
+  ADMIN
+  KEPSEK
+}
+
+enum AttendanceStatus {
+  HADIR
+  TERLAMBAT
+  IZIN
+  SAKIT
+  ALPHA
+}
+
+enum AttendanceMethod {
+  QR_CODE
+  NFC
+  MANUAL
+}
+
+enum TeacherAttendanceStatus {
+  HADIR
+  IZIN
+  SAKIT
+  DINAS_LUAR
+  ALPHA
+}
+
+enum ViolationSeverity {
+  RINGAN
+  SEDANG
+  BERAT
+}
+
+enum DisciplineCaseStatus {
+  DIPROSES
+  SELESAI
+  PANGGILAN_ORANG_TUA
+}
+
+enum CounselingStatus {
+  TERJADWAL
+  SELESAI
+  BATAL
+}
+
+enum CanteenCategory {
+  MAKANAN_BERAT
+  SNACK
+  MINUMAN
+  DESSERT
+}
+
+enum ExtracurricularCategory {
+  OLAHRAGA
+  SENI
+  TEKNOLOGI
+  KEAGAMAAN
+  KEPANDUAN
+  BAHASA
+}
+
+enum ClubMemberRole {
+  ANGGOTA
+  KETUA
+  WAKIL
+  SEKRETARIS
+  BENDAHARA
+}
+
+enum ClubMemberStatus {
+  PENDING
+  ACTIVE
+  INACTIVE
+}
+
+enum ProjectType {
+  PROYEK_PRODUKTIF
+  JURNAL_PKL
+  TUGAS_AKHIR
+}
+
+enum ProjectStatus {
+  PLANNING
+  ACTIVE
+  SUBMITTED
+  APPROVED
+  REVISION
+}
+
+enum TaskColumn {
+  TODO
+  IN_PROGRESS
+  REVIEW
+  DONE
+}
+
+enum TaskPriority {
+  LOW
+  MEDIUM
+  HIGH
+}
+
+enum ItemCondition {
+  BAIK
+  RUSAK_RINGAN
+  RUSAK_BERAT
+  DALAM_PERBAIKAN
+}
+
+enum ItemCategory {
+  ALAT_LAB_RPL
+  ALAT_LAB_TKJ
+  ALAT_OTOMOTIF
+  ALAT_ELEKTRONIKA
+  MEDIA_PEMBELAJARAN
+  UMUM
+}
+
+enum BorrowStatus {
+  PENDING
+  APPROVED
+  REJECTED
+  BORROWED
+  RETURNED
+  OVERDUE
+}
+
+enum VoucherStatus {
+  AVAILABLE
+  SOLD
+  USED
+  EXPIRED
+}
+
+enum PaymentMethod {
+  SALDO_INTERNAL
+  QRIS
+  CASH
+}
+
+enum NotificationType {
+  INFO
+  WARNING
+  SUCCESS
+  ALERT
+}
+
+// ==========================================
+// 1. AUTH & USER ENTITIES
+// ==========================================
+
+model User {
+  id           String   @id @default(uuid())
+  email        String   @unique
+  username     String   @unique
+  password     String
+  name         String
+  role         Role     @default(SISWA)
+  avatarUrl    String?
+  phone        String?
+  isActive     Boolean  @default(true)
+  refreshToken String?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  // Profile Relations
+  student   Student?
+  teacher   Teacher?
+  staff     Staff?
+
+  // Module Relations
+  disciplineReported DisciplineCase[] @relation("ReportedByTeacher")
+  counselorSessions  CounselingSession[] @relation("CounselorSessions")
+  managedCanteen     CanteenStand?
+  ledProjects        VocationalProject[] @relation("ProjectLeader")
+  supervisedProjects VocationalProject[] @relation("ProjectSupervisor")
+  borrowings         BorrowingRecord[]
+  voucherPurchases   HotspotVoucher[]
+  transactions       VoucherTransaction[]
+  notifications      Notification[]
+}
+
+model Student {
+  id                   String   @id @default(uuid())
+  userId               String   @unique
+  user                 User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  nisn                 String   @unique
+  nis                  String   @unique
+  classId              String
+  class                Class    @relation(fields: [classId], references: [id])
+  gender               String   @default("L") // L / P
+  parentName           String?
+  parentPhone          String?
+  address              String?
+  totalViolationPoints Int      @default(0)
+  createdAt            DateTime @default(now())
+
+  // Relations
+  attendances          Attendance[]
+  disciplineCases      DisciplineCase[]
+  counselingSessions   CounselingSession[]
+  extracurriculars     ExtracurricularMember[]
+  submissions          AssignmentSubmission[]
+  pklJournals          PklJournal[]
+}
+
+model Teacher {
+  id              String   @id @default(uuid())
+  userId          String   @unique
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  nip             String?  @unique
+  nuptk           String?  @unique
+  specialization  String?
+  isWaliKelas     Boolean  @default(false)
+  isGuruBK        Boolean  @default(false)
+  isPembinaEkskul Boolean  @default(false)
+  createdAt       DateTime @default(now())
+
+  // Relations
+  homeroomClass      Class?                  @relation("HomeroomTeacher")
+  attendances        TeacherAttendance[]
+  schedules          Schedule[]
+  learningMaterials  LearningMaterial[]
+  assignments        Assignment[]
+  clubsAsPembina     Extracurricular[]
+}
+
+model Staff {
+  id         String   @id @default(uuid())
+  userId     String   @unique
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  nip        String?
+  department String
+  createdAt  DateTime @default(now())
+}
+
+model Major {
+  id          String   @id @default(uuid())
+  code        String   @unique
+  name        String
+  description String?
+  classes     Class[]
+  subjects    Subject[]
+}
+
+model Class {
+  id                 String   @id @default(uuid())
+  name               String   @unique
+  grade              Int      // 10, 11, 12
+  majorId            String
+  major              Major    @relation(fields: [majorId], references: [id])
+  homeroomTeacherId  String?  @unique
+  homeroomTeacher    Teacher? @relation("HomeroomTeacher", fields: [homeroomTeacherId], references: [id])
+  academicYear       String   @default("2025/2026")
+
+  students           Student[]
+  schedules          Schedule[]
+  learningMaterials  LearningMaterial[]
+  assignments        Assignment[]
+  projects           VocationalProject[]
+}
+
+// ==========================================
+// 2. ABSENSI DIGITAL SISWA & GURU
+// ==========================================
+
+model Attendance {
+  id          String           @id @default(uuid())
+  studentId   String
+  student     Student          @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  date        DateTime         @db.Date
+  timeIn      DateTime?
+  timeOut     DateTime?
+  status      AttendanceStatus @default(HADIR)
+  method      AttendanceMethod @default(QR_CODE)
+  verifiedBy  String?
+  notes       String?
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
+
+  @@unique([studentId, date])
+}
+
+model AttendanceQR {
+  id        String   @id @default(uuid())
+  code      String   @unique
+  token     String   @unique
+  date      DateTime @db.Date
+  session   String   @default("PAGI") // PAGI / SORE
+  expiresAt DateTime
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+}
+
+model TeacherAttendance {
+  id               String                  @id @default(uuid())
+  teacherId        String
+  teacher          Teacher                 @relation(fields: [teacherId], references: [id], onDelete: Cascade)
+  date             DateTime                @db.Date
+  timeIn           DateTime?
+  timeOut          DateTime?
+  status           TeacherAttendanceStatus @default(HADIR)
+  latitude         Float?
+  longitude        Float?
+  photoUrl         String?
+  notes            String?
+  createdAt        DateTime                @default(now())
+  updatedAt        DateTime                @updatedAt
+
+  teachingSessions TeachingSession[]
+
+  @@unique([teacherId, date])
+}
+
+model TeachingSession {
+  id                  String            @id @default(uuid())
+  teacherAttendanceId String
+  teacherAttendance   TeacherAttendance @relation(fields: [teacherAttendanceId], references: [id], onDelete: Cascade)
+  subjectName         String
+  className           String
+  startPeriod         Int
+  endPeriod           Int
+  topicTaught         String
+  studentCount        Int               @default(0)
+  createdAt           DateTime          @default(now())
+}
+
+// ==========================================
+// 3. BK & PELANGGARAN
+// ==========================================
+
+model DisciplineCase {
+  id                 String               @id @default(uuid())
+  studentId          String
+  student            Student              @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  category           ViolationSeverity    @default(RINGAN)
+  title              String
+  description        String
+  points             Int                  @default(5)
+  reportedById       String
+  reportedBy         User                 @relation("ReportedByTeacher", fields: [reportedById], references: [id])
+  date               DateTime             @default(now())
+  status             DisciplineCaseStatus @default(DIPROSES)
+  needsParentSummons Boolean              @default(false)
+  parentSummonsDate  DateTime?
+  counselingNotes    String?
+  createdAt          DateTime             @default(now())
+  updatedAt          DateTime             @updatedAt
+
+  counselingSessions CounselingSession[]
+}
+
+model CounselingSession {
+  id           String           @id @default(uuid())
+  studentId    String
+  student      Student          @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  counselorId  String
+  counselor    User             @relation("CounselorSessions", fields: [counselorId], references: [id])
+  caseId       String?
+  case         DisciplineCase?  @relation(fields: [caseId], references: [id])
+  sessionDate  DateTime
+  notes        String
+  followUpPlan String
+  status       CounselingStatus @default(TERJADWAL)
+  createdAt    DateTime         @default(now())
+  updatedAt    DateTime         @updatedAt
+}
+
+// ==========================================
+// 4. SHOWCASE KANTIN
+// ==========================================
+
+model CanteenStand {
+  id          String        @id @default(uuid())
+  name        String
+  standNumber String        @unique
+  ownerName   String
+  phone       String?
+  isOpen      Boolean       @default(true)
+  operatorId  String?       @unique
+  operator    User?         @relation(fields: [operatorId], references: [id])
+  createdAt   DateTime      @default(now())
+
+  menus       CanteenMenu[]
+}
+
+model CanteenMenu {
+  id          String          @id @default(uuid())
+  standId     String
+  stand       CanteenStand    @relation(fields: [standId], references: [id], onDelete: Cascade)
+  name        String
+  description String?
+  price       Float
+  category    CanteenCategory @default(MAKANAN_BERAT)
+  imageUrl    String?
+  isAvailable Boolean         @default(true)
+  stock       Int             @default(50)
+  createdAt   DateTime        @default(now())
+  updatedAt   DateTime        @updatedAt
+}
+
+// ==========================================
+// 5. EKSTRAKURIKULER
+// ==========================================
+
+model Extracurricular {
+  id           String                  @id @default(uuid())
+  name         String                  @unique
+  description  String
+  category     ExtracurricularCategory @default(OLAHRAGA)
+  coachName    String
+  pembinaId    String?
+  pembina      Teacher?                @relation(fields: [pembinaId], references: [id])
+  scheduleDay  String                  // Senin, Selasa, dll
+  scheduleTime String                  // 15:30 - 17:30
+  location     String
+  imageUrl     String?
+  isRecruiting Boolean                 @default(true)
+  createdAt    DateTime                @default(now())
+
+  members      ExtracurricularMember[]
+  achievements ExtracurricularAchievement[]
+}
+
+model ExtracurricularMember {
+  id        String           @id @default(uuid())
+  clubId    String
+  club      Extracurricular  @relation(fields: [clubId], references: [id], onDelete: Cascade)
+  studentId String
+  student   Student          @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  joinedAt  DateTime         @default(now())
+  role      ClubMemberRole   @default(ANGGOTA)
+  status    ClubMemberStatus @default(ACTIVE)
+
+  @@unique([clubId, studentId])
+}
+
+model ExtracurricularAchievement {
+  id             String          @id @default(uuid())
+  clubId         String
+  club           Extracurricular @relation(fields: [clubId], references: [id], onDelete: Cascade)
+  title          String
+  competition    String
+  level          String          // KABUPATEN, PROVINSI, NASIONAL, INTERNASIONAL
+  rank           String          // Juara 1, Juara 2, dst
+  year           Int
+  certificateUrl String?
+  createdAt      DateTime        @default(now())
+}
+
+// ==========================================
+// 6. MATA PELAJARAN & LMS
+// ==========================================
+
+model Subject {
+  id         String   @id @default(uuid())
+  code       String   @unique
+  name       String
+  gradeLevel Int      @default(10)
+  majorId    String?
+  major      Major?   @relation(fields: [majorId], references: [id])
+  createdAt  DateTime @default(now())
+
+  schedules  Schedule[]
+  materials  LearningMaterial[]
+  assignments Assignment[]
+}
+
+model Schedule {
+  id        String   @id @default(uuid())
+  subjectId String
+  subject   Subject  @relation(fields: [subjectId], references: [id], onDelete: Cascade)
+  classId   String
+  class     Class    @relation(fields: [classId], references: [id], onDelete: Cascade)
+  teacherId String
+  teacher   Teacher  @relation(fields: [teacherId], references: [id], onDelete: Cascade)
+  dayOfWeek Int      // 1: Senin, 2: Selasa, ... 6: Sabtu
+  startTime String   // "07:15"
+  endTime   String   // "08:45"
+  room      String
+  createdAt DateTime @default(now())
+}
+
+model LearningMaterial {
+  id          String   @id @default(uuid())
+  subjectId   String
+  subject     Subject  @relation(fields: [subjectId], references: [id], onDelete: Cascade)
+  classId     String
+  class       Class    @relation(fields: [classId], references: [id], onDelete: Cascade)
+  teacherId   String
+  teacher     Teacher  @relation(fields: [teacherId], references: [id], onDelete: Cascade)
+  title       String
+  description String?
+  fileUrl     String?
+  linkUrl     String?
+  uploadedAt  DateTime @default(now())
+}
+
+model Assignment {
+  id          String                 @id @default(uuid())
+  subjectId   String
+  subject     Subject                @relation(fields: [subjectId], references: [id], onDelete: Cascade)
+  classId     String
+  class       Class                  @relation(fields: [classId], references: [id], onDelete: Cascade)
+  teacherId   String
+  teacher     Teacher                @relation(fields: [teacherId], references: [id], onDelete: Cascade)
+  title       String
+  description String
+  deadline    DateTime
+  maxScore    Int                    @default(100)
+  createdAt   DateTime               @default(now())
+
+  submissions AssignmentSubmission[]
+}
+
+model AssignmentSubmission {
+  id            String     @id @default(uuid())
+  assignmentId  String
+  assignment    Assignment @relation(fields: [assignmentId], references: [id], onDelete: Cascade)
+  studentId     String
+  student       Student    @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  submissionUrl String?
+  notes         String?
+  score         Float?
+  feedback      String?
+  submittedAt   DateTime   @default(now())
+  gradedAt      DateTime?
+
+  @@unique([assignmentId, studentId])
+}
+
+// ==========================================
+// 7. PROJECT TRACKER & JURNAL PKL
+// ==========================================
+
+model VocationalProject {
+  id           String        @id @default(uuid())
+  title        String
+  description  String
+  type         ProjectType   @default(PROYEK_PRODUKTIF)
+  major        String
+  classId      String
+  class        Class         @relation(fields: [classId], references: [id])
+  leaderId     String
+  leader       User          @relation("ProjectLeader", fields: [leaderId], references: [id])
+  supervisorId String
+  supervisor   User          @relation("ProjectSupervisor", fields: [supervisorId], references: [id])
+  githubUrl    String?
+  demoUrl      String?
+  score        Float?
+  feedback     String?
+  status       ProjectStatus @default(ACTIVE)
+  deadline     DateTime
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+
+  tasks        ProjectTask[]
+}
+
+model ProjectTask {
+  id           String            @id @default(uuid())
+  projectId    String
+  project      VocationalProject @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  title        String
+  description  String?
+  assigneeName String?
+  column       TaskColumn        @default(TODO)
+  priority     TaskPriority      @default(MEDIUM)
+  dueDate      DateTime?
+  createdAt    DateTime          @default(now())
+  updatedAt    DateTime          @updatedAt
+}
+
+model PklJournal {
+  id                   String   @id @default(uuid())
+  studentId            String
+  student              Student  @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  companyName          String
+  date                 DateTime @db.Date
+  activityDescription  String
+  competencyLearned    String
+  photoUrl             String?
+  verifiedBySupervisor Boolean  @default(false)
+  supervisorNotes      String?
+  createdAt            DateTime @default(now())
+}
+
+// ==========================================
+// 8. INVENTARIS SARPRAS
+// ==========================================
+
+model InventoryItem {
+  id                String          @id @default(uuid())
+  code              String          @unique
+  name              String
+  category          ItemCategory    @default(UMUM)
+  location          String
+  quantityTotal     Int
+  quantityAvailable Int
+  condition         ItemCondition   @default(BAIK)
+  purchaseDate      DateTime?
+  notes             String?
+  createdAt         DateTime        @default(now())
+  updatedAt         DateTime        @updatedAt
+
+  borrowings        BorrowingRecord[]
+  maintenanceLogs   MaintenanceLog[]
+}
+
+model BorrowingRecord {
+  id                 String        @id @default(uuid())
+  itemId             String
+  item               InventoryItem @relation(fields: [itemId], references: [id], onDelete: Cascade)
+  borrowerId         String
+  borrower           User          @relation(fields: [borrowerId], references: [id])
+  quantity           Int           @default(1)
+  borrowDate         DateTime      @default(now())
+  expectedReturnDate DateTime
+  actualReturnDate   DateTime?
+  status             BorrowStatus  @default(PENDING)
+  purpose            String
+  approvedBy         String?
+  notes              String?
+  createdAt          DateTime      @default(now())
+  updatedAt          DateTime      @updatedAt
+}
+
+model MaintenanceLog {
+  id               String        @id @default(uuid())
+  itemId           String
+  item             InventoryItem @relation(fields: [itemId], references: [id], onDelete: Cascade)
+  reportedDate     DateTime      @default(now())
+  issueDescription String
+  actionTaken      String?
+  cost             Float?
+  status           String        @default("PENDING") // PENDING, IN_PROGRESS, COMPLETED
+  completedDate    DateTime?
+}
+
+// ==========================================
+// 9. ISP VOUCHER HOTSPOT
+// ==========================================
+
+model HotspotVoucher {
+  id            String              @id @default(uuid())
+  code          String              @unique
+  profileName   String              // e.g. "3 Jam (1GB)", "1 Hari Unlimited", "1 Bulan"
+  durationHours Int
+  quotaMb       Int?
+  price         Float
+  status        VoucherStatus       @default(AVAILABLE)
+  batchNumber   String
+  buyerId       String?
+  buyer         User?               @relation(fields: [buyerId], references: [id])
+  purchasedAt   DateTime?
+  expiresAt     DateTime?
+  createdAt     DateTime            @default(now())
+
+  transaction   VoucherTransaction?
+}
+
+model VoucherTransaction {
+  id              String         @id @default(uuid())
+  voucherId       String         @unique
+  voucher         HotspotVoucher @relation(fields: [voucherId], references: [id], onDelete: Cascade)
+  userId          String
+  user            User           @relation(fields: [userId], references: [id])
+  amount          Float
+  paymentMethod   PaymentMethod  @default(SALDO_INTERNAL)
+  transactionDate DateTime       @default(now())
+}
+
+// ==========================================
+// NOTIFICATIONS
+// ==========================================
+
+model Notification {
+  id        String           @id @default(uuid())
+  userId    String
+  user      User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  title     String
+  message   String
+  type      NotificationType @default(INFO)
+  link      String?
+  isRead    Boolean          @default(false)
+  createdAt DateTime         @default(now())
+}
