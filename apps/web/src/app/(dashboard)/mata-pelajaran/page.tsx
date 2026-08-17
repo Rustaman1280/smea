@@ -5,16 +5,9 @@ import { useAuthStore } from "@/stores/auth-store";
 import { UserRole } from "@superapp/types";
 import {
   BookOpenCheck,
-  Calendar,
-  FileText,
   Clock,
   ExternalLink,
   Plus,
-  CheckCircle2,
-  AlertCircle,
-  GraduationCap,
-  Send,
-  Download,
   BookOpen,
 } from "lucide-react";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
@@ -182,12 +175,12 @@ export default function MataPelajaranPage() {
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
           <div className="flex items-center gap-2">
-            <h1 className="text-2xl font-bold tracking-tight text-slate-900">
+            <h1 className="text-2xl font-bold tracking-tight text-foreground">
               6. Mata Pelajaran & LMS
             </h1>
             <Badge variant="default">Modul 6</Badge>
           </div>
-          <p className="text-sm text-slate-500 mt-1">
+          <p className="text-sm text-muted-foreground mt-1">
             Jadwal mingguan, repositori modul pembelajaran digital SMK, dan pengumpulan tugas terstruktur.
           </p>
         </div>
@@ -196,7 +189,7 @@ export default function MataPelajaranPage() {
           <Button
             variant="default"
             size="sm"
-            className="bg-cyan-600 hover:bg-cyan-700 font-bold shadow-cyan-200"
+            className="bg-cyan-600 hover:bg-cyan-500 text-white font-semibold"
             onClick={() => setIsCreateModalOpen(true)}
           >
             <Plus className="h-4 w-4" />
@@ -206,33 +199,33 @@ export default function MataPelajaranPage() {
       </div>
 
       {/* Navigation Tabs */}
-      <div className="flex items-center gap-2 border-b border-slate-200 pb-1">
+      <div className="flex items-center gap-2 border-b border-border pb-1 overflow-x-auto">
         <button
           onClick={() => setActiveTab("TUGAS")}
-          className={`px-4 py-2 text-xs font-bold rounded-xl transition-all ${
+          className={`px-4 py-2 min-h-[38px] text-xs font-semibold rounded-xl transition-all whitespace-nowrap ${
             activeTab === "TUGAS"
-              ? "bg-sky-600 text-white shadow-sm shadow-sky-200"
-              : "text-slate-600 hover:bg-slate-100"
+              ? "bg-sky-500 text-slate-950 font-bold shadow-sm"
+              : "text-muted-foreground hover:text-foreground hover:bg-muted/50"
           }`}
         >
           Tugas & Nilai ({assignments.length})
         </button>
         <button
           onClick={() => setActiveTab("MATERI")}
-          className={`px-4 py-2 text-xs font-bold rounded-xl transition-all ${
+          className={`px-4 py-2 min-h-[38px] text-xs font-semibold rounded-xl transition-all whitespace-nowrap ${
             activeTab === "MATERI"
-              ? "bg-sky-600 text-white shadow-sm shadow-sky-200"
-              : "text-slate-600 hover:bg-slate-100"
+              ? "bg-sky-500 text-slate-950 font-bold shadow-sm"
+              : "text-muted-foreground hover:text-foreground hover:bg-muted/50"
           }`}
         >
           Materi Pembelajaran ({MATERIALS.length})
         </button>
         <button
           onClick={() => setActiveTab("JADWAL")}
-          className={`px-4 py-2 text-xs font-bold rounded-xl transition-all ${
+          className={`px-4 py-2 min-h-[38px] text-xs font-semibold rounded-xl transition-all whitespace-nowrap ${
             activeTab === "JADWAL"
-              ? "bg-sky-600 text-white shadow-sm shadow-sky-200"
-              : "text-slate-600 hover:bg-slate-100"
+              ? "bg-sky-500 text-slate-950 font-bold shadow-sm"
+              : "text-muted-foreground hover:text-foreground hover:bg-muted/50"
           }`}
         >
           Jadwal Mingguan Kelas
@@ -246,11 +239,11 @@ export default function MataPelajaranPage() {
             {assignments.map((ass) => (
               <Card
                 key={ass.id}
-                className="flex flex-col justify-between border-slate-200 hover:border-sky-300 hover:shadow-md transition-all"
+                className="flex flex-col justify-between"
               >
                 <div>
                   <div className="flex items-start justify-between gap-2 pb-2">
-                    <span className="text-xs font-bold text-sky-800 bg-sky-50 px-2 py-0.5 rounded-md border border-sky-100">
+                    <span className="text-xs font-semibold text-sky-600 dark:text-sky-300 bg-sky-500/10 px-2.5 py-1 rounded-lg border border-sky-500/25">
                       {ass.subjectName}
                     </span>
                     <Badge variant={ass.submitted ? "success" : "warning"}>
@@ -258,28 +251,28 @@ export default function MataPelajaranPage() {
                     </Badge>
                   </div>
 
-                  <h3 className="text-base font-bold text-slate-900 mt-2">
+                  <h3 className="text-base font-bold text-foreground mt-2">
                     {ass.title}
                   </h3>
-                  <p className="text-xs text-slate-600 mt-1.5 leading-relaxed">
+                  <p className="text-xs text-muted-foreground mt-1.5 leading-relaxed">
                     {ass.description}
                   </p>
 
-                  <div className="mt-3 flex items-center gap-1.5 text-xs text-slate-400">
-                    <Clock className="h-3.5 w-3.5 text-amber-500" />
-                    <span>Deadline: <strong>{ass.deadline}</strong></span>
+                  <div className="mt-3 flex items-center gap-1.5 text-xs text-muted-foreground">
+                    <Clock className="h-3.5 w-3.5 text-amber-500 dark:text-amber-400" />
+                    <span>Deadline: <strong className="text-foreground">{ass.deadline}</strong></span>
                   </div>
 
                   {ass.score !== undefined && (
-                    <div className="mt-3 p-3 rounded-2xl bg-emerald-50/80 border border-emerald-200 space-y-1">
+                    <div className="mt-3 p-3 rounded-2xl bg-emerald-500/10 border border-emerald-500/25 space-y-1">
                       <div className="flex items-center justify-between">
-                        <span className="text-xs font-bold text-emerald-900">
+                        <span className="text-xs font-bold text-emerald-600 dark:text-emerald-300">
                           Nilai Guru: {ass.score} / 100
                         </span>
                         <Badge variant="success">Tuntas (A)</Badge>
                       </div>
                       {ass.feedback && (
-                        <p className="text-[11px] text-emerald-800 italic">
+                        <p className="text-[11px] text-emerald-700 dark:text-emerald-200 italic">
                           "{ass.feedback}"
                         </p>
                       )}
@@ -287,20 +280,20 @@ export default function MataPelajaranPage() {
                   )}
                 </div>
 
-                <div className="pt-4 mt-4 border-t border-slate-100 flex items-center justify-between">
-                  <span className="text-[11px] text-slate-400">
-                    Format: Link GitHub / Dokumen Drive
+                <div className="pt-4 mt-4 border-t border-border flex items-center justify-between">
+                  <span className="text-[11px] text-muted-foreground">
+                    Format: Link GitHub / Drive
                   </span>
 
                   {user?.role === UserRole.SISWA ? (
                     <Button
-                      variant={ass.submitted ? "outline" : "gradient"}
+                      variant={ass.submitted ? "outline" : "default"}
                       size="sm"
                       onClick={() => {
                         setSelectedAssignment(ass);
                         setIsSubmitModalOpen(true);
                       }}
-                      className="font-bold text-xs"
+                      className="font-semibold text-xs"
                     >
                       {ass.submitted ? "Perbarui Pengumpulan" : "Kumpul Tugas"}
                     </Button>
@@ -319,16 +312,16 @@ export default function MataPelajaranPage() {
         <div className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {MATERIALS.map((mat) => (
-              <Card key={mat.id} className="border-slate-200">
+              <Card key={mat.id}>
                 <CardHeader className="pb-2">
                   <div className="flex items-center justify-between">
-                    <span className="text-xs font-bold text-sky-800 bg-sky-50 px-2 py-0.5 rounded-md">
+                    <span className="text-xs font-semibold text-sky-600 dark:text-sky-300 bg-sky-500/10 px-2.5 py-1 rounded-lg border border-sky-500/25">
                       {mat.subjectName}
                     </span>
-                    <span className="text-[11px] text-slate-400">{mat.uploadedAt}</span>
+                    <span className="text-[11px] text-muted-foreground">{mat.uploadedAt}</span>
                   </div>
-                  <CardTitle className="text-base mt-2">{mat.title}</CardTitle>
-                  <CardDescription className="text-xs mt-1">
+                  <CardTitle className="text-base mt-2.5">{mat.title}</CardTitle>
+                  <CardDescription className="text-xs mt-1 leading-relaxed">
                     {mat.description}
                   </CardDescription>
                 </CardHeader>
@@ -337,7 +330,7 @@ export default function MataPelajaranPage() {
                     href={mat.linkUrl}
                     target="_blank"
                     rel="noreferrer"
-                    className="inline-flex items-center gap-1.5 text-xs font-bold text-sky-600 hover:text-sky-800"
+                    className="inline-flex items-center gap-1.5 text-xs font-semibold text-sky-500 dark:text-sky-400 hover:text-sky-600 dark:hover:text-sky-300 hover:underline transition-colors"
                   >
                     <BookOpen className="h-4 w-4" />
                     Buka Dokumen / Tautan Materi
@@ -361,22 +354,22 @@ export default function MataPelajaranPage() {
             <div className="overflow-x-auto">
               <table className="w-full text-left text-xs">
                 <thead>
-                  <tr className="border-b border-slate-100 text-slate-400 uppercase font-semibold">
+                  <tr className="border-b border-border text-muted-foreground uppercase font-semibold">
                     <th className="pb-3">Hari</th>
                     <th className="pb-3">Waktu</th>
                     <th className="pb-3">Mata Pelajaran</th>
-                    <th className="pb-3">Ruangan</th>
+                    <th className="pb-3">Ruang</th>
                     <th className="pb-3">Guru Pengampu</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-slate-100 text-slate-700">
-                  {SCHEDULES.map((s) => (
-                    <tr key={s.id} className="hover:bg-slate-50/80">
-                      <td className="py-3 font-bold text-slate-900">{s.day}</td>
-                      <td className="py-3 font-semibold text-sky-800">{s.time} WIB</td>
-                      <td className="py-3 font-bold text-slate-900">{s.subjectName}</td>
-                      <td className="py-3">{s.room}</td>
-                      <td className="py-3 text-slate-500">{s.teacherName}</td>
+                <tbody className="divide-y divide-border text-foreground">
+                  {SCHEDULES.map((sc) => (
+                    <tr key={sc.id} className="hover:bg-muted/40 transition-colors">
+                      <td className="py-3.5 font-bold text-sky-600 dark:text-sky-400">{sc.day}</td>
+                      <td className="py-3.5 text-muted-foreground">{sc.time} WIB</td>
+                      <td className="py-3.5 font-semibold text-foreground">{sc.subjectName}</td>
+                      <td className="py-3.5 text-muted-foreground">{sc.room}</td>
+                      <td className="py-3.5 text-muted-foreground">{sc.teacherName}</td>
                     </tr>
                   ))}
                 </tbody>
@@ -386,30 +379,30 @@ export default function MataPelajaranPage() {
         </Card>
       )}
 
-      {/* Modal Kumpul Tugas */}
+      {/* Modal Submit Assignment */}
       <Modal
         isOpen={isSubmitModalOpen}
         onClose={() => setIsSubmitModalOpen(false)}
-        title={`Kumpul Tugas: ${selectedAssignment?.title || ""}`}
-        description="Lampirkan link hasil pengerjaan tugas praktikum (GitHub / Google Drive)."
+        title="Pengumpulan Tugas Siswa"
+        description={selectedAssignment?.title}
         maxWidth="md"
       >
         <form onSubmit={handleSubmitTask} className="space-y-4 mt-2">
           <Input
-            label="Tautan / URL Submission"
+            label="Tautan Tugas (GitHub Repo / Google Drive URL)"
             value={submissionLink}
             onChange={(e) => setSubmissionLink(e.target.value)}
-            placeholder="https://github.com/username/project-repo"
+            placeholder="https://github.com/username/praktikum-nestjs"
             required
           />
 
           <div className="space-y-1.5">
-            <label className="block text-xs font-semibold uppercase tracking-wider text-slate-600">
+            <label className="block text-xs font-semibold uppercase tracking-wider text-muted-foreground">
               Catatan untuk Guru (Opsional)
             </label>
             <textarea
-              className="w-full rounded-2xl border border-slate-200 bg-white p-3.5 text-sm text-slate-900 min-h-[80px]"
-              placeholder="Jelaskan fitur yang sudah selesai atau kendala praktikum..."
+              className="w-full rounded-2xl border border-input bg-card p-3.5 text-sm text-foreground min-h-[85px] focus:outline-none focus:ring-2 focus:ring-sky-500"
+              placeholder="Jelaskan fitur yang telah diselesaikan atau kendala praktikum..."
               value={submissionNote}
               onChange={(e) => setSubmissionNote(e.target.value)}
             />
@@ -419,54 +412,56 @@ export default function MataPelajaranPage() {
             <Button type="button" variant="outline" onClick={() => setIsSubmitModalOpen(false)}>
               Batal
             </Button>
-            <Button type="submit" variant="gradient" className="font-bold">
-              <Send className="h-4 w-4" />
+            <Button type="submit" variant="default" className="font-semibold">
               Kirimkan Tugas
             </Button>
           </div>
         </form>
       </Modal>
 
-      {/* Modal Buat Tugas (Guru) */}
+      {/* Modal Create Assignment */}
       <Modal
         isOpen={isCreateModalOpen}
         onClose={() => setIsCreateModalOpen(false)}
-        title="Buat Tugas Kelas Baru"
-        description="Rancang instruksi praktikum dan deadline pengerjaan siswa."
-        maxWidth="lg"
+        title="Buat Tugas Baru"
+        description="Publikasikan penugasan terstruktur untuk siswa kejuruan."
+        maxWidth="md"
       >
         <form onSubmit={handleCreateAssignment} className="space-y-4 mt-2">
           <Input
-            label="Judul Tugas / Praktikum"
+            label="Judul Tugas"
             value={assTitle}
             onChange={(e) => setAssTitle(e.target.value)}
-            placeholder="Contoh: Praktikum Pemrograman Framework Next.js"
+            placeholder="Contoh: Praktikum 04: Next.js Server Actions"
             required
           />
 
-          <div className="grid grid-cols-2 gap-3">
+          <div className="space-y-1.5">
+            <label className="block text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+              Mata Pelajaran
+            </label>
             <Input
-              label="Mata Pelajaran"
               value={assSubject}
               onChange={(e) => setAssSubject(e.target.value)}
               required
             />
-            <Input
-              label="Batas Akhir (Deadline)"
-              type="datetime-local"
-              value={assDeadline}
-              onChange={(e) => setAssDeadline(e.target.value)}
-              required
-            />
           </div>
 
+          <Input
+            label="Batas Pengumpulan (Deadline)"
+            type="datetime-local"
+            value={assDeadline}
+            onChange={(e) => setAssDeadline(e.target.value)}
+            required
+          />
+
           <div className="space-y-1.5">
-            <label className="block text-xs font-semibold uppercase tracking-wider text-slate-600">
-              Deskripsi Soal & Ketentuan
+            <label className="block text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+              Deskripsi & Instruksi Pengerjaan
             </label>
             <textarea
-              className="w-full rounded-2xl border border-slate-200 bg-white p-3.5 text-sm text-slate-900 min-h-[85px]"
-              placeholder="Tuliskan spesifikasi pengerjaan tugas..."
+              className="w-full rounded-2xl border border-input bg-card p-3.5 text-sm text-foreground min-h-[85px] focus:outline-none focus:ring-2 focus:ring-sky-500"
+              placeholder="Tuliskan poin-poin yang wajib dikerjakan siswa..."
               value={assDesc}
               onChange={(e) => setAssDesc(e.target.value)}
               required
@@ -477,8 +472,8 @@ export default function MataPelajaranPage() {
             <Button type="button" variant="outline" onClick={() => setIsCreateModalOpen(false)}>
               Batal
             </Button>
-            <Button type="submit" variant="gradient">
-              Publikasikan Tugas
+            <Button type="submit" variant="default" className="font-semibold">
+              Terbitkan Tugas
             </Button>
           </div>
         </form>

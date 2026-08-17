@@ -11,15 +11,8 @@ import {
   Plus,
   Medal,
   CheckCircle2,
-  Sparkles,
-  Bot,
-  Flame,
-  Music,
-  Dumbbell,
-  Compass,
-  Check,
 } from "lucide-react";
-import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
+import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -164,12 +157,12 @@ export default function EkskulPage() {
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
           <div className="flex items-center gap-2">
-            <h1 className="text-2xl font-bold tracking-tight text-slate-900">
+            <h1 className="text-2xl font-bold tracking-tight text-foreground">
               5. Ekstrakurikuler & Prestasi
             </h1>
             <Badge variant="success">Modul 5</Badge>
           </div>
-          <p className="text-sm text-slate-500 mt-1">
+          <p className="text-sm text-muted-foreground mt-1">
             Katalog klub kegiatan siswa, pendaftaran online anggota baru, dan rekam galeri piagam kejuaraan.
           </p>
         </div>
@@ -178,7 +171,7 @@ export default function EkskulPage() {
           <Button
             variant="default"
             size="sm"
-            className="bg-emerald-600 hover:bg-emerald-700 font-bold shadow-emerald-200"
+            className="bg-emerald-600 hover:bg-emerald-500 text-white font-semibold"
             onClick={() => setIsAchievementModalOpen(true)}
           >
             <Plus className="h-4 w-4" />
@@ -188,9 +181,9 @@ export default function EkskulPage() {
       </div>
 
       {toastMessage && (
-        <div className="rounded-2xl bg-emerald-50 border border-emerald-200 p-3.5 text-xs text-emerald-800 flex items-center gap-2 shadow-sm animate-in fade-in">
-          <CheckCircle2 className="h-4 w-4 text-emerald-600 shrink-0" />
-          <span className="font-bold">{toastMessage}</span>
+        <div className="rounded-2xl bg-emerald-500/10 border border-emerald-500/25 p-3.5 text-xs text-emerald-600 dark:text-emerald-300 flex items-center gap-2 shadow-sm animate-in fade-in">
+          <CheckCircle2 className="h-4 w-4 text-emerald-500 shrink-0" />
+          <span className="font-semibold">{toastMessage}</span>
         </div>
       )}
 
@@ -199,56 +192,56 @@ export default function EkskulPage() {
         {clubs.map((club) => (
           <Card
             key={club.id}
-            className="flex flex-col justify-between border-slate-200 hover:border-emerald-400 hover:shadow-md transition-all"
+            className="flex flex-col justify-between hover:border-emerald-500/40 transition-all"
           >
             <div>
               <div className="flex items-start justify-between gap-2 pb-2">
                 <div className="flex items-center gap-2.5">
-                  <div className="h-11 w-11 rounded-2xl bg-emerald-100 text-emerald-700 flex items-center justify-center font-bold shadow-sm">
+                  <div className="h-11 w-11 rounded-2xl bg-emerald-500/15 text-emerald-500 dark:text-emerald-400 border border-emerald-500/20 flex items-center justify-center font-bold shadow-sm">
                     <Trophy className="h-6 w-6" />
                   </div>
                   <div>
-                    <h3 className="text-base font-extrabold text-slate-900 leading-tight">
+                    <h3 className="text-base font-bold text-foreground leading-tight">
                       {club.name}
                     </h3>
-                    <Badge variant="secondary" className="text-[10px] mt-0.5 font-bold">
+                    <Badge variant="secondary" className="text-[10px] mt-0.5 font-semibold">
                       {club.category}
                     </Badge>
                   </div>
                 </div>
 
                 {club.isJoined && (
-                  <Badge variant="success" className="gap-1 font-bold">
+                  <Badge variant="success" className="gap-1 font-semibold">
                     <CheckCircle2 className="h-3 w-3" />
                     Terdaftar
                   </Badge>
                 )}
               </div>
 
-              <p className="text-xs text-slate-600 mt-3 leading-relaxed">
+              <p className="text-xs text-muted-foreground mt-3 leading-relaxed">
                 {club.description}
               </p>
 
               {/* Schedules and Info */}
-              <div className="mt-4 grid grid-cols-2 gap-2 text-xs text-slate-600 bg-slate-50 p-3.5 rounded-2xl border border-slate-100">
+              <div className="mt-4 grid grid-cols-2 gap-2 text-xs text-muted-foreground bg-muted/40 p-3.5 rounded-2xl border border-border">
                 <div className="flex items-center gap-1.5">
-                  <Calendar className="h-3.5 w-3.5 text-emerald-600 shrink-0" />
+                  <Calendar className="h-3.5 w-3.5 text-emerald-500 shrink-0" />
                   <span className="truncate">{club.scheduleDay}, {club.scheduleTime}</span>
                 </div>
                 <div className="flex items-center gap-1.5">
-                  <MapPin className="h-3.5 w-3.5 text-emerald-600 shrink-0" />
+                  <MapPin className="h-3.5 w-3.5 text-emerald-500 shrink-0" />
                   <span className="truncate">{club.location}</span>
                 </div>
-                <div className="flex items-center gap-1.5 col-span-2 pt-1 border-t border-slate-200/60">
-                  <Users className="h-3.5 w-3.5 text-slate-400 shrink-0" />
-                  <span>Pembina: <strong>{club.coachName}</strong> ({club.memberCount} Anggota)</span>
+                <div className="flex items-center gap-1.5 col-span-2 pt-1 border-t border-border">
+                  <Users className="h-3.5 w-3.5 text-muted-foreground shrink-0" />
+                  <span>Pembina: <strong className="text-foreground">{club.coachName}</strong> ({club.memberCount} Anggota)</span>
                 </div>
               </div>
 
               {/* Achievements Showcase */}
               {club.achievements.length > 0 && (
                 <div className="mt-3.5 space-y-1.5">
-                  <p className="text-[11px] font-bold text-slate-700 flex items-center gap-1">
+                  <p className="text-[11px] font-semibold text-foreground flex items-center gap-1">
                     <Medal className="h-3.5 w-3.5 text-amber-500" />
                     Piagam Prestasi Kejuaraan:
                   </p>
@@ -256,10 +249,10 @@ export default function EkskulPage() {
                     {club.achievements.map((a, i) => (
                       <div
                         key={i}
-                        className="flex items-center justify-between text-xs bg-amber-50/70 border border-amber-200/80 px-3 py-1.5 rounded-xl text-amber-900"
+                        className="flex items-center justify-between text-xs bg-amber-500/10 border border-amber-500/25 px-3 py-1.5 rounded-xl text-foreground"
                       >
-                        <span className="font-bold">{a.title}</span>
-                        <Badge variant="warning" className="text-[10px] bg-amber-100 text-amber-900 font-bold">
+                        <span className="font-medium text-foreground">{a.title}</span>
+                        <Badge variant="warning" className="text-[10px] font-semibold">
                           {a.rank} ({a.year})
                         </Badge>
                       </div>
@@ -270,8 +263,8 @@ export default function EkskulPage() {
             </div>
 
             {/* Bottom Join Action */}
-            <div className="pt-4 mt-4 border-t border-slate-100 flex items-center justify-between">
-              <span className="text-xs text-slate-400 font-medium">
+            <div className="pt-4 mt-4 border-t border-border flex items-center justify-between">
+              <span className="text-xs text-muted-foreground font-medium">
                 {club.isRecruiting ? "Pendaftaran Terbuka" : "Pendaftaran Ditutup"}
               </span>
 
@@ -281,7 +274,7 @@ export default function EkskulPage() {
                   size="sm"
                   disabled={club.isJoined || !club.isRecruiting}
                   onClick={() => handleJoinClub(club.id)}
-                  className={club.isJoined ? "text-emerald-700 border-emerald-300 font-bold" : "font-bold"}
+                  className={club.isJoined ? "text-emerald-500 border-emerald-500/30 font-semibold" : "font-semibold"}
                 >
                   {club.isJoined ? "Sudah Bergabung" : "Daftar Ekskul Sekarang"}
                 </Button>
@@ -301,13 +294,13 @@ export default function EkskulPage() {
       >
         <form onSubmit={handleAddAchievement} className="space-y-4 mt-2">
           <div className="space-y-1.5">
-            <label className="block text-xs font-semibold uppercase tracking-wider text-slate-600">
+            <label className="block text-xs font-semibold uppercase tracking-wider text-muted-foreground">
               Pilih Ekstrakurikuler
             </label>
             <select
               value={selectedClubId}
               onChange={(e) => setSelectedClubId(e.target.value)}
-              className="w-full h-11 rounded-2xl border border-slate-200 bg-white px-3 text-sm text-slate-900"
+              className="w-full h-11 rounded-2xl border border-input bg-card px-3 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-emerald-500"
             >
               {clubs.map((c) => (
                 <option key={c.id} value={c.id}>
@@ -347,7 +340,7 @@ export default function EkskulPage() {
             <Button type="button" variant="outline" onClick={() => setIsAchievementModalOpen(false)}>
               Batal
             </Button>
-            <Button type="submit" variant="gradient">
+            <Button type="submit" variant="default" className="bg-emerald-600 hover:bg-emerald-500 text-white font-semibold">
               Simpan Piagam Prestasi
             </Button>
           </div>

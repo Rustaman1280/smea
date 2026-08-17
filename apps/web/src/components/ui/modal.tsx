@@ -46,38 +46,51 @@ export function Modal({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 animate-in fade-in duration-200">
-      {/* Backdrop */}
+      {/* Backdrop — dark blur */}
       <div
-        className="fixed inset-0 bg-slate-900/40 backdrop-blur-sm transition-opacity"
+        className="fixed inset-0 bg-black/70 backdrop-blur-md transition-opacity"
         onClick={onClose}
       />
 
-      {/* Modal Dialog */}
+      {/* Modal Panel — dark glassmorphism */}
       <div
         className={cn(
-          "relative w-full rounded-2xl bg-white p-6 shadow-2xl transition-all duration-200 border border-slate-100 z-10 max-h-[90vh] overflow-y-auto",
+          "relative w-full z-10 max-h-[90vh] overflow-y-auto",
+          "rounded-2xl p-6",
+          // Dark glass base
+          "bg-[#0d1526]/90 backdrop-blur-2xl",
+          // Shimmer border effect
+          "border border-white/[0.09]",
+          // Blue glow shadow
+          "shadow-[0_0_0_1px_rgba(14,165,233,0.08),0_24px_64px_rgba(0,0,0,0.7),0_0_40px_rgba(14,165,233,0.06)]",
+          "transition-all duration-200 animate-in zoom-in-95 slide-in-from-bottom-4",
           maxWidths[maxWidth]
         )}
       >
-        <div className="flex items-center justify-between pb-4">
+        {/* Top shimmer line */}
+        <div className="absolute top-0 left-8 right-8 h-px bg-gradient-to-r from-transparent via-sky-500/40 to-transparent" />
+
+        <div className="flex items-start justify-between pb-4 border-b border-white/[0.07]">
           <div>
             {title && (
-              <h3 className="text-lg font-bold text-slate-800 tracking-tight">
+              <h3 className="text-base font-semibold text-slate-100 tracking-tight">
                 {title}
               </h3>
             )}
             {description && (
-              <p className="text-xs text-slate-500 mt-0.5">{description}</p>
+              <p className="text-xs text-slate-400 mt-1 leading-relaxed">
+                {description}
+              </p>
             )}
           </div>
           <button
             onClick={onClose}
-            className="rounded-full p-1.5 text-slate-400 hover:bg-slate-100 hover:text-slate-600 transition-colors"
+            className="ml-4 shrink-0 rounded-lg p-1.5 text-slate-500 hover:bg-white/[0.08] hover:text-slate-300 transition-colors"
           >
             <X className="h-4 w-4" />
           </button>
         </div>
-        <div className="mt-2">{children}</div>
+        <div className="mt-4">{children}</div>
       </div>
     </div>
   );

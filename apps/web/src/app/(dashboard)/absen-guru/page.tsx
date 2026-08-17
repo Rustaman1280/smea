@@ -13,8 +13,6 @@ import {
   Calendar,
   Building,
   FileCheck,
-  Check,
-  AlertCircle,
 } from "lucide-react";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -133,230 +131,168 @@ export default function AbsenGuruPage() {
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
           <div className="flex items-center gap-2">
-            <h1 className="text-2xl font-bold tracking-tight text-slate-900">
+            <h1 className="text-2xl font-bold tracking-tight text-foreground">
               2. Absen Guru & Log BKD
             </h1>
             <Badge variant="info">Modul 2</Badge>
           </div>
-          <p className="text-sm text-slate-500 mt-1">
+          <p className="text-sm text-muted-foreground mt-1">
             Presensi kehadiran dewan guru, pencatatan beban kerja jam mengajar (BKD), dan pelaporan guru pengganti.
           </p>
         </div>
 
-        <div className="flex items-center gap-2 text-xs font-bold text-slate-700 bg-white border border-slate-200 px-3.5 py-2 rounded-2xl shadow-sm">
-          <Calendar className="h-4 w-4 text-indigo-600" />
+        <div className="flex items-center gap-2 text-xs font-semibold text-foreground bg-card border border-border px-3.5 py-2 rounded-2xl shadow-sm">
+          <Calendar className="h-4 w-4 text-indigo-500" />
           <span>Minggu, 16 Agustus 2026</span>
         </div>
       </div>
 
-      {/* Main Content Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-        {/* Guru Self Service Checkin Card */}
-        <Card className="lg:col-span-5 border-indigo-200/80 bg-gradient-to-b from-indigo-50/50 to-white shadow-sm">
-          <CardHeader>
-            <div className="flex items-center justify-between">
-              <CardTitle className="text-base">Status Presensi Guru</CardTitle>
-              <Badge variant={isCheckedIn ? "success" : "secondary"}>
-                {isCheckedIn ? "Sudah Hadir" : "Belum Absen"}
-              </Badge>
+        {/* Check-In / Check-Out Card */}
+        <Card className="lg:col-span-4 border-indigo-500/20 bg-indigo-500/5">
+          <CardHeader className="text-center pb-2">
+            <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-indigo-500/15 text-indigo-500 dark:text-indigo-400 border border-indigo-500/30">
+              <UserCheck2 className="h-7 w-7" />
             </div>
+            <CardTitle className="mt-3 text-lg font-bold text-foreground">Presensi Kehadiran Guru</CardTitle>
             <CardDescription>
-              {user.name} · {user.role}
+              {user.name} · NIP. 198501012010011001
             </CardDescription>
           </CardHeader>
-          <CardContent className="space-y-4">
-            {/* Geolocation Verification Box */}
-            <div className="rounded-2xl border border-indigo-200 bg-white p-3.5 space-y-2 text-xs shadow-sm">
-              <div className="flex items-center justify-between">
-                <span className="text-slate-600 flex items-center gap-1.5 font-bold">
-                  <MapPin className="h-3.5 w-3.5 text-indigo-600" />
-                  Radius Geolokasi Presensi:
-                </span>
-                <span className="font-extrabold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200 text-[10px]">
-                  Terverifikasi di Sekolah
-                </span>
-              </div>
-              <p className="text-[11px] text-slate-400">
-                SMKN 1 Garut (Radius 50m dari Titik Koordinat Utama)
-              </p>
-            </div>
-
-            {/* Checkin / Checkout Timing */}
+          <CardContent className="space-y-4 pt-2">
             <div className="grid grid-cols-2 gap-3 text-center">
-              <div className="rounded-2xl bg-slate-50 p-3.5 border border-slate-200/80">
-                <p className="text-[10px] font-bold uppercase tracking-wider text-slate-400">Jam Masuk</p>
-                <p className="text-base font-black text-slate-900 mt-1">{checkInTime}</p>
-                <p className="text-[10px] text-emerald-600 font-bold mt-0.5">Tepat Waktu</p>
+              <div className="p-3 rounded-2xl bg-card border border-border space-y-1">
+                <span className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
+                  Presensi Masuk
+                </span>
+                <p className="text-sm font-bold text-foreground">{checkInTime}</p>
+                <Badge variant="success" className="text-[9px]">Tepat Waktu</Badge>
               </div>
-              <div className="rounded-2xl bg-slate-50 p-3.5 border border-slate-200/80">
-                <p className="text-[10px] font-bold uppercase tracking-wider text-slate-400">Jam Pulang</p>
-                <p className="text-base font-black text-slate-900 mt-1">
-                  {checkOutTime || "Belum Check-out"}
+
+              <div className="p-3 rounded-2xl bg-card border border-border space-y-1">
+                <span className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
+                  Presensi Pulang
+                </span>
+                <p className="text-sm font-bold text-foreground">
+                  {checkOutTime || "Belum Pulang"}
                 </p>
-                <p className="text-[10px] text-slate-400 font-medium mt-0.5">Min. 15:30 WIB</p>
+                <Badge variant={isCheckedOut ? "success" : "secondary"} className="text-[9px]">
+                  {isCheckedOut ? "Selesai" : "Standby"}
+                </Badge>
               </div>
             </div>
 
-            {/* Action Buttons */}
-            <div className="flex gap-2">
-              <Button
-                variant={isCheckedIn ? "outline" : "gradient"}
-                className="flex-1 font-bold"
-                disabled={isCheckedIn}
-                onClick={handleCheckIn}
-              >
-                <CheckCircle2 className="h-4 w-4" />
-                Check-in Masuk
-              </Button>
-              <Button
-                variant={isCheckedOut ? "outline" : "default"}
-                className="flex-1 bg-indigo-600 hover:bg-indigo-700 font-bold"
-                disabled={!isCheckedIn || isCheckedOut}
-                onClick={handleCheckOut}
-              >
-                <Clock className="h-4 w-4" />
-                Check-out Pulang
-              </Button>
+            <div className="space-y-2 pt-2">
+              {!isCheckedOut ? (
+                <Button
+                  variant="gradient"
+                  className="w-full font-bold min-h-[42px]"
+                  onClick={handleCheckOut}
+                >
+                  <Clock className="h-4 w-4" />
+                  Catat Jam Pulang Sekolah
+                </Button>
+              ) : (
+                <div className="p-3 rounded-2xl bg-emerald-500/10 border border-emerald-500/25 text-emerald-600 dark:text-emerald-300 text-xs text-center font-semibold">
+                  ✓ Presensi harian Anda telah lengkap tercatat.
+                </div>
+              )}
+            </div>
+
+            <div className="rounded-2xl bg-muted/40 border border-border p-3 text-xs space-y-1.5 text-muted-foreground">
+              <div className="flex items-center justify-between">
+                <span>Lokasi Terdeteksi:</span>
+                <strong className="text-foreground flex items-center gap-1">
+                  <MapPin className="h-3 w-3 text-rose-500" />
+                  SMKN 1 Garut (Radius 50m)
+                </strong>
+              </div>
+              <div className="flex items-center justify-between">
+                <span>Total Jam BKD Hari Ini:</span>
+                <strong className="text-indigo-500 dark:text-indigo-300 font-bold">5 Jam Pelajaran</strong>
+              </div>
             </div>
           </CardContent>
         </Card>
 
-        {/* Teaching Hours / BKD Logger */}
-        <Card className="lg:col-span-7">
+        {/* Teaching Logs / BKD */}
+        <Card className="lg:col-span-8">
           <CardHeader className="flex flex-row items-center justify-between pb-3">
             <div>
-              <CardTitle>Log Jam Mengajar Hari Ini (BKD)</CardTitle>
+              <CardTitle>Log Jam Mengajar & BKD Hari Ini</CardTitle>
               <CardDescription>
-                Pencatatan kelas, materi, dan jam mengajar guru (termasuk guru pengganti)
+                Beban Kerja Dosen / Guru (BKD) Terverifikasi Kurikulum
               </CardDescription>
             </div>
             <Button
               variant="default"
               size="sm"
-              className="bg-indigo-600 hover:bg-indigo-700 font-bold"
+              className="bg-indigo-600 hover:bg-indigo-500 text-white font-semibold"
               onClick={() => setIsModalOpen(true)}
             >
               <Plus className="h-4 w-4" />
-              Catat Jam Mengajar
+              Catat Sesi BKD
             </Button>
           </CardHeader>
-          <CardContent>
-            {sessions.length === 0 ? (
-              <div className="text-center py-8 text-slate-400 text-xs">
-                Belum ada sesi jam mengajar yang dicatat hari ini.
-              </div>
-            ) : (
-              <div className="space-y-3">
-                {sessions.map((session) => (
-                  <div
-                    key={session.id}
-                    className="p-4 rounded-2xl border border-slate-200 bg-white hover:border-indigo-300 transition-all space-y-2 shadow-sm"
-                  >
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-2">
-                        <span className="font-extrabold text-sm text-slate-900">
-                          {session.className}
-                        </span>
-                        <span className="text-slate-300">·</span>
-                        <span className="text-xs font-bold text-indigo-800">
-                          {session.subjectName}
-                        </span>
-                        {session.isSubstitute && (
-                          <Badge variant="warning" className="text-[10px]">
-                            Guru Pengganti
-                          </Badge>
-                        )}
-                      </div>
-                      <Badge variant="secondary" className="text-[10px]">
-                        {session.periods}
-                      </Badge>
-                    </div>
-
-                    <p className="text-xs text-slate-600">
-                      <strong className="text-slate-800">Pokok Bahasan:</strong> {session.topic}
-                    </p>
-
-                    {session.substituteTeacherName && (
-                      <p className="text-[11px] text-amber-800 bg-amber-50 p-2 rounded-xl border border-amber-200 font-semibold">
-                        Catatan Pengganti: {session.substituteTeacherName}
-                      </p>
-                    )}
-
-                    <div className="flex items-center justify-between text-[11px] text-slate-400 pt-1.5 border-t border-slate-100">
-                      <span>Kehadiran Siswa: {session.studentCount} Orang</span>
-                      <span className="text-emerald-600 font-bold flex items-center gap-1">
-                        <CheckCircle2 className="h-3.5 w-3.5" />
-                        Tervalidasi BKD
+          <CardContent className="space-y-3">
+            {sessions.map((s) => (
+              <div
+                key={s.id}
+                className="p-4 rounded-2xl border border-border bg-card/60 space-y-2 transition-all hover:border-indigo-500/30"
+              >
+                <div className="flex items-start justify-between gap-2">
+                  <div>
+                    <div className="flex items-center gap-2">
+                      <span className="text-xs font-bold text-indigo-600 dark:text-indigo-300 bg-indigo-500/10 px-2.5 py-0.5 rounded-lg border border-indigo-500/25">
+                        {s.className}
                       </span>
+                      <h4 className="text-xs font-bold text-foreground">
+                        {s.subjectName}
+                      </h4>
+                      {s.isSubstitute && (
+                        <Badge variant="warning" className="text-[10px]">
+                          Guru Pengganti
+                        </Badge>
+                      )}
                     </div>
+                    <p className="text-xs text-muted-foreground mt-1">
+                      <strong>Materi / Topik:</strong> {s.topic}
+                    </p>
                   </div>
-                ))}
+                  <Badge variant="success" className="text-[10px]">
+                    {s.periods}
+                  </Badge>
+                </div>
+
+                {s.substituteTeacherName && (
+                  <p className="text-[11px] text-amber-500 dark:text-amber-300 italic">
+                    ℹ️ {s.substituteTeacherName}
+                  </p>
+                )}
+
+                <div className="pt-2 border-t border-border flex items-center justify-between text-[11px] text-muted-foreground">
+                  <span className="flex items-center gap-1">
+                    <Building className="h-3.5 w-3.5" />
+                    Kehadiran Siswa: {s.studentCount} Siswa
+                  </span>
+                  <span className="text-emerald-500 dark:text-emerald-300 font-semibold flex items-center gap-1">
+                    <FileCheck className="h-3.5 w-3.5" />
+                    Tervalidasi BKD
+                  </span>
+                </div>
               </div>
-            )}
+            ))}
           </CardContent>
         </Card>
       </div>
-
-      {/* Schoolwide Recap Table */}
-      <Card className="mt-6">
-        <CardHeader>
-          <div className="flex items-center justify-between">
-            <div>
-              <CardTitle>Rekapitulasi Kehadiran Dewan Guru SMKN 1 Garut</CardTitle>
-              <CardDescription>
-                Pantauan harian kehadiran seluruh bapak/ibu guru pengampu
-              </CardDescription>
-            </div>
-            <Badge variant="info">48 Dewan Guru Aktif</Badge>
-          </div>
-        </CardHeader>
-        <CardContent>
-          <div className="overflow-x-auto">
-            <table className="w-full text-left text-xs">
-              <thead>
-                <tr className="border-b border-slate-100 text-slate-400 uppercase font-semibold">
-                  <th className="pb-3">Nama Guru</th>
-                  <th className="pb-3">NIP / Bidang</th>
-                  <th className="pb-3">Check-In</th>
-                  <th className="pb-3">Total Jam BKD</th>
-                  <th className="pb-3">Status</th>
-                  <th className="pb-3 text-right">Keterangan</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-slate-100 text-slate-700">
-                <tr className="hover:bg-slate-50/80">
-                  <td className="py-3 font-bold text-slate-900">Budi Santoso, S.Kom</td>
-                  <td className="py-3 text-slate-500">19850101... · RPL</td>
-                  <td className="py-3 font-semibold text-slate-800">06:48 WIB</td>
-                  <td className="py-3 font-bold text-indigo-700">5 Jam Pelajaran</td>
-                  <td className="py-3">
-                    <Badge variant="success">Hadir</Badge>
-                  </td>
-                  <td className="py-3 text-right text-slate-400">-</td>
-                </tr>
-                <tr className="hover:bg-slate-50/80">
-                  <td className="py-3 font-bold text-slate-900">Hendrik Kurniawan, S.Pd</td>
-                  <td className="py-3 text-slate-500">19880412... · TKJ</td>
-                  <td className="py-3 text-slate-400">-</td>
-                  <td className="py-3 font-bold text-slate-500">0 Jam</td>
-                  <td className="py-3">
-                    <Badge variant="warning">Izin Dinas</Badge>
-                  </td>
-                  <td className="py-3 text-right text-amber-700 font-semibold">Digantikan Budi Santoso</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </CardContent>
-      </Card>
 
       {/* Modal Add Teaching Session */}
       <Modal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
-        title="Catat Jam Mengajar (Log BKD)"
-        description="Rekam sesi kelas, pokok bahasan, dan flag jika Anda menjadi guru pengganti."
-        maxWidth="lg"
+        title="Catat Sesi Mengajar BKD"
+        description="Laporkan materi yang diajarkan pada kelas hari ini."
+        maxWidth="md"
       >
         <form onSubmit={handleAddSession} className="space-y-4 mt-2">
           <div className="grid grid-cols-2 gap-3">
@@ -364,14 +300,12 @@ export default function AbsenGuruPage() {
               label="Kelas"
               value={classNameInput}
               onChange={(e) => setClassNameInput(e.target.value)}
-              placeholder="XII RPL 2"
               required
             />
             <Input
               label="Mata Pelajaran"
               value={subjectInput}
               onChange={(e) => setSubjectInput(e.target.value)}
-              placeholder="Basis Data"
               required
             />
           </div>
@@ -381,7 +315,6 @@ export default function AbsenGuruPage() {
               label="Alokasi Jam Pelajaran"
               value={periodInput}
               onChange={(e) => setPeriodInput(e.target.value)}
-              placeholder="Jam ke-6 s.d 8"
               required
             />
             <Input
@@ -389,57 +322,49 @@ export default function AbsenGuruPage() {
               type="number"
               value={studentCountInput}
               onChange={(e) => setStudentCountInput(e.target.value)}
-              placeholder="32"
               required
             />
           </div>
 
           <div className="space-y-1.5">
-            <label className="block text-xs font-semibold uppercase tracking-wider text-slate-600">
-              Topik & Pokok Bahasan Praktik
+            <label className="block text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+              Topik & Pokok Bahasan Materi
             </label>
             <textarea
-              className="w-full rounded-2xl border border-slate-200 bg-white p-3.5 text-sm text-slate-900 focus:border-sky-500 focus:outline-none focus:ring-2 focus:ring-sky-100 min-h-[85px]"
-              placeholder="Jelaskan ringkasan materi dan kegiatan praktikum..."
+              className="w-full rounded-2xl border border-input bg-card p-3.5 text-sm text-foreground min-h-[85px] focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              placeholder="Tuliskan ringkasan materi atau modul praktikum yang telah diselesaikan..."
               value={topicInput}
               onChange={(e) => setTopicInput(e.target.value)}
               required
             />
           </div>
 
-          {/* Substitute Teacher Flag */}
-          <div className="rounded-2xl border border-slate-200 p-3 bg-slate-50 space-y-2">
-            <label className="flex items-center gap-2 text-xs font-bold text-slate-800 cursor-pointer">
-              <input
-                type="checkbox"
-                checked={isSubstituteInput}
-                onChange={(e) => setIsSubstituteInput(e.target.checked)}
-                className="rounded text-sky-600 focus:ring-sky-400"
-              />
-              <span>Tandai sebagai Guru Pengganti (Invalen)</span>
-            </label>
+          <label className="flex items-center gap-2 text-xs font-semibold text-foreground cursor-pointer pt-1">
+            <input
+              type="checkbox"
+              checked={isSubstituteInput}
+              onChange={(e) => setIsSubstituteInput(e.target.checked)}
+              className="rounded text-indigo-600 focus:ring-indigo-400"
+            />
+            <span>Sesi ini menggantikan jam guru lain (Guru Pengganti)</span>
+          </label>
 
-            {isSubstituteInput && (
-              <Input
-                label="Nama Guru Asli yang Digantikan"
-                value={originalTeacherInput}
-                onChange={(e) => setOriginalTeacherInput(e.target.value)}
-                placeholder="Contoh: Hendrik Kurniawan, S.Pd (Dinas Luar)"
-                required
-              />
-            )}
-          </div>
+          {isSubstituteInput && (
+            <Input
+              label="Nama Guru Asli yang Digantikan"
+              placeholder="Contoh: Pak Hendrik, S.Pd"
+              value={originalTeacherInput}
+              onChange={(e) => setOriginalTeacherInput(e.target.value)}
+              required
+            />
+          )}
 
           <div className="flex justify-end gap-2 pt-2">
-            <Button
-              type="button"
-              variant="outline"
-              onClick={() => setIsModalOpen(false)}
-            >
+            <Button type="button" variant="outline" onClick={() => setIsModalOpen(false)}>
               Batal
             </Button>
-            <Button type="submit" variant="gradient">
-              Simpan Log Sesi BKD
+            <Button type="submit" variant="default" className="bg-indigo-600 hover:bg-indigo-500 text-white font-semibold">
+              Simpan Log BKD
             </Button>
           </div>
         </form>

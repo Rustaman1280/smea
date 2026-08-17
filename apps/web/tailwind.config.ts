@@ -30,15 +30,43 @@ const config: Config = {
           900: "#0c4a6e",
           950: "#082f49",
         },
-        // Razorbill Plumage & Nordic Arctic Tokens
+        // Abyss — Ultra-dark blue-black base palette
+        abyss: {
+          950: "#020408",
+          900: "#040810",
+          800: "#060b14",
+          700: "#080f1c",
+          600: "#0b1628",
+          500: "#0d1e36",
+          400: "#102440",
+        },
+        // Neon — Electric blue accent palette
+        neon: {
+          blue: "#0ea5e9",
+          "blue-bright": "#38bdf8",
+          "blue-dim": "#0284c7",
+          indigo: "#6366f1",
+          purple: "#8b5cf6",
+          glow: "rgba(14,165,233,0.35)",
+        },
+        // Aurora — Soft glowing color tokens
+        aurora: {
+          cyan: "#22d3ee",
+          sky: "#7dd3fc",
+          violet: "#a78bfa",
+          emerald: "#34d399",
+          rose: "#fb7185",
+          amber: "#fbbf24",
+        },
+        // Razorbill Plumage & Nordic Arctic Tokens (preserved)
         razor: {
-          dark: "#0b1120",
-          obsidian: "#0f172a",
+          dark: "#060b14",
+          obsidian: "#0b1628",
           slate: "#1e293b",
           light: "#f8fafc",
           snow: "#ffffff",
           ice: "#f1f5f9",
-          border: "#e2e8f0",
+          border: "#1e293b",
         },
         oceanic: {
           50: "#f0fdfa",
@@ -98,9 +126,24 @@ const config: Config = {
         mono: ["var(--font-mono)", "ui-monospace", "monospace"],
       },
       boxShadow: {
-        subtle: "0 1px 3px 0 rgb(0 0 0 / 0.05), 0 1px 2px -1px rgb(0 0 0 / 0.05)",
-        razor: "0 4px 20px -2px rgba(15, 23, 42, 0.08)",
-        glow: "0 0 25px -5px rgba(2, 132, 199, 0.25)",
+        subtle: "0 1px 3px 0 rgb(0 0 0 / 0.3), 0 1px 2px -1px rgb(0 0 0 / 0.3)",
+        razor: "0 4px 20px -2px rgba(0, 0, 0, 0.5)",
+        // Glow shadows — blue
+        glow: "0 0 20px rgba(14, 165, 233, 0.3), 0 0 60px rgba(14, 165, 233, 0.1)",
+        "glow-sm": "0 0 8px rgba(14, 165, 233, 0.4), 0 0 20px rgba(14, 165, 233, 0.15)",
+        "glow-lg": "0 0 30px rgba(14, 165, 233, 0.4), 0 0 80px rgba(14, 165, 233, 0.15), 0 0 160px rgba(14, 165, 233, 0.06)",
+        // Card shadows — elevated dark
+        "card-dark": "0 4px 24px rgba(0,0,0,0.5), 0 1px 4px rgba(0,0,0,0.4)",
+        "card-hover": "0 8px 32px rgba(0,0,0,0.6), 0 0 0 1px rgba(14,165,233,0.15), 0 0 20px rgba(14,165,233,0.08)",
+      },
+      backgroundImage: {
+        // Mesh gradient backgrounds
+        "mesh-dark": "linear-gradient(135deg, #060b14 0%, #0b1628 40%, #0c2040 60%, #060b14 100%)",
+        "mesh-blue-banner": "radial-gradient(ellipse 70% 80% at 10% 50%, rgba(14,165,233,0.25) 0%, transparent 60%), radial-gradient(ellipse 60% 60% at 90% 20%, rgba(99,102,241,0.2) 0%, transparent 55%), linear-gradient(135deg, #060b14 0%, #0a1929 50%, #060b14 100%)",
+        // Gradient borders
+        "border-blue": "linear-gradient(135deg, rgba(14,165,233,0.5), rgba(99,102,241,0.3))",
+        // Subtle surface gradient
+        "surface-dark": "linear-gradient(145deg, rgba(255,255,255,0.04) 0%, rgba(255,255,255,0.02) 100%)",
       },
       fontWeight: {
         thin: '100',
@@ -112,7 +155,26 @@ const config: Config = {
         bold: '500',      // Bawaan Tailwind: 700 -> diubah ke 500
         extrabold: '500', // Bawaan Tailwind: 800 -> diubah ke 500
         black: '500',
-      }
+      },
+      animation: {
+        "orb-pulse": "orb-pulse 8s ease-in-out infinite",
+        "glow-pulse": "glow-pulse 3s ease-in-out infinite",
+        "shimmer": "shimmer 2s linear infinite",
+      },
+      keyframes: {
+        "orb-pulse": {
+          "0%, 100%": { opacity: "0.7", transform: "scale(1)" },
+          "50%": { opacity: "1", transform: "scale(1.1)" },
+        },
+        "glow-pulse": {
+          "0%, 100%": { boxShadow: "0 0 15px rgba(14,165,233,0.3)" },
+          "50%": { boxShadow: "0 0 30px rgba(14,165,233,0.5), 0 0 60px rgba(14,165,233,0.2)" },
+        },
+        shimmer: {
+          "0%": { backgroundPosition: "-200% 0" },
+          "100%": { backgroundPosition: "200% 0" },
+        },
+      },
     },
   },
   plugins: [],

@@ -16,18 +16,17 @@ import {
   KanbanSquare,
   Boxes,
   Wifi,
-  Sparkles,
   Compass,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { Badge } from "@/components/ui/badge";
 
 interface NavItem {
   title: string;
   href: string;
   icon: React.ElementType;
-  accentColor: string;
+  colorClass: string;
   allowedRoles: UserRole[];
+  section?: string;
 }
 
 const NAV_ITEMS: NavItem[] = [
@@ -35,14 +34,15 @@ const NAV_ITEMS: NavItem[] = [
     title: "Dashboard Utama",
     href: "/",
     icon: LayoutDashboard,
-    accentColor: "text-sky-600 bg-sky-100",
+    colorClass: "text-sky-500 dark:text-sky-400",
     allowedRoles: Object.values(UserRole),
   },
   {
-    title: "1. Absensi Siswa (QR)",
+    title: "Absensi Siswa (QR)",
     href: "/absensi-siswa",
     icon: QrCode,
-    accentColor: "text-sky-600 bg-sky-100",
+    colorClass: "text-sky-500 dark:text-sky-400",
+    section: "Presensi & Kehadiran",
     allowedRoles: [
       UserRole.SISWA,
       UserRole.GURU,
@@ -54,10 +54,11 @@ const NAV_ITEMS: NavItem[] = [
     ],
   },
   {
-    title: "2. Absen Guru & BKD",
+    title: "Absen Guru & BKD",
     href: "/absen-guru",
     icon: UserCheck2,
-    accentColor: "text-indigo-600 bg-indigo-100",
+    colorClass: "text-indigo-500 dark:text-indigo-400",
+    section: "Presensi & Kehadiran",
     allowedRoles: [
       UserRole.GURU,
       UserRole.GURU_BK,
@@ -69,10 +70,11 @@ const NAV_ITEMS: NavItem[] = [
     ],
   },
   {
-    title: "3. BK & Pelanggaran",
+    title: "BK & Pelanggaran",
     href: "/bk-pelanggaran",
     icon: ShieldAlert,
-    accentColor: "text-rose-600 bg-rose-100",
+    colorClass: "text-rose-500 dark:text-rose-400",
+    section: "Akademik & Konseling",
     allowedRoles: [
       UserRole.SISWA,
       UserRole.GURU_BK,
@@ -82,10 +84,57 @@ const NAV_ITEMS: NavItem[] = [
     ],
   },
   {
-    title: "4. E-Kantin",
+    title: "Mapel & LMS",
+    href: "/mata-pelajaran",
+    icon: BookOpenCheck,
+    colorClass: "text-cyan-500 dark:text-cyan-400",
+    section: "Akademik & Konseling",
+    allowedRoles: [
+      UserRole.SISWA,
+      UserRole.GURU,
+      UserRole.WALI_KELAS,
+      UserRole.GURU_BK,
+      UserRole.STAFF_TU,
+      UserRole.ADMIN,
+      UserRole.KEPSEK,
+    ],
+  },
+  {
+    title: "Project & Jurnal PKL",
+    href: "/project-tracker",
+    icon: KanbanSquare,
+    colorClass: "text-purple-500 dark:text-purple-400",
+    section: "Akademik & Konseling",
+    allowedRoles: [
+      UserRole.SISWA,
+      UserRole.GURU,
+      UserRole.WALI_KELAS,
+      UserRole.ADMIN,
+      UserRole.KEPSEK,
+    ],
+  },
+  {
+    title: "Ekstrakurikuler",
+    href: "/ekskul",
+    icon: Trophy,
+    colorClass: "text-emerald-500 dark:text-emerald-400",
+    section: "Layanan & Fasilitas",
+    allowedRoles: [
+      UserRole.SISWA,
+      UserRole.GURU,
+      UserRole.WALI_KELAS,
+      UserRole.PEMBINA_EKSKUL,
+      UserRole.STAFF_TU,
+      UserRole.ADMIN,
+      UserRole.KEPSEK,
+    ],
+  },
+  {
+    title: "E-Kantin",
     href: "/kantin",
     icon: UtensilsCrossed,
-    accentColor: "text-amber-600 bg-amber-100",
+    colorClass: "text-amber-500 dark:text-amber-400",
+    section: "Layanan & Fasilitas",
     allowedRoles: [
       UserRole.SISWA,
       UserRole.GURU,
@@ -100,53 +149,11 @@ const NAV_ITEMS: NavItem[] = [
     ],
   },
   {
-    title: "5. Ekstrakurikuler",
-    href: "/ekskul",
-    icon: Trophy,
-    accentColor: "text-emerald-600 bg-emerald-100",
-    allowedRoles: [
-      UserRole.SISWA,
-      UserRole.GURU,
-      UserRole.WALI_KELAS,
-      UserRole.PEMBINA_EKSKUL,
-      UserRole.STAFF_TU,
-      UserRole.ADMIN,
-      UserRole.KEPSEK,
-    ],
-  },
-  {
-    title: "6. Mapel & LMS",
-    href: "/mata-pelajaran",
-    icon: BookOpenCheck,
-    accentColor: "text-cyan-600 bg-cyan-100",
-    allowedRoles: [
-      UserRole.SISWA,
-      UserRole.GURU,
-      UserRole.WALI_KELAS,
-      UserRole.GURU_BK,
-      UserRole.STAFF_TU,
-      UserRole.ADMIN,
-      UserRole.KEPSEK,
-    ],
-  },
-  {
-    title: "7. Project & Jurnal PKL",
-    href: "/project-tracker",
-    icon: KanbanSquare,
-    accentColor: "text-purple-600 bg-purple-100",
-    allowedRoles: [
-      UserRole.SISWA,
-      UserRole.GURU,
-      UserRole.WALI_KELAS,
-      UserRole.ADMIN,
-      UserRole.KEPSEK,
-    ],
-  },
-  {
-    title: "8. Inventaris Sarpras",
+    title: "Inventaris Sarpras",
     href: "/inventaris",
     icon: Boxes,
-    accentColor: "text-orange-600 bg-orange-100",
+    colorClass: "text-orange-500 dark:text-orange-400",
+    section: "Layanan & Fasilitas",
     allowedRoles: [
       UserRole.SISWA,
       UserRole.GURU,
@@ -157,10 +164,11 @@ const NAV_ITEMS: NavItem[] = [
     ],
   },
   {
-    title: "9. ISP Voucher Hotspot",
+    title: "ISP Voucher Hotspot",
     href: "/isp-voucher",
     icon: Wifi,
-    accentColor: "text-teal-600 bg-teal-100",
+    colorClass: "text-teal-500 dark:text-teal-400",
+    section: "Layanan & Fasilitas",
     allowedRoles: [
       UserRole.SISWA,
       UserRole.GURU,
@@ -181,71 +189,137 @@ export function SidebarNav() {
     item.allowedRoles.includes(user.role)
   );
 
+  // Separate dashboard item from numbered module items
+  const dashboardItem = accessibleNavs.find((item) => item.href === "/");
+  const moduleItems = accessibleNavs.filter((item) => item.href !== "/");
+
   return (
-    <aside className="hidden lg:flex w-64 flex-col shrink-0 border-r border-slate-200/80 bg-white/70 backdrop-blur-md p-4 h-[calc(100vh-4rem)] sticky top-16 overflow-y-auto">
-      {/* Current Portal Badge */}
-      <div className="mb-4 px-2.5 py-2 rounded-xl bg-slate-900 text-white flex items-center justify-between shadow-sm">
-        <div className="flex items-center gap-2">
-          <div className="h-2 w-2 rounded-full bg-sky-400 animate-pulse" />
-          <span className="text-xs font-bold tracking-tight">
-            Portal {DEMO_ACCOUNTS[user.role]?.title || user.role}
+    <aside className="hidden lg:flex w-64 flex-col shrink-0 h-[calc(100vh-4rem)] sticky top-16 overflow-y-auto">
+      {/* Glass panel base with subtle clean border */}
+      <div className="flex flex-col flex-1 bg-card/60 dark:bg-[#080d18]/70 backdrop-blur-xl border-r border-border/80 p-4">
+
+        {/* Current Portal Badge */}
+        <div className="mb-4 px-3 py-2.5 rounded-xl bg-sky-500/10 border border-sky-500/25 flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <span className="relative flex h-2 w-2">
+              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-sky-400 opacity-60" />
+              <span className="relative inline-flex h-2 w-2 rounded-full bg-sky-500" />
+            </span>
+            <span className="text-xs font-semibold text-foreground tracking-tight">
+              Portal {DEMO_ACCOUNTS[user.role]?.title || user.role}
+            </span>
+          </div>
+          <span className="text-[10px] font-mono font-semibold text-sky-600 dark:text-sky-300">
+            {accessibleNavs.length} Menu
           </span>
         </div>
-        <span className="text-[10px] font-mono font-semibold text-sky-300">
-          {accessibleNavs.length} Menu
-        </span>
-      </div>
 
-      <div className="mb-2 px-2">
-        <p className="text-[10px] font-bold uppercase tracking-wider text-slate-400">
-          Modul yang Dapat Diakses
-        </p>
-      </div>
-
-      <nav className="space-y-1">
-        {accessibleNavs.map((item) => {
-          const Icon = item.icon;
-          const isActive =
-            pathname === item.href ||
-            (item.href !== "/" && pathname.startsWith(item.href));
-
-          return (
+        {/* Dashboard Main Item */}
+        {dashboardItem && (
+          <div className="mb-3">
             <Link
-              key={item.href}
-              href={item.href}
+              href={dashboardItem.href}
               className={cn(
-                "group flex items-center gap-3 rounded-xl px-3 py-2.5 text-xs font-bold transition-all duration-150",
-                isActive
-                  ? "bg-sky-600 text-white shadow-sm shadow-sky-300/40"
-                  : "text-slate-600 hover:bg-slate-100/90 hover:text-slate-900"
+                "group flex items-center gap-3 rounded-xl px-2.5 py-2.5 text-xs font-medium transition-all duration-150",
+                pathname === "/"
+                  ? "bg-sky-500/15 text-sky-700 dark:text-white border border-sky-500/40 shadow-[inset_3px_0_0_rgba(14,165,233,0.8)] font-semibold"
+                  : "text-muted-foreground border border-transparent hover:bg-muted/60 hover:text-foreground"
               )}
             >
               <div
                 className={cn(
-                  "flex h-7 w-7 items-center justify-center rounded-lg transition-transform group-hover:scale-105",
-                  isActive
-                    ? "bg-white/20 text-white"
-                    : "bg-slate-100 text-slate-500 group-hover:bg-sky-50 group-hover:text-sky-600"
+                  "flex h-7 w-7 items-center justify-center rounded-lg transition-all duration-150",
+                  pathname === "/"
+                    ? "bg-sky-500/20 text-sky-600 dark:text-sky-400"
+                    : "bg-muted text-muted-foreground group-hover:bg-sky-500/15 group-hover:text-sky-500"
                 )}
               >
-                <Icon className="h-4 w-4" />
+                <LayoutDashboard className="h-3.5 w-3.5" />
               </div>
-              <span className="truncate">{item.title}</span>
+              <span className="truncate">{dashboardItem.title}</span>
+              {pathname === "/" && (
+                <div className="ml-auto h-1.5 w-1.5 rounded-full bg-sky-500" />
+              )}
             </Link>
-          );
-        })}
-      </nav>
-
-      {/* Footer Info Box */}
-      <div className="mt-auto pt-6 px-1">
-        <div className="rounded-2xl bg-gradient-to-br from-slate-900 via-sky-950 to-slate-900 p-3.5 text-white border border-sky-500/20 shadow-md">
-          <div className="flex items-center gap-2">
-            <Compass className="h-4 w-4 text-sky-400" />
-            <p className="text-xs font-black tracking-wide">auklet SMK Super App</p>
           </div>
-          <p className="text-[10px] text-sky-200/80 mt-1">
-            SMKN 1 Garut · Tahun Ajaran 2025/2026
+        )}
+
+        {/* Section label with high contrast */}
+        <div className="mb-2 px-2 flex items-center justify-between">
+          <p className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
+            Modul Pembelajaran & Layanan
           </p>
+          <span className="text-[10px] font-mono text-muted-foreground">
+            1 - {moduleItems.length}
+          </span>
+        </div>
+
+        {/* Dynamic Numbered Module Items */}
+        <nav className="space-y-1">
+          {moduleItems.map((item, index) => {
+            const Icon = item.icon;
+            const dynamicNumber = index + 1;
+            const isActive =
+              pathname === item.href ||
+              (item.href !== "/" && pathname.startsWith(item.href));
+
+            return (
+              <Link
+                key={item.href}
+                href={item.href}
+                className={cn(
+                  "group flex items-center gap-2.5 rounded-xl px-2.5 py-2 text-xs font-medium transition-all duration-150",
+                  isActive
+                    ? "bg-sky-500/15 text-sky-700 dark:text-white border border-sky-500/40 shadow-[inset_3px_0_0_rgba(14,165,233,0.8)] font-semibold"
+                    : "text-muted-foreground border border-transparent hover:bg-muted/60 hover:text-foreground"
+                )}
+              >
+                {/* Dynamic Sequential Number Badge */}
+                <span
+                  className={cn(
+                    "flex h-5 w-5 shrink-0 items-center justify-center rounded-md text-[10px] font-bold font-mono transition-colors",
+                    isActive
+                      ? "bg-sky-500 text-white dark:text-slate-950"
+                      : "bg-muted text-muted-foreground group-hover:bg-sky-500/20 group-hover:text-sky-600 dark:group-hover:text-sky-300"
+                  )}
+                >
+                  {dynamicNumber}
+                </span>
+
+                {/* Icon container */}
+                <div
+                  className={cn(
+                    "flex h-6 w-6 items-center justify-center rounded-lg transition-all duration-150 shrink-0",
+                    isActive
+                      ? `bg-sky-500/20 ${item.colorClass}`
+                      : `text-muted-foreground group-hover:${item.colorClass}`
+                  )}
+                >
+                  <Icon className="h-3.5 w-3.5" />
+                </div>
+
+                <span className="truncate">{item.title}</span>
+
+                {/* Active indicator pill */}
+                {isActive && (
+                  <div className="ml-auto h-1.5 w-1.5 rounded-full bg-sky-500 shrink-0" />
+                )}
+              </Link>
+            );
+          })}
+        </nav>
+
+        {/* Footer Info Box */}
+        <div className="mt-auto pt-6 px-1">
+          <div className="rounded-2xl border border-border/80 bg-card/50 p-3.5">
+            <div className="flex items-center gap-2 mb-1">
+              <Compass className="h-4 w-4 text-sky-500 dark:text-sky-400" />
+              <p className="text-xs font-semibold text-foreground">auklet SMK Super App</p>
+            </div>
+            <p className="text-[10px] text-muted-foreground">
+              SMKN 1 Garut · TA 2025/2026
+            </p>
+          </div>
         </div>
       </div>
     </aside>

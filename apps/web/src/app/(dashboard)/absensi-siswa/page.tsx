@@ -7,16 +7,9 @@ import {
   QrCode,
   CheckCircle2,
   Clock,
-  Calendar,
-  AlertCircle,
-  Users,
   Camera,
   RefreshCw,
-  Sparkles,
   Download,
-  Filter,
-  Check,
-  MapPin,
   FileSpreadsheet,
 } from "lucide-react";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
@@ -119,12 +112,12 @@ export default function AbsensiSiswaPage() {
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
           <div className="flex items-center gap-2">
-            <h1 className="text-2xl font-bold tracking-tight text-slate-900">
+            <h1 className="text-2xl font-bold tracking-tight text-foreground">
               1. Absensi Digital Siswa
             </h1>
             <Badge variant="default">Modul 1</Badge>
           </div>
-          <p className="text-sm text-slate-500 mt-1">
+          <p className="text-sm text-muted-foreground mt-1">
             Presensi QR Code dinamis harian, validasi geolokasi sekolah & rekapitulasi kehadiran per kelas.
           </p>
         </div>
@@ -134,7 +127,7 @@ export default function AbsensiSiswaPage() {
             <select
               value={selectedClass}
               onChange={(e) => setSelectedClass(e.target.value)}
-              className="rounded-xl border border-slate-200 bg-white px-3 py-2 text-xs font-bold text-slate-800 shadow-sm focus:outline-none focus:ring-2 focus:ring-sky-500"
+              className="rounded-xl border border-input bg-card px-3 py-2 text-xs font-semibold text-foreground shadow-sm focus:outline-none focus:ring-2 focus:ring-sky-500"
             >
               <option value="XII RPL 1">Kelas XII RPL 1</option>
               <option value="XII RPL 2">Kelas XII RPL 2</option>
@@ -146,6 +139,7 @@ export default function AbsensiSiswaPage() {
               variant="outline"
               size="sm"
               onClick={() => setIsExportModalOpen(true)}
+              className="font-semibold"
             >
               <Download className="h-4 w-4" />
               Ekspor Rekap
@@ -158,52 +152,53 @@ export default function AbsensiSiswaPage() {
       {isStudent ? (
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
           {/* QR Scan Action Card */}
-          <Card className="lg:col-span-5 border-sky-200 bg-gradient-to-b from-sky-50/60 to-white shadow-md">
+          <Card className="lg:col-span-5 border-sky-500/20 bg-sky-500/5">
             <CardHeader className="text-center pb-2">
-              <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-sky-600 text-white shadow-lg shadow-sky-200">
+              <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-sky-500/15 text-sky-500 dark:text-sky-400 border border-sky-500/30">
                 <QrCode className="h-7 w-7" />
               </div>
-              <CardTitle className="mt-3">Scan QR Presensi Siswa</CardTitle>
+              <CardTitle className="mt-3 text-lg font-bold text-foreground">Scan QR Presensi Siswa</CardTitle>
               <CardDescription>
                 Arahkan kamera scanner ke layar proyektor kelas atau gerbang utama
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4 pt-2">
               {scanSuccessMsg && (
-                <div className="rounded-2xl bg-emerald-50 border border-emerald-200 p-3 text-xs text-emerald-800 flex items-center gap-2 shadow-sm">
-                  <CheckCircle2 className="h-4 w-4 text-emerald-600 shrink-0" />
+                <div className="rounded-2xl bg-emerald-500/10 border border-emerald-500/25 p-3 text-xs text-emerald-600 dark:text-emerald-300 flex items-center gap-2">
+                  <CheckCircle2 className="h-4 w-4 text-emerald-500 shrink-0" />
                   <span>{scanSuccessMsg}</span>
                 </div>
               )}
 
               {/* QR Scanner Simulation Box */}
-              <div className="relative aspect-square max-w-[260px] mx-auto rounded-3xl border-2 border-dashed border-sky-400 bg-slate-950 flex flex-col items-center justify-center text-white overflow-hidden p-4 text-center shadow-inner">
+              <div className="relative aspect-square max-w-[260px] mx-auto rounded-3xl border-2 border-dashed border-sky-500/40 bg-slate-950 flex flex-col items-center justify-center text-white overflow-hidden p-4 text-center">
                 <div className="absolute inset-x-6 top-1/2 -translate-y-1/2 h-0.5 bg-sky-400 shadow-[0_0_15px_#38bdf8] animate-pulse" />
                 <Camera className="h-12 w-12 text-sky-400 mb-2 opacity-80" />
                 <p className="text-xs font-bold text-slate-200">
                   {isScanning ? "Memverifikasi Kode Presensi..." : "Kamera Scanner Siap"}
                 </p>
-                <p className="text-[10px] text-sky-300/80 font-mono mt-1">
+                <p className="text-[10px] text-sky-300 font-mono mt-1">
                   Token: {qrToken.substring(0, 16)}...
                 </p>
               </div>
 
               <Button
                 variant="gradient"
-                className="w-full font-bold"
+                className="w-full font-bold min-h-[42px]"
                 onClick={handleSimulateScan}
                 isLoading={isScanning}
+                aria-label="Simulasikan Scan QR Presensi"
               >
                 <Camera className="h-4 w-4" />
                 Simulasikan Scan QR Presensi
               </Button>
 
-              <div className="rounded-2xl bg-slate-50 border border-slate-200 p-3 text-xs text-slate-600 flex items-center justify-between">
+              <div className="rounded-2xl bg-muted/40 border border-border p-3 text-xs text-muted-foreground flex items-center justify-between">
                 <span className="flex items-center gap-1.5 font-medium">
-                  <Clock className="h-3.5 w-3.5 text-sky-600" />
+                  <Clock className="h-3.5 w-3.5 text-sky-500" />
                   Batas Masuk Tepat Waktu:
                 </span>
-                <span className="font-extrabold text-slate-900">07:15 WIB</span>
+                <span className="font-bold text-foreground">07:15 WIB</span>
               </div>
             </CardContent>
           </Card>
@@ -223,7 +218,7 @@ export default function AbsensiSiswaPage() {
               <div className="overflow-x-auto">
                 <table className="w-full text-left text-xs">
                   <thead>
-                    <tr className="border-b border-slate-100 text-slate-400 uppercase font-semibold">
+                    <tr className="border-b border-border text-muted-foreground uppercase font-semibold">
                       <th className="pb-3">Tanggal</th>
                       <th className="pb-3">Jam Masuk</th>
                       <th className="pb-3">Metode</th>
@@ -231,33 +226,33 @@ export default function AbsensiSiswaPage() {
                       <th className="pb-3">Keterangan</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-slate-100 text-slate-600">
+                  <tbody className="divide-y divide-border text-foreground">
                     <tr>
-                      <td className="py-3 font-bold text-slate-900">Hari ini, 16 Ags</td>
-                      <td className="py-3 font-semibold text-slate-800">07:05 WIB</td>
-                      <td className="py-3">QR Scanner</td>
+                      <td className="py-3 font-semibold text-foreground">Hari ini, 16 Ags</td>
+                      <td className="py-3 font-medium text-foreground">07:05 WIB</td>
+                      <td className="py-3 text-muted-foreground">QR Scanner</td>
                       <td className="py-3">
                         <Badge variant="success">Hadir</Badge>
                       </td>
-                      <td className="py-3 text-emerald-600 font-semibold">Tepat waktu</td>
+                      <td className="py-3 text-emerald-500 dark:text-emerald-300 font-semibold">Tepat waktu</td>
                     </tr>
                     <tr>
-                      <td className="py-3 font-bold text-slate-900">Jumat, 15 Ags</td>
-                      <td className="py-3 font-semibold text-slate-800">07:02 WIB</td>
-                      <td className="py-3">QR Scanner</td>
+                      <td className="py-3 font-semibold text-foreground">Jumat, 15 Ags</td>
+                      <td className="py-3 font-medium text-foreground">07:02 WIB</td>
+                      <td className="py-3 text-muted-foreground">QR Scanner</td>
                       <td className="py-3">
                         <Badge variant="success">Hadir</Badge>
                       </td>
-                      <td className="py-3 text-slate-400">-</td>
+                      <td className="py-3 text-muted-foreground">-</td>
                     </tr>
                     <tr>
-                      <td className="py-3 font-bold text-slate-900">Kamis, 14 Ags</td>
-                      <td className="py-3 font-semibold text-slate-800">07:22 WIB</td>
-                      <td className="py-3">QR Scanner</td>
+                      <td className="py-3 font-semibold text-foreground">Kamis, 14 Ags</td>
+                      <td className="py-3 font-medium text-foreground">07:22 WIB</td>
+                      <td className="py-3 text-muted-foreground">QR Scanner</td>
                       <td className="py-3">
                         <Badge variant="warning">Terlambat</Badge>
                       </td>
-                      <td className="py-3 text-amber-700">Macet Tarogong</td>
+                      <td className="py-3 text-amber-500 dark:text-amber-300 font-medium">Macet Tarogong</td>
                     </tr>
                   </tbody>
                 </table>
@@ -270,35 +265,35 @@ export default function AbsensiSiswaPage() {
         <div className="space-y-6">
           {/* Class Summary Stats */}
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
-            <Card className="p-3 bg-white border-slate-200">
-              <p className="text-[11px] font-bold text-slate-400 uppercase">Total Siswa</p>
-              <h4 className="text-xl font-black text-slate-900 mt-1">{stats.total}</h4>
+            <Card className="p-3">
+              <p className="text-[11px] font-medium text-muted-foreground uppercase tracking-wider">Total Siswa</p>
+              <h4 className="text-xl font-bold text-foreground mt-1">{stats.total}</h4>
             </Card>
-            <Card className="p-3 bg-emerald-50/60 border-emerald-200">
-              <p className="text-[11px] font-bold text-emerald-700 uppercase">Hadir</p>
-              <h4 className="text-xl font-black text-emerald-800 mt-1">{stats.hadir}</h4>
+            <Card className="p-3 border-emerald-500/20 bg-emerald-500/5">
+              <p className="text-[11px] font-medium text-emerald-500 dark:text-emerald-300 uppercase tracking-wider">Hadir</p>
+              <h4 className="text-xl font-bold text-foreground mt-1">{stats.hadir}</h4>
             </Card>
-            <Card className="p-3 bg-amber-50/60 border-amber-200">
-              <p className="text-[11px] font-bold text-amber-700 uppercase">Terlambat</p>
-              <h4 className="text-xl font-black text-amber-800 mt-1">{stats.terlambat}</h4>
+            <Card className="p-3 border-amber-500/20 bg-amber-500/5">
+              <p className="text-[11px] font-medium text-amber-500 dark:text-amber-300 uppercase tracking-wider">Terlambat</p>
+              <h4 className="text-xl font-bold text-foreground mt-1">{stats.terlambat}</h4>
             </Card>
-            <Card className="p-3 bg-sky-50/60 border-sky-200">
-              <p className="text-[11px] font-bold text-sky-700 uppercase">Izin</p>
-              <h4 className="text-xl font-black text-sky-800 mt-1">{stats.izin}</h4>
+            <Card className="p-3 border-sky-500/20 bg-sky-500/5">
+              <p className="text-[11px] font-medium text-sky-500 dark:text-sky-300 uppercase tracking-wider">Izin</p>
+              <h4 className="text-xl font-bold text-foreground mt-1">{stats.izin}</h4>
             </Card>
-            <Card className="p-3 bg-indigo-50/60 border-indigo-200">
-              <p className="text-[11px] font-bold text-indigo-700 uppercase">Sakit</p>
-              <h4 className="text-xl font-black text-indigo-800 mt-1">{stats.sakit}</h4>
+            <Card className="p-3 border-indigo-500/20 bg-indigo-500/5">
+              <p className="text-[11px] font-medium text-indigo-500 dark:text-indigo-300 uppercase tracking-wider">Sakit</p>
+              <h4 className="text-xl font-bold text-foreground mt-1">{stats.sakit}</h4>
             </Card>
-            <Card className="p-3 bg-rose-50/60 border-rose-200">
-              <p className="text-[11px] font-bold text-rose-700 uppercase">Alpha</p>
-              <h4 className="text-xl font-black text-rose-800 mt-1">{stats.alpha}</h4>
+            <Card className="p-3 border-rose-500/20 bg-rose-500/5">
+              <p className="text-[11px] font-medium text-rose-500 dark:text-rose-300 uppercase tracking-wider">Alpha</p>
+              <h4 className="text-xl font-bold text-foreground mt-1">{stats.alpha}</h4>
             </Card>
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
             {/* Projector / Class QR Display */}
-            <Card className="lg:col-span-4 border-sky-200 bg-gradient-to-b from-sky-50/70 to-white shadow-sm">
+            <Card className="lg:col-span-4 border-sky-500/20 bg-sky-500/5">
               <CardHeader className="text-center pb-2">
                 <CardTitle className="text-base">QR Presensi {selectedClass}</CardTitle>
                 <CardDescription>
@@ -306,7 +301,7 @@ export default function AbsensiSiswaPage() {
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-4 text-center">
-                <div className="p-4 bg-white rounded-3xl border border-sky-200 shadow-md max-w-[200px] mx-auto">
+                <div className="p-4 bg-white dark:bg-card rounded-3xl border border-sky-500/25 shadow-md max-w-[200px] mx-auto">
                   <div className="aspect-square bg-slate-950 rounded-2xl flex items-center justify-center p-3 text-white">
                     <QrCode className="h-28 w-28 text-sky-300" />
                   </div>
@@ -315,7 +310,7 @@ export default function AbsensiSiswaPage() {
                   <Badge variant="default" className="text-xs">
                     Sesi Pagi · Berlaku s.d 12:00 WIB
                   </Badge>
-                  <p className="text-[10px] font-mono text-slate-400 mt-2">
+                  <p className="text-[10px] font-mono text-muted-foreground mt-2">
                     {qrToken}
                   </p>
                 </div>
@@ -347,21 +342,21 @@ export default function AbsensiSiswaPage() {
                 <div className="overflow-x-auto">
                   <table className="w-full text-left text-xs">
                     <thead>
-                      <tr className="border-b border-slate-100 text-slate-400 uppercase font-semibold">
+                      <tr className="border-b border-border text-muted-foreground uppercase font-semibold">
                         <th className="pb-3">Siswa</th>
                         <th className="pb-3">Jam Masuk</th>
                         <th className="pb-3">Status Terkini</th>
                         <th className="pb-3 text-right">Ubah Status Cepat</th>
                       </tr>
                     </thead>
-                    <tbody className="divide-y divide-slate-100 text-slate-700">
+                    <tbody className="divide-y divide-border text-foreground">
                       {students.map((s) => (
-                        <tr key={s.id} className="hover:bg-slate-50/80 transition-colors">
+                        <tr key={s.id} className="hover:bg-muted/40 transition-colors">
                           <td className="py-3">
-                            <p className="font-bold text-slate-900">{s.name}</p>
-                            <p className="text-[10px] text-slate-400">NISN: {s.nisn}</p>
+                            <p className="font-semibold text-foreground">{s.name}</p>
+                            <p className="text-[10px] text-muted-foreground">NISN: {s.nisn}</p>
                           </td>
-                          <td className="py-3 font-semibold text-slate-800">
+                          <td className="py-3 font-medium text-foreground">
                             {s.timeIn ? `${s.timeIn} WIB` : "-"}
                           </td>
                           <td className="py-3">
@@ -381,19 +376,20 @@ export default function AbsensiSiswaPage() {
                               {s.status}
                             </Badge>
                             {s.notes && (
-                              <p className="text-[10px] text-slate-400 mt-0.5">{s.notes}</p>
+                              <p className="text-[10px] text-muted-foreground mt-0.5">{s.notes}</p>
                             )}
                           </td>
                           <td className="py-3 text-right">
-                            <div className="inline-flex rounded-xl border border-slate-200 bg-white p-0.5 shadow-sm">
+                            <div className="inline-flex rounded-xl border border-border bg-card p-0.5 shadow-sm">
                               <button
                                 onClick={() => handleStatusChange(s.id, AttendanceStatus.HADIR)}
                                 className={`px-2 py-1 rounded-lg text-[10px] font-bold transition-colors ${
                                   s.status === AttendanceStatus.HADIR
                                     ? "bg-emerald-600 text-white"
-                                    : "text-slate-600 hover:bg-slate-100"
+                                    : "text-muted-foreground hover:bg-muted"
                                 }`}
                                 title="Set Hadir"
+                                aria-label={`Set ${s.name} Hadir`}
                               >
                                 H
                               </button>
@@ -402,9 +398,10 @@ export default function AbsensiSiswaPage() {
                                 className={`px-2 py-1 rounded-lg text-[10px] font-bold transition-colors ${
                                   s.status === AttendanceStatus.SAKIT
                                     ? "bg-indigo-600 text-white"
-                                    : "text-slate-600 hover:bg-slate-100"
+                                    : "text-muted-foreground hover:bg-muted"
                                 }`}
                                 title="Set Sakit"
+                                aria-label={`Set ${s.name} Sakit`}
                               >
                                 S
                               </button>
@@ -413,9 +410,10 @@ export default function AbsensiSiswaPage() {
                                 className={`px-2 py-1 rounded-lg text-[10px] font-bold transition-colors ${
                                   s.status === AttendanceStatus.IZIN
                                     ? "bg-sky-600 text-white"
-                                    : "text-slate-600 hover:bg-slate-100"
+                                    : "text-muted-foreground hover:bg-muted"
                                 }`}
                                 title="Set Izin"
+                                aria-label={`Set ${s.name} Izin`}
                               >
                                 I
                               </button>
@@ -424,9 +422,10 @@ export default function AbsensiSiswaPage() {
                                 className={`px-2 py-1 rounded-lg text-[10px] font-bold transition-colors ${
                                   s.status === AttendanceStatus.ALPHA
                                     ? "bg-rose-600 text-white"
-                                    : "text-slate-600 hover:bg-slate-100"
+                                    : "text-muted-foreground hover:bg-muted"
                                 }`}
                                 title="Set Alpha"
+                                aria-label={`Set ${s.name} Alpha`}
                               >
                                 A
                               </button>
@@ -452,10 +451,10 @@ export default function AbsensiSiswaPage() {
         maxWidth="md"
       >
         <div className="space-y-4 mt-2">
-          <div className="p-4 rounded-2xl bg-sky-50 border border-sky-100 space-y-1 text-xs">
-            <p className="font-bold text-sky-950">Kelas: {selectedClass}</p>
-            <p className="text-slate-600">Periode: 1 s.d 16 Agustus 2026</p>
-            <p className="text-emerald-700 font-semibold">Tingkat Kehadiran: 94.8%</p>
+          <div className="p-4 rounded-2xl bg-sky-500/10 border border-sky-500/20 space-y-1 text-xs">
+            <p className="font-bold text-foreground">Kelas: {selectedClass}</p>
+            <p className="text-muted-foreground">Periode: 1 s.d 16 Agustus 2026</p>
+            <p className="text-emerald-500 dark:text-emerald-300 font-semibold">Tingkat Kehadiran: 94.8%</p>
           </div>
 
           <div className="flex justify-end gap-2 pt-2">

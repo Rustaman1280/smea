@@ -5,17 +5,8 @@ import { useAuthStore } from "@/stores/auth-store";
 import { UserRole, ViolationSeverity } from "@superapp/types";
 import {
   ShieldAlert,
-  AlertTriangle,
-  User,
-  Calendar,
-  FileText,
   Plus,
   Printer,
-  Sparkles,
-  CheckCircle2,
-  Lock,
-  MessageSquareText,
-  X,
 } from "lucide-react";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -91,7 +82,6 @@ export default function BkPelanggaranPage() {
 
   const [cases, setCases] = useState<CaseItem[]>(INITIAL_CASES);
   const [isCaseModalOpen, setIsCaseModalOpen] = useState(false);
-  const [isCounselingModalOpen, setIsCounselingModalOpen] = useState(false);
   const [selectedLetterCase, setSelectedLetterCase] = useState<CaseItem | null>(null);
 
   // Form states
@@ -133,12 +123,12 @@ export default function BkPelanggaranPage() {
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
           <div className="flex items-center gap-2">
-            <h1 className="text-2xl font-bold tracking-tight text-slate-900">
+            <h1 className="text-2xl font-bold tracking-tight text-foreground">
               3. BK & Pelanggaran
             </h1>
             <Badge variant="destructive">Data Terbatas</Badge>
           </div>
-          <p className="text-sm text-slate-500 mt-1">
+          <p className="text-sm text-muted-foreground mt-1">
             Manajemen poin kedisiplinan siswa, catatan bimbingan konseling, dan penerbitan Surat Panggilan Orang Tua.
           </p>
         </div>
@@ -148,7 +138,7 @@ export default function BkPelanggaranPage() {
             <Button
               variant="default"
               size="sm"
-              className="bg-rose-600 hover:bg-rose-700 font-bold shadow-sm shadow-rose-200"
+              className="bg-rose-600 hover:bg-rose-500 text-white font-semibold"
               onClick={() => setIsCaseModalOpen(true)}
             >
               <Plus className="h-4 w-4" />
@@ -161,23 +151,25 @@ export default function BkPelanggaranPage() {
       {/* SISWA VIEW */}
       {isStudent ? (
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-          {/* Student Points Meter */}
-          <Card className="lg:col-span-4 border-rose-200 bg-gradient-to-b from-rose-50/50 via-white to-white shadow-sm">
+          {/* Student Points Meter — FIXED: Dark Theme Surface Color & Crisp Contrast */}
+          <Card className="lg:col-span-4 border-rose-500/20 bg-rose-500/5">
             <CardHeader className="text-center pb-2">
-              <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-rose-600 text-white shadow-lg shadow-rose-200">
+              <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-rose-500/15 text-rose-400 border border-rose-500/30">
                 <ShieldAlert className="h-7 w-7" />
               </div>
-              <CardTitle className="mt-3">Status Poin Kedisiplinan</CardTitle>
+              <CardTitle className="mt-3 text-lg font-bold text-foreground">
+                Status Poin Kedisiplinan
+              </CardTitle>
               <CardDescription>
                 Akumulasi Pelanggaran Siswa (Maks. 100 Poin)
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4 text-center">
               <div className="py-3">
-                <div className="text-4xl font-black text-slate-900">
-                  10 <span className="text-base font-semibold text-slate-400">/ 100 Poin</span>
+                <div className="text-4xl font-black text-foreground">
+                  10 <span className="text-base font-semibold text-muted-foreground">/ 100 Poin</span>
                 </div>
-                <div className="mt-3 w-full bg-slate-100 rounded-full h-3 overflow-hidden border border-slate-200">
+                <div className="mt-3 w-full bg-muted/60 dark:bg-white/[0.08] rounded-full h-3 overflow-hidden border border-border">
                   <div
                     className="bg-rose-500 h-full rounded-full transition-all"
                     style={{ width: "10%" }}
@@ -190,8 +182,8 @@ export default function BkPelanggaranPage() {
                 </div>
               </div>
 
-              <div className="rounded-2xl bg-slate-50 p-3.5 text-xs text-left text-slate-600 space-y-1.5 border border-slate-200/80">
-                <p className="font-bold text-slate-900">Ketentuan Bobot Poin Sanksi:</p>
+              <div className="rounded-2xl bg-card/60 dark:bg-white/[0.03] p-3.5 text-xs text-left text-muted-foreground space-y-1.5 border border-border">
+                <p className="font-semibold text-foreground">Ketentuan Bobot Poin Sanksi:</p>
                 <p>• 10 - 25 Poin: Peringatan Lisan & Konseling BK</p>
                 <p>• 50 Poin: Surat Peringatan 1 & Panggilan Orang Tua</p>
                 <p>• 75 Poin: Surat Peringatan 2 & Skorsing Praktik</p>
@@ -209,36 +201,36 @@ export default function BkPelanggaranPage() {
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-3">
-              <div className="p-4 rounded-2xl border border-amber-200 bg-amber-50/40 space-y-2">
+              <div className="p-4 rounded-2xl border border-amber-500/20 bg-amber-500/10 space-y-2">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
                     <Badge variant="warning">Pelanggaran Ringan (+10 Poin)</Badge>
-                    <span className="text-xs font-bold text-slate-900">
+                    <span className="text-xs font-semibold text-foreground">
                       Terlambat Masuk Sekolah 3x
                     </span>
                   </div>
-                  <span className="text-xs text-slate-400">14 Agustus 2026</span>
+                  <span className="text-xs text-muted-foreground">14 Agustus 2026</span>
                 </div>
-                <p className="text-xs text-slate-600">
+                <p className="text-xs text-muted-foreground">
                   Siswa tiba di sekolah lewat dari pukul 07:15 WIB pada hari Senin, Selasa, dan Kamis.
                 </p>
-                <div className="pt-2 border-t border-amber-200/60 flex items-center justify-between text-[11px] text-slate-500">
+                <div className="pt-2 border-t border-amber-500/20 flex items-center justify-between text-[11px] text-muted-foreground">
                   <span>Pelapor: Dedi Supriadi, M.T (Wali Kelas)</span>
                   <Badge variant="info">Sudah Konseling BK</Badge>
                 </div>
               </div>
 
-              <div className="rounded-2xl border border-slate-200 bg-white p-4 space-y-2">
+              <div className="rounded-2xl border border-border bg-card/60 dark:bg-white/[0.02] p-4 space-y-2">
                 <div className="flex items-center justify-between">
-                  <span className="text-xs font-bold text-slate-900">
+                  <span className="text-xs font-semibold text-foreground">
                     Sesi Bimbingan Konseling (BK)
                   </span>
-                  <span className="text-xs text-slate-400">15 Agustus 2026</span>
+                  <span className="text-xs text-muted-foreground">15 Agustus 2026</span>
                 </div>
-                <p className="text-xs text-slate-600">
-                  <strong>Catatan Guru BK:</strong> Siswa berkomitmen untuk mengatur jadwal istirahat malam dan tiba di gerbang sekolah sebelum pukul 07:00 WIB.
+                <p className="text-xs text-muted-foreground">
+                  <strong className="text-foreground">Catatan Guru BK:</strong> Siswa berkomitmen untuk mengatur jadwal istirahat malam dan tiba di gerbang sekolah sebelum pukul 07:00 WIB.
                 </p>
-                <p className="text-[11px] text-indigo-700 font-bold">
+                <p className="text-[11px] text-indigo-400 font-semibold">
                   Konselor: Siti Rahmawati, S.Pd (Guru BK)
                 </p>
               </div>
@@ -250,25 +242,25 @@ export default function BkPelanggaranPage() {
         <div className="space-y-6">
           {/* Summary Stats */}
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-            <Card className="p-4 bg-white border-slate-200">
-              <p className="text-xs font-bold text-slate-400 uppercase">Total Kasus Aktif</p>
-              <h4 className="text-2xl font-black text-slate-900 mt-1">{cases.length}</h4>
+            <Card className="p-4">
+              <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider">Total Kasus Aktif</p>
+              <h4 className="text-2xl font-bold text-foreground mt-1">{cases.length}</h4>
             </Card>
-            <Card className="p-4 bg-amber-50/60 border-amber-200">
-              <p className="text-xs font-bold text-amber-700 uppercase">Pelanggaran Ringan</p>
-              <h4 className="text-2xl font-black text-amber-800 mt-1">
+            <Card className="p-4 border-amber-500/20 bg-amber-500/5">
+              <p className="text-xs font-medium text-amber-500 dark:text-amber-300 uppercase tracking-wider">Pelanggaran Ringan</p>
+              <h4 className="text-2xl font-bold text-foreground mt-1">
                 {cases.filter((c) => c.category === ViolationSeverity.RINGAN).length}
               </h4>
             </Card>
-            <Card className="p-4 bg-rose-50/60 border-rose-200">
-              <p className="text-xs font-bold text-rose-700 uppercase">Sedang / Berat</p>
-              <h4 className="text-2xl font-black text-rose-800 mt-1">
+            <Card className="p-4 border-rose-500/20 bg-rose-500/5">
+              <p className="text-xs font-medium text-rose-500 dark:text-rose-300 uppercase tracking-wider">Sedang / Berat</p>
+              <h4 className="text-2xl font-bold text-foreground mt-1">
                 {cases.filter((c) => c.category !== ViolationSeverity.RINGAN).length}
               </h4>
             </Card>
-            <Card className="p-4 bg-purple-50/60 border-purple-200">
-              <p className="text-xs font-bold text-purple-700 uppercase">Perlu Panggilan Ortu</p>
-              <h4 className="text-2xl font-black text-purple-800 mt-1">
+            <Card className="p-4 border-purple-500/20 bg-purple-500/5">
+              <p className="text-xs font-medium text-purple-500 dark:text-purple-300 uppercase tracking-wider">Perlu Panggilan Ortu</p>
+              <h4 className="text-2xl font-bold text-foreground mt-1">
                 {cases.filter((c) => c.status === "PANGGILAN_ORANG_TUA").length}
               </h4>
             </Card>
@@ -286,7 +278,7 @@ export default function BkPelanggaranPage() {
               <div className="overflow-x-auto">
                 <table className="w-full text-left text-xs">
                   <thead>
-                    <tr className="border-b border-slate-100 text-slate-400 uppercase font-semibold">
+                    <tr className="border-b border-border text-muted-foreground uppercase font-semibold">
                       <th className="pb-3">Siswa / Kelas</th>
                       <th className="pb-3">Pelanggaran</th>
                       <th className="pb-3">Kategori</th>
@@ -295,16 +287,16 @@ export default function BkPelanggaranPage() {
                       <th className="pb-3 text-right">Aksi</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-slate-100 text-slate-700">
+                  <tbody className="divide-y divide-border text-foreground">
                     {cases.map((c) => (
-                      <tr key={c.id} className="hover:bg-slate-50/80 transition-colors">
+                      <tr key={c.id} className="hover:bg-muted/40 transition-colors">
                         <td className="py-3">
-                          <p className="font-bold text-slate-900">{c.studentName}</p>
-                          <p className="text-[10px] text-slate-400">{c.className} · {c.nisn}</p>
+                          <p className="font-semibold text-foreground">{c.studentName}</p>
+                          <p className="text-[10px] text-muted-foreground">{c.className} · {c.nisn}</p>
                         </td>
                         <td className="py-3">
-                          <p className="font-semibold text-slate-800">{c.title}</p>
-                          <p className="text-[10px] text-slate-500 line-clamp-1">{c.description}</p>
+                          <p className="font-medium text-foreground">{c.title}</p>
+                          <p className="text-[10px] text-muted-foreground line-clamp-1">{c.description}</p>
                         </td>
                         <td className="py-3">
                           <Badge
@@ -317,8 +309,8 @@ export default function BkPelanggaranPage() {
                             {c.category}
                           </Badge>
                         </td>
-                        <td className="py-3 font-bold text-rose-600">+{c.points}</td>
-                        <td className="py-3 text-slate-500">{c.reporterName}</td>
+                        <td className="py-3 font-bold text-rose-500 dark:text-rose-400">+{c.points}</td>
+                        <td className="py-3 text-muted-foreground">{c.reporterName}</td>
                         <td className="py-3 text-right">
                           <Button
                             variant="outline"
@@ -366,7 +358,7 @@ export default function BkPelanggaranPage() {
 
           <div className="grid grid-cols-2 gap-3">
             <div className="space-y-1.5">
-              <label className="block text-xs font-semibold uppercase tracking-wider text-slate-600">
+              <label className="block text-xs font-semibold uppercase tracking-wider text-muted-foreground">
                 Kategori Pelanggaran
               </label>
               <select
@@ -376,7 +368,7 @@ export default function BkPelanggaranPage() {
                   setCategoryInput(cat);
                   setPointsInput(cat === ViolationSeverity.RINGAN ? 10 : cat === ViolationSeverity.SEDANG ? 25 : 50);
                 }}
-                className="w-full h-11 rounded-2xl border border-slate-200 bg-white px-3 text-sm text-slate-900"
+                className="w-full h-11 rounded-2xl border border-input bg-card px-3 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-sky-500"
               >
                 <option value={ViolationSeverity.RINGAN}>Ringan (5-15 Poin)</option>
                 <option value={ViolationSeverity.SEDANG}>Sedang (20-40 Poin)</option>
@@ -402,11 +394,11 @@ export default function BkPelanggaranPage() {
           />
 
           <div className="space-y-1.5">
-            <label className="block text-xs font-semibold uppercase tracking-wider text-slate-600">
+            <label className="block text-xs font-semibold uppercase tracking-wider text-muted-foreground">
               Kronologi / Keterangan Kejadian
             </label>
             <textarea
-              className="w-full rounded-2xl border border-slate-200 bg-white p-3.5 text-sm text-slate-900 min-h-[85px] focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
+              className="w-full rounded-2xl border border-input bg-card p-3.5 text-sm text-foreground min-h-[85px] focus:outline-none focus:ring-2 focus:ring-sky-500"
               placeholder="Jelaskan saksi, lokasi, dan kronologi kejadian..."
               value={descInput}
               onChange={(e) => setDescInput(e.target.value)}
@@ -414,7 +406,7 @@ export default function BkPelanggaranPage() {
             />
           </div>
 
-          <label className="flex items-center gap-2 text-xs font-bold text-slate-800 cursor-pointer pt-1">
+          <label className="flex items-center gap-2 text-xs font-semibold text-foreground cursor-pointer pt-1">
             <input
               type="checkbox"
               checked={needsSummons}
@@ -428,7 +420,7 @@ export default function BkPelanggaranPage() {
             <Button type="button" variant="outline" onClick={() => setIsCaseModalOpen(false)}>
               Batal
             </Button>
-            <Button type="submit" variant="destructive" className="font-bold">
+            <Button type="submit" variant="destructive" className="font-semibold">
               Simpan Kasus Pelanggaran
             </Button>
           </div>
@@ -445,7 +437,7 @@ export default function BkPelanggaranPage() {
       >
         {selectedLetterCase && (
           <div className="space-y-4">
-            {/* Official Letter Container */}
+            {/* Official Letter Container (White paper style for print simulation) */}
             <div className="p-6 border border-slate-300 rounded-2xl bg-white text-slate-900 font-serif text-xs space-y-4 shadow-sm">
               {/* Letterhead */}
               <div className="text-center border-b-2 border-black pb-3 space-y-0.5">

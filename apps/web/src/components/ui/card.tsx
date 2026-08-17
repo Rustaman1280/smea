@@ -9,7 +9,11 @@ export function Card({
   return (
     <div
       className={cn(
-        "rounded-2xl border border-slate-100 bg-white p-6 shadow-sm transition-all duration-200 hover:border-slate-200 hover:shadow-md",
+        // Clean Dark Glassmorphism Card
+        "rounded-2xl border border-white/[0.08] bg-[#0b1322]/60 backdrop-blur-md",
+        "p-6 transition-all duration-200",
+        // Restrained natural hover elevation & subtle accent glow
+        "hover:border-sky-500/30 hover:bg-[#0e192e]/80 hover:shadow-[0_12px_28px_rgba(0,0,0,0.5),0_0_20px_rgba(14,165,233,0.08)] hover:-translate-y-0.5",
         className
       )}
       {...props}
@@ -39,7 +43,7 @@ export function CardTitle({
   return (
     <h3
       className={cn(
-        "text-lg font-semibold leading-none tracking-tight text-slate-800",
+        "text-base font-semibold leading-tight tracking-tight text-white",
         className
       )}
       {...props}
@@ -55,7 +59,7 @@ export function CardDescription({
   ...props
 }: React.HTMLAttributes<HTMLParagraphElement>) {
   return (
-    <p className={cn("text-sm text-slate-500", className)} {...props}>
+    <p className={cn("text-xs text-slate-400 leading-relaxed", className)} {...props}>
       {children}
     </p>
   );
@@ -67,7 +71,7 @@ export function CardContent({
   ...props
 }: React.HTMLAttributes<HTMLDivElement>) {
   return (
-    <div className={cn("pt-0", className)} {...props}>
+    <div className={cn("pt-0 text-slate-300 text-sm", className)} {...props}>
       {children}
     </div>
   );
@@ -79,7 +83,7 @@ export function CardFooter({
   ...props
 }: React.HTMLAttributes<HTMLDivElement>) {
   return (
-    <div className={cn("flex items-center pt-4", className)} {...props}>
+    <div className={cn("flex items-center pt-4 border-t border-white/[0.06]", className)} {...props}>
       {children}
     </div>
   );

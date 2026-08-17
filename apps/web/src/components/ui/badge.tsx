@@ -19,19 +19,33 @@ export function Badge({
   ...props
 }: BadgeProps) {
   const variants = {
-    default: "bg-sky-50 text-sky-700 border-sky-200",
-    secondary: "bg-slate-100 text-slate-700 border-slate-200",
-    destructive: "bg-rose-50 text-rose-700 border-rose-200",
-    outline: "border border-slate-200 text-slate-700 bg-transparent",
-    success: "bg-emerald-50 text-emerald-700 border-emerald-200",
-    warning: "bg-amber-50 text-amber-700 border-amber-200",
-    info: "bg-indigo-50 text-indigo-700 border-indigo-200",
+    // Sky-blue accent badge — crisp and clean without muddy static shadow
+    default:
+      "bg-sky-500/15 text-sky-300 border-sky-500/30 font-medium",
+    // Muted dark glass badge — clear contrast
+    secondary:
+      "bg-white/[0.06] text-slate-300 border-white/[0.1] font-medium",
+    // Rose red destructive badge
+    destructive:
+      "bg-rose-500/15 text-rose-300 border-rose-500/30 font-medium",
+    // Outline badge
+    outline:
+      "border border-white/20 text-slate-200 bg-transparent font-medium",
+    // Emerald green success badge
+    success:
+      "bg-emerald-500/15 text-emerald-300 border-emerald-500/30 font-medium",
+    // Amber yellow warning badge
+    warning:
+      "bg-amber-500/15 text-amber-300 border-amber-500/30 font-medium",
+    // Indigo info badge
+    info:
+      "bg-indigo-500/15 text-indigo-300 border-indigo-500/30 font-medium",
   };
 
   return (
     <div
       className={cn(
-        "inline-flex items-center gap-1.5 rounded-full border px-2.5 py-0.5 text-xs font-semibold tracking-wide transition-colors",
+        "inline-flex items-center gap-1.5 rounded-full border px-2.5 py-0.5 text-xs tracking-wide transition-colors",
         variants[variant],
         className
       )}

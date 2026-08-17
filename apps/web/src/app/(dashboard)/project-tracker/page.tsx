@@ -5,18 +5,9 @@ import { useAuthStore } from "@/stores/auth-store";
 import { UserRole, TaskColumn, TaskPriority } from "@superapp/types";
 import {
   KanbanSquare,
-  Github,
-  ExternalLink,
   Plus,
-  CheckCircle2,
-  Clock,
-  Briefcase,
   ChevronRight,
   ChevronLeft,
-  Calendar,
-  Sparkles,
-  BookOpen,
-  Send,
   Building,
   Check,
   MessageSquare,
@@ -165,15 +156,15 @@ export default function ProjectTrackerPage() {
 
   const handleVerifyJournal = (id: string) => {
     setJournals((prev) =>
-      prev.map((j) => (j.id === id ? { ...j, isVerified: true, supervisorNotes: "Disetujui oleh Pembimbing." } : j))
+      prev.map((j) => (j.id === id ? { ...j, isVerified: true, supervisorNotes: "Disetujui dan diverifikasi oleh Pembimbing PKL." } : j))
     );
   };
 
   const columns = [
-    { key: TaskColumn.TODO, title: "📋 To Do", color: "border-slate-300 bg-slate-50/70" },
-    { key: TaskColumn.IN_PROGRESS, title: "🚀 In Progress", color: "border-sky-300 bg-sky-50/40" },
-    { key: TaskColumn.REVIEW, title: "🔍 Review & Testing", color: "border-amber-300 bg-amber-50/40" },
-    { key: TaskColumn.DONE, title: "✅ Done / Selesai", color: "border-emerald-300 bg-emerald-50/40" },
+    { key: TaskColumn.TODO, title: "📋 To Do", colorClass: "border-border bg-muted/20" },
+    { key: TaskColumn.IN_PROGRESS, title: "🚀 In Progress", colorClass: "border-sky-500/20 bg-sky-500/5" },
+    { key: TaskColumn.REVIEW, title: "🔍 Review & Testing", colorClass: "border-amber-500/20 bg-amber-500/5" },
+    { key: TaskColumn.DONE, title: "✅ Done / Selesai", colorClass: "border-emerald-500/20 bg-emerald-500/5" },
   ];
 
   return (
@@ -182,13 +173,13 @@ export default function ProjectTrackerPage() {
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
           <div className="flex items-center gap-2">
-            <h1 className="text-2xl font-bold tracking-tight text-slate-900">
+            <h1 className="text-2xl font-bold tracking-tight text-foreground">
               7. Project Tracker & Jurnal PKL
             </h1>
             <Badge variant="default">Modul 7</Badge>
           </div>
-          <p className="text-sm text-slate-500 mt-1">
-            Board Kanban tugas praktik kejuruan SMK (TeFa & Proyek Akhir) serta buku jurnal harian magang industri (PKL/Prakerin).
+          <p className="text-sm text-muted-foreground mt-1">
+            Board Kanban proyek kejuruan RPL/TKJ dan pencatatan jurnal harian Praktik Kerja Lapangan (PKL) industri.
           </p>
         </div>
 
@@ -197,155 +188,121 @@ export default function ProjectTrackerPage() {
             <Button
               variant="default"
               size="sm"
-              className="bg-purple-600 hover:bg-purple-700 font-bold shadow-purple-200"
+              className="bg-purple-600 hover:bg-purple-500 text-white font-semibold"
               onClick={() => setIsTaskModalOpen(true)}
             >
               <Plus className="h-4 w-4" />
-              Tambah Task Baru
+              Tambah Task Proyek
             </Button>
           ) : (
-            <Button
-              variant="default"
-              size="sm"
-              className="bg-purple-600 hover:bg-purple-700 font-bold shadow-purple-200"
-              onClick={() => setIsJournalModalOpen(true)}
-            >
-              <Plus className="h-4 w-4" />
-              Isi Jurnal PKL Hari Ini
-            </Button>
+            !isTeacher && (
+              <Button
+                variant="default"
+                size="sm"
+                className="bg-purple-600 hover:bg-purple-500 text-white font-semibold"
+                onClick={() => setIsJournalModalOpen(true)}
+              >
+                <Plus className="h-4 w-4" />
+                Catat Log PKL Hari Ini
+              </Button>
+            )
           )}
         </div>
       </div>
 
-      {/* Tabs */}
-      <div className="flex items-center gap-2 border-b border-slate-200 pb-1">
+      {/* Navigation Tabs */}
+      <div className="flex items-center gap-2 border-b border-border pb-1">
         <button
           onClick={() => setActiveTab("KANBAN")}
-          className={`px-4 py-2 text-xs font-bold rounded-xl transition-all ${
+          className={`px-4 py-2 min-h-[38px] text-xs font-semibold rounded-xl transition-all ${
             activeTab === "KANBAN"
-              ? "bg-purple-600 text-white shadow-sm shadow-purple-200"
-              : "text-slate-600 hover:bg-slate-100"
+              ? "bg-purple-600 text-white font-bold shadow-sm"
+              : "text-muted-foreground hover:text-foreground hover:bg-muted/50"
           }`}
         >
-          Papan Kanban Proyek Kelas ({tasks.length} Task)
+          Board Proyek Kejuruan ({tasks.length} Task)
         </button>
         <button
           onClick={() => setActiveTab("PKL")}
-          className={`px-4 py-2 text-xs font-bold rounded-xl transition-all ${
+          className={`px-4 py-2 min-h-[38px] text-xs font-semibold rounded-xl transition-all ${
             activeTab === "PKL"
-              ? "bg-purple-600 text-white shadow-sm shadow-purple-200"
-              : "text-slate-600 hover:bg-slate-100"
+              ? "bg-purple-600 text-white font-bold shadow-sm"
+              : "text-muted-foreground hover:text-foreground hover:bg-muted/50"
           }`}
         >
-          Jurnal Harian PKL / Prakerin ({journals.length} Catatan)
+          Jurnal Harian PKL ({journals.length} Log)
         </button>
       </div>
 
       {/* TAB 1: KANBAN BOARD */}
       {activeTab === "KANBAN" && (
         <div className="space-y-4">
-          {/* Active Project Banner */}
-          <div className="p-4 rounded-3xl border border-purple-200 bg-gradient-to-r from-purple-50/80 via-indigo-50/50 to-white flex flex-col md:flex-row md:items-center justify-between gap-4 shadow-sm">
-            <div className="space-y-1">
-              <div className="flex items-center gap-2">
-                <span className="font-extrabold text-base text-slate-900">
-                  Aplikasi POS Kasir Kantin Berbasis Web & Mobile
-                </span>
-                <Badge variant="secondary" className="font-bold">Proyek Produktif RPL</Badge>
-              </div>
-              <p className="text-xs text-slate-600">
-                Ketua Tim: <strong>Ahmad Fauzi</strong> · Pembimbing: <strong>Budi Santoso, S.Kom</strong> · Target Selesai: <strong>30 September 2026</strong>
-              </p>
-            </div>
-
-            <div className="flex items-center gap-2">
-              <a
-                href="https://github.com/smkn1garut/pos-canteen"
-                target="_blank"
-                rel="noreferrer"
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-slate-300 bg-white text-xs font-bold text-slate-700 hover:bg-slate-50 shadow-sm"
-              >
-                <Github className="h-3.5 w-3.5" />
-                GitHub Repo
-              </a>
-              <a
-                href="https://pos-canteen.smkn1garut.sch.id"
-                target="_blank"
-                rel="noreferrer"
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-purple-600 text-white text-xs font-bold hover:bg-purple-700 shadow-sm"
-              >
-                <ExternalLink className="h-3.5 w-3.5" />
-                Demo Live
-              </a>
-            </div>
-          </div>
-
-          {/* 4 Columns Board */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
             {columns.map((col) => {
               const colTasks = tasks.filter((t) => t.column === col.key);
               return (
                 <div
                   key={col.key}
-                  className={`rounded-3xl border ${col.color} p-3.5 flex flex-col min-h-[460px] shadow-sm`}
+                  className={`rounded-2xl border p-3.5 space-y-3 flex flex-col ${col.colorClass}`}
                 >
-                  <div className="flex items-center justify-between pb-3 border-b border-slate-200/80 mb-3">
-                    <span className="text-xs font-bold text-slate-800">
+                  <div className="flex items-center justify-between pb-2 border-b border-border">
+                    <span className="text-xs font-bold text-foreground">
                       {col.title}
                     </span>
-                    <span className="text-xs font-bold bg-white px-2 py-0.5 rounded-full border border-slate-200 text-slate-600">
+                    <span className="text-[10px] font-bold font-mono px-2 py-0.5 rounded-full bg-muted text-muted-foreground">
                       {colTasks.length}
                     </span>
                   </div>
 
-                  <div className="space-y-2.5 flex-1">
-                    {colTasks.map((task) => (
+                  <div className="space-y-2.5 flex-1 overflow-y-auto max-h-[500px]">
+                    {colTasks.length === 0 && (
+                      <div className="py-8 text-center text-xs text-muted-foreground italic">
+                        Belum ada task di kolom ini
+                      </div>
+                    )}
+                    {colTasks.map((t) => (
                       <div
-                        key={task.id}
-                        className="p-3.5 rounded-2xl bg-white border border-slate-200 shadow-sm hover:border-purple-300 transition-all space-y-2"
+                        key={t.id}
+                        className="rounded-xl border border-border bg-card p-3 space-y-2 shadow-sm hover:border-purple-500/40 transition-all"
                       >
-                        <div className="flex items-start justify-between gap-1">
-                          <p className="text-xs font-bold text-slate-900 leading-snug">
-                            {task.title}
-                          </p>
-                        </div>
-
-                        <div className="flex items-center justify-between pt-2 border-t border-slate-100 text-[11px]">
+                        <div className="flex items-center justify-between gap-1">
                           <Badge
                             variant={
-                              task.priority === TaskPriority.HIGH
+                              t.priority === TaskPriority.HIGH
                                 ? "destructive"
-                                : task.priority === TaskPriority.MEDIUM
+                                : t.priority === TaskPriority.MEDIUM
                                 ? "warning"
                                 : "secondary"
                             }
-                            className="text-[9px] px-1.5 py-0 font-bold"
+                            className="text-[9px] py-0 px-1.5"
                           >
-                            {task.priority}
+                            {t.priority}
                           </Badge>
-                          <span className="text-slate-500 font-semibold">
-                            {task.assignee}
+                          <span className="text-[10px] font-medium text-muted-foreground truncate">
+                            {t.assignee}
                           </span>
                         </div>
 
-                        {/* Move Task Controls */}
-                        <div className="flex items-center justify-between pt-1">
+                        <p className="text-xs font-semibold text-foreground leading-snug">
+                          {t.title}
+                        </p>
+
+                        <div className="flex items-center justify-between pt-1 border-t border-border/60">
                           <button
-                            onClick={() => handleMoveTask(task.id, "prev")}
-                            disabled={task.column === TaskColumn.TODO}
-                            className="p-1 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-slate-100 disabled:opacity-25"
-                            title="Geser Mundur"
+                            onClick={() => handleMoveTask(t.id, "prev")}
+                            disabled={t.column === TaskColumn.TODO}
+                            className="p-1 rounded-lg hover:bg-muted text-muted-foreground disabled:opacity-20 transition-colors"
+                            title="Pindah ke kolom sebelumnya"
+                            aria-label="Pindah ke kolom sebelumnya"
                           >
                             <ChevronLeft className="h-3.5 w-3.5" />
                           </button>
-                          <span className="text-[10px] text-slate-400 font-mono font-medium">
-                            Pindahkan
-                          </span>
                           <button
-                            onClick={() => handleMoveTask(task.id, "next")}
-                            disabled={task.column === TaskColumn.DONE}
-                            className="p-1 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-slate-100 disabled:opacity-25"
-                            title="Geser Maju"
+                            onClick={() => handleMoveTask(t.id, "next")}
+                            disabled={t.column === TaskColumn.DONE}
+                            className="p-1 rounded-lg hover:bg-muted text-muted-foreground disabled:opacity-20 transition-colors"
+                            title="Pindah ke kolom berikutnya"
+                            aria-label="Pindah ke kolom berikutnya"
                           >
                             <ChevronRight className="h-3.5 w-3.5" />
                           </button>
@@ -365,16 +322,16 @@ export default function ProjectTrackerPage() {
         <div className="space-y-4">
           <div className="grid grid-cols-1 gap-4">
             {journals.map((j) => (
-              <Card key={j.id} className="border-slate-200 space-y-3 shadow-sm">
+              <Card key={j.id} className="space-y-3">
                 <div className="flex items-start justify-between gap-2">
                   <div>
                     <div className="flex items-center gap-2">
-                      <Building className="h-4 w-4 text-purple-600" />
-                      <h3 className="text-sm font-bold text-slate-900">
+                      <Building className="h-4 w-4 text-purple-500 dark:text-purple-400" />
+                      <h3 className="text-sm font-bold text-foreground">
                         {j.companyName}
                       </h3>
                     </div>
-                    <p className="text-xs text-slate-400 mt-0.5">{j.date}</p>
+                    <p className="text-xs text-muted-foreground mt-0.5">{j.date}</p>
                   </div>
                   <div className="flex items-center gap-2">
                     <Badge variant={j.isVerified ? "success" : "warning"}>
@@ -384,7 +341,7 @@ export default function ProjectTrackerPage() {
                       <Button
                         variant="default"
                         size="sm"
-                        className="bg-emerald-600 hover:bg-emerald-700 text-xs py-1 h-7 font-bold"
+                        className="bg-emerald-600 hover:bg-emerald-500 text-white text-xs py-1 h-7 font-semibold"
                         onClick={() => handleVerifyJournal(j.id)}
                       >
                         <Check className="h-3 w-3" />
@@ -394,18 +351,23 @@ export default function ProjectTrackerPage() {
                   </div>
                 </div>
 
-                <div className="p-3.5 bg-slate-50 rounded-2xl border border-slate-100 space-y-1 text-xs">
-                  <p className="font-bold text-slate-800">Aktivitas Industri Hari Ini:</p>
-                  <p className="text-slate-600 leading-relaxed">{j.activity}</p>
+                <div className="p-3.5 bg-muted/40 rounded-2xl border border-border space-y-1 text-xs">
+                  <p className="font-semibold text-foreground">Aktivitas Industri Hari Ini:</p>
+                  <p className="text-muted-foreground leading-relaxed">{j.activity}</p>
                 </div>
 
-                <div className="text-xs text-slate-600">
-                  <strong>Kompetensi yang Dipelajari:</strong> {j.competency}
+                <div className="text-xs text-muted-foreground">
+                  <strong className="text-foreground">Kompetensi yang Dipelajari:</strong> {j.competency}
                 </div>
 
+                {/* FIXED: High Contrast Catatan Pembimbing Box */}
                 {j.supervisorNotes && (
-                  <div className="text-xs text-emerald-800 bg-emerald-50/80 p-3 rounded-xl border border-emerald-200">
-                    <strong>Catatan Pembimbing:</strong> {j.supervisorNotes}
+                  <div className="text-xs text-emerald-600 dark:text-emerald-300 bg-emerald-500/10 p-3.5 rounded-xl border border-emerald-500/20 flex items-start gap-2">
+                    <MessageSquare className="h-4 w-4 text-emerald-500 dark:text-emerald-400 shrink-0 mt-0.5" />
+                    <div>
+                      <strong className="text-emerald-700 dark:text-emerald-200 font-semibold">Catatan Pembimbing:</strong>{" "}
+                      <span>{j.supervisorNotes}</span>
+                    </div>
                   </div>
                 )}
               </Card>
@@ -439,13 +401,13 @@ export default function ProjectTrackerPage() {
               required
             />
             <div className="space-y-1.5">
-              <label className="block text-xs font-semibold uppercase tracking-wider text-slate-600">
+              <label className="block text-xs font-semibold uppercase tracking-wider text-muted-foreground">
                 Prioritas
               </label>
               <select
                 value={taskPriority}
                 onChange={(e) => setTaskPriority(e.target.value as TaskPriority)}
-                className="w-full h-11 rounded-2xl border border-slate-200 bg-white px-3 text-sm text-slate-900"
+                className="w-full h-11 rounded-2xl border border-input bg-card px-3 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-purple-500"
               >
                 <option value={TaskPriority.LOW}>Low</option>
                 <option value={TaskPriority.MEDIUM}>Medium</option>
@@ -458,8 +420,8 @@ export default function ProjectTrackerPage() {
             <Button type="button" variant="outline" onClick={() => setIsTaskModalOpen(false)}>
               Batal
             </Button>
-            <Button type="submit" variant="gradient" className="font-bold">
-              Tambahkan ke Board
+            <Button type="submit" variant="default" className="bg-purple-600 hover:bg-purple-500 text-white font-semibold">
+              Simpan Task
             </Button>
           </div>
         </form>
@@ -469,25 +431,25 @@ export default function ProjectTrackerPage() {
       <Modal
         isOpen={isJournalModalOpen}
         onClose={() => setIsJournalModalOpen(false)}
-        title="Isi Jurnal Harian PKL / Prakerin"
-        description="Dokumentasikan kegiatan dan keahlian baru yang didapat di tempat magang industri."
-        maxWidth="lg"
+        title="Input Log Jurnal PKL Harian"
+        description="Catat aktivitas dan kompetensi industri harian yang telah dipelajari."
+        maxWidth="md"
       >
         <form onSubmit={handleAddJournal} className="space-y-4 mt-2">
           <Input
-            label="Nama Perusahaan / Instansi DUDI"
+            label="Nama Perusahaan / Industri Mitra"
             value={companyInput}
             onChange={(e) => setCompanyInput(e.target.value)}
             required
           />
 
           <div className="space-y-1.5">
-            <label className="block text-xs font-semibold uppercase tracking-wider text-slate-600">
-              Uraian Aktivitas & Pekerjaan yang Dikerjakan
+            <label className="block text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+              Aktivitas Industri Hari Ini
             </label>
             <textarea
-              className="w-full rounded-2xl border border-slate-200 bg-white p-3.5 text-sm text-slate-900 min-h-[85px]"
-              placeholder="Ceritakan detail tugas dan pekerjaan praktis hari ini..."
+              className="w-full rounded-2xl border border-input bg-card p-3.5 text-sm text-foreground min-h-[85px] focus:outline-none focus:ring-2 focus:ring-purple-500"
+              placeholder="Jelaskan pekerjaan atau troubleshooting yang Anda tangani..."
               value={activityInput}
               onChange={(e) => setActivityInput(e.target.value)}
               required
@@ -495,10 +457,10 @@ export default function ProjectTrackerPage() {
           </div>
 
           <Input
-            label="Kompetensi / Keterampilan Kejuruan yang Dipelajari"
+            label="Kompetensi Kejuruan Terkait"
             value={competencyInput}
             onChange={(e) => setCompetencyInput(e.target.value)}
-            placeholder="Contoh: Konfigurasi MikroTik OSPF, Krimping RJ45"
+            placeholder="Contoh: Network Troubleshooting, Splicing FO"
             required
           />
 
@@ -506,8 +468,8 @@ export default function ProjectTrackerPage() {
             <Button type="button" variant="outline" onClick={() => setIsJournalModalOpen(false)}>
               Batal
             </Button>
-            <Button type="submit" variant="gradient" className="font-bold">
-              Kirim Jurnal untuk Diverifikasi
+            <Button type="submit" variant="default" className="bg-purple-600 hover:bg-purple-500 text-white font-semibold">
+              Simpan Jurnal PKL
             </Button>
           </div>
         </form>

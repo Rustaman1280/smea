@@ -5,17 +5,8 @@ import { useAuthStore } from "@/stores/auth-store";
 import { UserRole, ItemCondition, BorrowStatus } from "@superapp/types";
 import {
   Boxes,
-  Search,
   Plus,
-  CheckCircle2,
-  Clock,
-  Wrench,
-  AlertTriangle,
   RotateCcw,
-  Sparkles,
-  Laptop,
-  Projector,
-  FileCheck,
   AlertCircle,
 } from "lucide-react";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
@@ -151,12 +142,12 @@ export default function InventarisPage() {
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
           <div className="flex items-center gap-2">
-            <h1 className="text-2xl font-bold tracking-tight text-slate-900">
+            <h1 className="text-2xl font-bold tracking-tight text-foreground">
               8. Inventaris Sarpras
             </h1>
             <Badge variant="warning">Modul 8</Badge>
           </div>
-          <p className="text-sm text-slate-500 mt-1">
+          <p className="text-sm text-muted-foreground mt-1">
             Katalog aset peralatan lab/bengkel kejuruan SMK, alur peminjaman alat praktik, dan peringatan stok menipis.
           </p>
         </div>
@@ -165,7 +156,7 @@ export default function InventarisPage() {
           <Button
             variant="default"
             size="sm"
-            className="bg-orange-600 hover:bg-orange-700 font-bold shadow-orange-200"
+            className="bg-orange-600 hover:bg-orange-500 text-white font-semibold"
             onClick={() => setIsBorrowModalOpen(true)}
           >
             <Plus className="h-4 w-4" />
@@ -174,45 +165,45 @@ export default function InventarisPage() {
         </div>
       </div>
 
-      {/* Low-stock Alerts Banner if applicable */}
-      <div className="rounded-3xl border border-orange-200 bg-gradient-to-r from-orange-500/15 via-amber-500/10 to-transparent p-4 flex items-center justify-between gap-3 shadow-sm">
+      {/* Low-stock Alerts Banner */}
+      <div className="rounded-3xl border border-orange-500/25 bg-gradient-to-r from-orange-500/15 via-amber-500/10 to-transparent p-4 flex items-center justify-between gap-3 shadow-sm">
         <div className="flex items-center gap-3">
           <div className="h-10 w-10 rounded-2xl bg-orange-600 text-white flex items-center justify-center shadow-sm">
             <AlertCircle className="h-5 w-5" />
           </div>
           <div>
-            <h3 className="text-xs sm:text-sm font-black text-slate-900">
+            <h3 className="text-xs sm:text-sm font-bold text-foreground">
               Peringatan Ketersediaan Sarpras: 2 Barang Perlu Perhatian
             </h3>
-            <p className="text-[11px] text-slate-600 mt-0.5">
+            <p className="text-[11px] text-muted-foreground mt-0.5">
               Crimping Tool RJ45 (Sisa 2 Unit) & Kamera DSLR DKV (Sisa 1 Unit - Dalam Perbaikan).
             </p>
           </div>
         </div>
 
-        <Badge variant="warning" className="hidden sm:inline-flex font-bold">
+        <Badge variant="warning" className="hidden sm:inline-flex font-semibold">
           Prioritas Sarpras
         </Badge>
       </div>
 
       {/* Tabs */}
-      <div className="flex items-center gap-2 border-b border-slate-200 pb-1">
+      <div className="flex items-center gap-2 border-b border-border pb-1">
         <button
           onClick={() => setActiveTab("ITEMS")}
-          className={`px-4 py-2 text-xs font-bold rounded-xl transition-all ${
+          className={`px-4 py-2 text-xs font-semibold rounded-xl transition-all ${
             activeTab === "ITEMS"
-              ? "bg-orange-600 text-white shadow-sm shadow-orange-200"
-              : "text-slate-600 hover:bg-slate-100"
+              ? "bg-orange-600 text-white shadow-sm"
+              : "text-muted-foreground hover:text-foreground hover:bg-muted/50"
           }`}
         >
           Katalog Aset & Alat ({items.length} Barang)
         </button>
         <button
           onClick={() => setActiveTab("BORROWS")}
-          className={`px-4 py-2 text-xs font-bold rounded-xl transition-all ${
+          className={`px-4 py-2 text-xs font-semibold rounded-xl transition-all ${
             activeTab === "BORROWS"
-              ? "bg-orange-600 text-white shadow-sm shadow-orange-200"
-              : "text-slate-600 hover:bg-slate-100"
+              ? "bg-orange-600 text-white shadow-sm"
+              : "text-muted-foreground hover:text-foreground hover:bg-muted/50"
           }`}
         >
           Daftar Peminjaman ({borrows.length} Data)
@@ -225,16 +216,16 @@ export default function InventarisPage() {
           {items.map((item) => (
             <Card
               key={item.id}
-              className="border-slate-200 hover:border-orange-400 hover:shadow-md transition-all flex flex-col justify-between"
+              className="hover:border-orange-500/40 transition-all flex flex-col justify-between"
             >
               <div>
                 <div className="flex items-start justify-between gap-2 pb-2">
-                  <span className="font-mono text-xs font-black text-orange-900 bg-orange-100/70 px-2 py-0.5 rounded-md border border-orange-200">
+                  <span className="font-mono text-xs font-semibold text-orange-600 dark:text-orange-300 bg-orange-500/10 px-2 py-0.5 rounded-md border border-orange-500/25">
                     {item.code}
                   </span>
                   <div className="flex items-center gap-1">
                     {item.isLowStock && (
-                      <Badge variant="destructive" className="text-[9px] font-bold">
+                      <Badge variant="destructive" className="text-[9px]">
                         Stok Menipis
                       </Badge>
                     )}
@@ -246,27 +237,26 @@ export default function InventarisPage() {
                           ? "warning"
                           : "destructive"
                       }
-                      className="font-bold"
                     >
                       {item.condition}
                     </Badge>
                   </div>
                 </div>
 
-                <h3 className="text-base font-extrabold text-slate-900 mt-2">
+                <h3 className="text-base font-bold text-foreground mt-2">
                   {item.name}
                 </h3>
-                <p className="text-xs text-slate-500 mt-1">
+                <p className="text-xs text-muted-foreground mt-1">
                   Kategori: {item.category} · Lokasi: {item.location}
                 </p>
               </div>
 
-              <div className="pt-4 mt-4 border-t border-slate-100 flex items-center justify-between">
+              <div className="pt-4 mt-4 border-t border-border flex items-center justify-between">
                 <div>
-                  <span className="text-[10px] uppercase font-bold text-slate-400 block">
+                  <span className="text-[10px] uppercase font-semibold text-muted-foreground block">
                     Ketersediaan
                   </span>
-                  <span className="text-sm font-black text-slate-800">
+                  <span className="text-sm font-bold text-foreground">
                     {item.available} / {item.total} Unit
                   </span>
                 </div>
@@ -279,7 +269,7 @@ export default function InventarisPage() {
                     setIsBorrowModalOpen(true);
                   }}
                   disabled={item.available <= 0}
-                  className="font-bold text-xs"
+                  className="font-semibold text-xs"
                 >
                   {item.available > 0 ? "Pinjam Alat" : "Stok Kosong"}
                 </Button>
@@ -306,7 +296,7 @@ export default function InventarisPage() {
             <div className="overflow-x-auto">
               <table className="w-full text-left text-xs">
                 <thead>
-                  <tr className="border-b border-slate-100 text-slate-400 uppercase font-semibold">
+                  <tr className="border-b border-border text-muted-foreground uppercase font-semibold">
                     <th className="pb-3">Barang</th>
                     <th className="pb-3">Peminjam</th>
                     <th className="pb-3">Jumlah</th>
@@ -315,19 +305,19 @@ export default function InventarisPage() {
                     {isSarpras && <th className="pb-3 text-right">Approval Sarpras</th>}
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-slate-100 text-slate-700">
+                <tbody className="divide-y divide-border text-foreground">
                   {borrows.map((b) => (
-                    <tr key={b.id} className="hover:bg-slate-50/80">
+                    <tr key={b.id} className="hover:bg-muted/40 transition-colors">
                       <td className="py-3">
-                        <p className="font-bold text-slate-900">{b.itemName}</p>
-                        <p className="text-[10px] text-slate-400">{b.itemCode} · "{b.purpose}"</p>
+                        <p className="font-semibold text-foreground">{b.itemName}</p>
+                        <p className="text-[10px] text-muted-foreground">{b.itemCode} · "{b.purpose}"</p>
                       </td>
                       <td className="py-3">
-                        <p className="font-semibold text-slate-800">{b.borrowerName}</p>
-                        <p className="text-[10px] text-slate-500">{b.borrowerRole}</p>
+                        <p className="font-semibold text-foreground">{b.borrowerName}</p>
+                        <p className="text-[10px] text-muted-foreground">{b.borrowerRole}</p>
                       </td>
-                      <td className="py-3 font-bold text-slate-900">{b.quantity} Unit</td>
-                      <td className="py-3 text-slate-600">{b.expectedDate}</td>
+                      <td className="py-3 font-bold text-foreground">{b.quantity} Unit</td>
+                      <td className="py-3 text-muted-foreground">{b.expectedDate}</td>
                       <td className="py-3">
                         <Badge
                           variant={
@@ -339,7 +329,6 @@ export default function InventarisPage() {
                               ? "success"
                               : "secondary"
                           }
-                          className="font-bold"
                         >
                           {b.status}
                         </Badge>
@@ -351,7 +340,7 @@ export default function InventarisPage() {
                               <Button
                                 variant="default"
                                 size="sm"
-                                className="bg-emerald-600 hover:bg-emerald-700 text-xs py-1 h-7 font-bold"
+                                className="bg-emerald-600 hover:bg-emerald-500 text-xs py-1 h-7 font-semibold"
                                 onClick={() => handleUpdateBorrowStatus(b.id, BorrowStatus.BORROWED)}
                               >
                                 Setujui
@@ -361,7 +350,7 @@ export default function InventarisPage() {
                               <Button
                                 variant="outline"
                                 size="sm"
-                                className="text-xs py-1 h-7 border-emerald-300 text-emerald-700 hover:bg-emerald-50 font-bold"
+                                className="text-xs py-1 h-7 border-emerald-500/30 text-emerald-500 hover:bg-emerald-500/10 font-semibold"
                                 onClick={() => handleUpdateBorrowStatus(b.id, BorrowStatus.RETURNED)}
                               >
                                 <RotateCcw className="h-3 w-3" />
@@ -390,13 +379,13 @@ export default function InventarisPage() {
       >
         <form onSubmit={handleCreateBorrow} className="space-y-4 mt-2">
           <div className="space-y-1.5">
-            <label className="block text-xs font-semibold uppercase tracking-wider text-slate-600">
+            <label className="block text-xs font-semibold uppercase tracking-wider text-muted-foreground">
               Pilih Barang Inventaris
             </label>
             <select
               value={selectedItemId}
               onChange={(e) => setSelectedItemId(e.target.value)}
-              className="w-full h-11 rounded-2xl border border-slate-200 bg-white px-3 text-sm text-slate-900"
+              className="w-full h-11 rounded-2xl border border-input bg-card px-3 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-orange-500"
             >
               {items.map((it) => (
                 <option key={it.id} value={it.id}>
@@ -425,11 +414,11 @@ export default function InventarisPage() {
           </div>
 
           <div className="space-y-1.5">
-            <label className="block text-xs font-semibold uppercase tracking-wider text-slate-600">
+            <label className="block text-xs font-semibold uppercase tracking-wider text-muted-foreground">
               Tujuan Peminjaman & Lokasi Pemakaian
             </label>
             <textarea
-              className="w-full rounded-2xl border border-slate-200 bg-white p-3.5 text-sm text-slate-900 min-h-[80px]"
+              className="w-full rounded-2xl border border-input bg-card p-3.5 text-sm text-foreground min-h-[80px] focus:outline-none focus:ring-2 focus:ring-orange-500"
               placeholder="Contoh: Praktikum jaringan di lab TKJ..."
               value={borrowPurpose}
               onChange={(e) => setBorrowPurpose(e.target.value)}
@@ -441,7 +430,7 @@ export default function InventarisPage() {
             <Button type="button" variant="outline" onClick={() => setIsBorrowModalOpen(false)}>
               Batal
             </Button>
-            <Button type="submit" variant="gradient" className="font-bold">
+            <Button type="submit" variant="default" className="bg-orange-600 hover:bg-orange-500 text-white font-semibold">
               Kirimkan Pengajuan Pinjam
             </Button>
           </div>

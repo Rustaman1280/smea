@@ -15,7 +15,6 @@ import {
   Wifi,
   Boxes,
   KanbanSquare,
-  Layers,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -81,38 +80,52 @@ export function BottomNav() {
   const navItems = getNavItems();
 
   return (
-    <div className="lg:hidden fixed bottom-0 left-0 right-0 z-40 border-t border-slate-200/80 bg-white/95 backdrop-blur-md px-2 py-2">
-      <nav className="flex items-center justify-around">
-        {navItems.map((item) => {
-          const Icon = item.icon;
-          const isActive =
-            pathname === item.href ||
-            (item.href !== "/" && pathname.startsWith(item.href));
+    <div className="lg:hidden fixed bottom-0 left-0 right-0 z-40">
+      {/* Dark glass panel with clean border */}
+      <div className="border-t border-white/[0.08] bg-[#060b14]/90 backdrop-blur-xl px-2 py-1.5">
+        <nav className="flex items-center justify-around">
+          {navItems.map((item) => {
+            const Icon = item.icon;
+            const isActive =
+              pathname === item.href ||
+              (item.href !== "/" && pathname.startsWith(item.href));
 
-          return (
-            <Link
-              key={item.href}
-              href={item.href}
-              className={cn(
-                "flex flex-col items-center gap-1 rounded-xl px-2 py-1 text-[10px] font-semibold transition-all",
-                isActive
-                  ? "text-sky-600 font-bold"
-                  : "text-slate-500 hover:text-slate-900"
-              )}
-            >
-              <div
+            return (
+              <Link
+                key={item.href}
+                href={item.href}
                 className={cn(
-                  "flex h-7 w-7 items-center justify-center rounded-lg transition-transform",
-                  isActive ? "bg-sky-100 text-sky-600 scale-110" : ""
+                  "flex flex-col items-center gap-1 rounded-xl px-2 py-1 text-[10px] font-medium transition-all duration-150",
+                  isActive
+                    ? "text-white font-semibold"
+                    : "text-slate-400 hover:text-slate-200"
                 )}
               >
-                <Icon className="h-4 w-4" />
-              </div>
-              <span className="truncate max-w-[56px] text-center">{item.label}</span>
-            </Link>
-          );
-        })}
-      </nav>
+                {/* Icon wrapper */}
+                <div
+                  className={cn(
+                    "flex h-7 w-7 items-center justify-center rounded-lg transition-all duration-150",
+                    isActive
+                      ? "bg-sky-500/20 text-sky-400"
+                      : "text-slate-400"
+                  )}
+                >
+                  <Icon className="h-4 w-4" />
+                </div>
+
+                <span className="truncate max-w-[56px] text-center">
+                  {item.label}
+                </span>
+
+                {/* Active underline dot */}
+                {isActive && (
+                  <div className="h-1 w-1 rounded-full bg-sky-400" />
+                )}
+              </Link>
+            );
+          })}
+        </nav>
+      </div>
     </div>
   );
 }

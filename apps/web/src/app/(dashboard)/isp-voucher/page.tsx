@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import { useAuthStore } from "@/stores/auth-store";
-import { UserRole, VoucherStatus } from "@superapp/types";
+import { UserRole } from "@superapp/types";
 import {
   Wifi,
   Zap,
@@ -10,13 +10,8 @@ import {
   Copy,
   Check,
   Plus,
-  ArrowRight,
-  TrendingUp,
-  Download,
   CreditCard,
   QrCode,
-  Sparkles,
-  Printer,
 } from "lucide-react";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -110,12 +105,12 @@ export default function IspVoucherPage() {
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
           <div className="flex items-center gap-2">
-            <h1 className="text-2xl font-bold tracking-tight text-slate-900">
+            <h1 className="text-2xl font-bold tracking-tight text-foreground">
               9. ISP Voucher Hotspot
             </h1>
             <Badge variant="success">Modul 9</Badge>
           </div>
-          <p className="text-sm text-slate-500 mt-1">
+          <p className="text-sm text-muted-foreground mt-1">
             Penjualan voucher Wi-Fi hotspot sekolah, integrasi MikroTik RouterOS TeFa TKJ, dan analitik pendapatan kas.
           </p>
         </div>
@@ -124,7 +119,7 @@ export default function IspVoucherPage() {
           <Button
             variant="default"
             size="sm"
-            className="bg-teal-600 hover:bg-teal-700 font-bold shadow-teal-200"
+            className="bg-teal-600 hover:bg-teal-500 text-white font-semibold"
             onClick={() => setIsBatchModalOpen(true)}
           >
             <Plus className="h-4 w-4" />
@@ -136,60 +131,61 @@ export default function IspVoucherPage() {
       {/* OPERATOR ANALYTICS BANNER */}
       {isOperator && (
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-          <Card className="p-4 bg-teal-50/60 border-teal-200">
-            <p className="text-xs font-bold text-teal-900 uppercase">Total Voucher Dibuat</p>
-            <h4 className="text-2xl font-black text-slate-900 mt-1">250 Unit</h4>
+          <Card className="p-4 border-teal-500/20 bg-teal-500/5">
+            <p className="text-xs font-medium text-teal-600 dark:text-teal-300 uppercase tracking-wider">Total Voucher Dibuat</p>
+            <h4 className="text-2xl font-bold text-foreground mt-1">250 Unit</h4>
           </Card>
-          <Card className="p-4 bg-emerald-50/60 border-emerald-200">
-            <p className="text-xs font-bold text-emerald-900 uppercase">Voucher Terjual</p>
-            <h4 className="text-2xl font-black text-emerald-700 mt-1">182 Unit</h4>
+          <Card className="p-4 border-emerald-500/20 bg-emerald-500/5">
+            <p className="text-xs font-medium text-emerald-600 dark:text-emerald-300 uppercase tracking-wider">Voucher Terjual</p>
+            <h4 className="text-2xl font-bold text-emerald-500 dark:text-emerald-300 mt-1">182 Unit</h4>
           </Card>
-          <Card className="p-4 bg-sky-50/60 border-sky-200">
-            <p className="text-xs font-bold text-sky-900 uppercase">Stok Tersedia</p>
-            <h4 className="text-2xl font-black text-sky-700 mt-1">68 Unit</h4>
+          <Card className="p-4 border-sky-500/20 bg-sky-500/5">
+            <p className="text-xs font-medium text-sky-600 dark:text-sky-300 uppercase tracking-wider">Stok Tersedia</p>
+            <h4 className="text-2xl font-bold text-sky-500 dark:text-sky-300 mt-1">68 Unit</h4>
           </Card>
-          <Card className="p-4 border-purple-200 bg-purple-50/60">
-            <p className="text-xs font-bold text-purple-900 uppercase">Total Omset Kas</p>
-            <h4 className="text-xl font-black text-purple-800 mt-1">{formatCurrency(685000)}</h4>
+          <Card className="p-4 border-purple-500/20 bg-purple-500/5">
+            <p className="text-xs font-medium text-purple-600 dark:text-purple-300 uppercase tracking-wider">Total Omset Kas</p>
+            <h4 className="text-xl font-bold text-purple-500 dark:text-purple-300 mt-1">{formatCurrency(685000)}</h4>
           </Card>
         </div>
       )}
 
       {/* Active Voucher Code Card (For User) */}
       {purchasedList.length > 0 && (
-        <div className="rounded-3xl border border-teal-300 bg-gradient-to-r from-teal-700 via-emerald-800 to-slate-900 p-6 text-white shadow-xl shadow-teal-950/10">
+        <div className="rounded-3xl border border-teal-500/30 bg-gradient-to-r from-teal-900/90 via-slate-900 to-slate-950 p-6 text-white shadow-xl">
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
             <div className="space-y-1.5">
-              <div className="inline-flex items-center gap-2 rounded-full bg-white/20 px-3 py-0.5 text-xs font-bold backdrop-blur-md">
+              <div className="inline-flex items-center gap-2 rounded-full bg-teal-500/20 px-3 py-0.5 text-xs font-semibold text-teal-200 border border-teal-400/40 backdrop-blur-md">
                 <Zap className="h-3.5 w-3.5 text-amber-300" />
                 <span>Voucher Hotspot Anda Aktif</span>
               </div>
-              <h2 className="text-xl font-black tracking-tight">
+              <h2 className="text-xl font-bold tracking-tight text-white">
                 {purchasedList[0].profileName}
               </h2>
-              <p className="text-xs text-teal-100">
-                Berlaku hingga: <strong>{purchasedList[0].expiresAt}</strong> · SSID Hotspot:{" "}
-                <strong className="text-white font-bold">SMKN1GARUT-STUDENT-5G</strong>
+              <p className="text-xs text-slate-300">
+                Berlaku hingga: <strong className="text-white">{purchasedList[0].expiresAt}</strong> · SSID Hotspot:{" "}
+                <strong className="text-teal-300 font-bold">SMKN1GARUT-STUDENT-5G</strong>
               </p>
             </div>
 
             {/* Code Copy Box */}
-            <div className="flex items-center gap-3 bg-slate-950/60 backdrop-blur-md p-3.5 rounded-2xl border border-white/20 shadow-inner">
+            <div className="flex items-center gap-3 bg-slate-950/80 backdrop-blur-md p-3.5 rounded-2xl border border-teal-500/30 shadow-inner">
               <div>
-                <p className="text-[10px] uppercase font-bold text-teal-200">Kode Login Hotspot:</p>
-                <p className="text-xl font-mono font-black tracking-widest text-amber-300">
+                <p className="text-[10px] uppercase font-semibold text-teal-300">Kode Login Hotspot:</p>
+                <p className="text-xl font-mono font-bold tracking-widest text-amber-300">
                   {purchasedList[0].code}
                 </p>
               </div>
               <button
                 onClick={() => handleCopy(purchasedList[0].code)}
-                className="p-2.5 rounded-xl bg-white text-slate-900 hover:bg-teal-50 transition-all active:scale-95 shadow-sm font-bold"
+                className="p-2.5 rounded-xl bg-teal-500 text-slate-950 hover:bg-teal-400 transition-all active:scale-95 shadow-sm font-bold min-h-[40px] min-w-[40px] flex items-center justify-center"
                 title="Salin Kode"
+                aria-label="Salin Kode Voucher"
               >
                 {copiedCode === purchasedList[0].code ? (
-                  <Check className="h-4 w-4 text-emerald-600 font-bold" />
+                  <Check className="h-4 w-4 stroke-[3]" />
                 ) : (
-                  <Copy className="h-4 w-4" />
+                  <Copy className="h-4 w-4 stroke-[2.5]" />
                 )}
               </button>
             </div>
@@ -199,7 +195,7 @@ export default function IspVoucherPage() {
 
       {/* Package Plans Grid */}
       <div className="space-y-3">
-        <h2 className="text-base font-bold text-slate-900">
+        <h2 className="text-base font-semibold text-foreground">
           Pilih Paket Internet Wi-Fi Hotspot Sekolah (Teaching Factory TKJ)
         </h2>
 
@@ -207,39 +203,39 @@ export default function IspVoucherPage() {
           {PACKAGES.map((pkg) => (
             <Card
               key={pkg.id}
-              className={`flex flex-col justify-between transition-all duration-200 hover:border-teal-400 hover:shadow-md ${
-                pkg.badge ? "border-teal-300 ring-1 ring-teal-300 bg-teal-50/20" : "border-slate-200"
+              className={`flex flex-col justify-between transition-all duration-200 hover:border-teal-500/40 ${
+                pkg.badge ? "border-teal-500/40 bg-teal-500/5" : ""
               }`}
             >
               <div>
                 <div className="flex items-center justify-between pb-2">
-                  <span className="text-xs font-bold text-slate-400 uppercase">{pkg.duration}</span>
-                  {pkg.badge && <Badge variant="default" className="font-bold">{pkg.badge}</Badge>}
+                  <span className="text-xs font-semibold text-muted-foreground uppercase">{pkg.duration}</span>
+                  {pkg.badge && <Badge variant="default">{pkg.badge}</Badge>}
                 </div>
 
-                <h3 className="text-base font-black text-slate-900 mt-1">
+                <h3 className="text-base font-bold text-foreground mt-1">
                   {pkg.name}
                 </h3>
-                <p className="text-xl font-black text-teal-800 mt-2">
+                <p className="text-xl font-bold text-teal-500 dark:text-teal-300 mt-2">
                   {formatCurrency(pkg.price)}
                 </p>
 
-                <div className="mt-4 space-y-2 text-xs text-slate-600 bg-slate-50 p-3 rounded-2xl border border-slate-100">
+                <div className="mt-4 space-y-2 text-xs text-muted-foreground bg-muted/40 p-3 rounded-2xl border border-border">
                   <div className="flex items-center gap-1.5">
-                    <Zap className="h-3.5 w-3.5 text-teal-600" />
-                    <span>Kecepatan: <strong>{pkg.speed}</strong></span>
+                    <Zap className="h-3.5 w-3.5 text-teal-500" />
+                    <span>Kecepatan: <strong className="text-foreground">{pkg.speed}</strong></span>
                   </div>
                   <div className="flex items-center gap-1.5">
-                    <Wifi className="h-3.5 w-3.5 text-teal-600" />
-                    <span>Kuota: <strong>{pkg.quota}</strong></span>
+                    <Wifi className="h-3.5 w-3.5 text-teal-500" />
+                    <span>Kuota: <strong className="text-foreground">{pkg.quota}</strong></span>
                   </div>
                 </div>
               </div>
 
-              <div className="pt-4 mt-4 border-t border-slate-100">
+              <div className="pt-4 mt-4 border-t border-border">
                 <Button
-                  variant="gradient"
-                  className="w-full text-xs font-bold from-teal-600 to-emerald-600 hover:from-teal-700 hover:to-emerald-700"
+                  variant="default"
+                  className="w-full text-xs font-bold bg-teal-600 hover:bg-teal-500 text-white min-h-[38px]"
                   onClick={() => setSelectedPkg(pkg)}
                 >
                   Beli Voucher Sekarang
@@ -260,7 +256,7 @@ export default function IspVoucherPage() {
           <div className="overflow-x-auto">
             <table className="w-full text-left text-xs">
               <thead>
-                <tr className="border-b border-slate-100 text-slate-400 uppercase font-semibold">
+                <tr className="border-b border-border text-muted-foreground uppercase font-semibold">
                   <th className="pb-3">Kode Voucher</th>
                   <th className="pb-3">Paket</th>
                   <th className="pb-3">Tanggal Beli</th>
@@ -268,19 +264,19 @@ export default function IspVoucherPage() {
                   <th className="pb-3 text-right">Aksi</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-100 text-slate-700">
+              <tbody className="divide-y divide-border text-foreground">
                 {purchasedList.map((v, i) => (
-                  <tr key={i} className="hover:bg-slate-50/80">
-                    <td className="py-3 font-mono font-bold text-teal-800">{v.code}</td>
-                    <td className="py-3 font-bold text-slate-900">{v.profileName}</td>
-                    <td className="py-3 text-slate-500">{v.purchasedAt}</td>
-                    <td className="py-3 font-black text-slate-900">{formatCurrency(v.price)}</td>
+                  <tr key={i} className="hover:bg-muted/40 transition-colors">
+                    <td className="py-3 font-mono font-bold text-teal-500 dark:text-teal-300">{v.code}</td>
+                    <td className="py-3 font-semibold text-foreground">{v.profileName}</td>
+                    <td className="py-3 text-muted-foreground">{v.purchasedAt}</td>
+                    <td className="py-3 font-bold text-foreground">{formatCurrency(v.price)}</td>
                     <td className="py-3 text-right">
                       <Button
                         variant="outline"
                         size="sm"
                         onClick={() => handleCopy(v.code)}
-                        className="text-xs h-7 py-0 font-bold"
+                        className="text-xs h-7 py-0 font-semibold"
                       >
                         {copiedCode === v.code ? "Tersalin" : "Salin Kode"}
                       </Button>
@@ -303,16 +299,16 @@ export default function IspVoucherPage() {
       >
         {selectedPkg && (
           <div className="space-y-4 mt-2">
-            <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200 flex items-center justify-between">
+            <div className="p-4 rounded-2xl bg-muted/40 border border-border flex items-center justify-between">
               <div>
-                <p className="font-bold text-slate-900">{selectedPkg.name}</p>
-                <p className="text-xs text-slate-500">Durasi: {selectedPkg.duration} · {selectedPkg.speed}</p>
+                <p className="font-semibold text-foreground">{selectedPkg.name}</p>
+                <p className="text-xs text-muted-foreground">Durasi: {selectedPkg.duration} · {selectedPkg.speed}</p>
               </div>
-              <p className="text-lg font-black text-teal-800">{formatCurrency(selectedPkg.price)}</p>
+              <p className="text-lg font-bold text-teal-500 dark:text-teal-300">{formatCurrency(selectedPkg.price)}</p>
             </div>
 
             <div className="space-y-2">
-              <label className="block text-xs font-semibold uppercase tracking-wider text-slate-600">
+              <label className="block text-xs font-semibold uppercase tracking-wider text-muted-foreground">
                 Pilih Metode Pembayaran
               </label>
 
@@ -320,37 +316,37 @@ export default function IspVoucherPage() {
                 <button
                   type="button"
                   onClick={() => setPayMethod("SALDO")}
-                  className={`p-3 rounded-2xl border text-left text-xs font-bold transition-all ${
+                  className={`p-3 rounded-2xl border text-left text-xs font-semibold transition-all ${
                     payMethod === "SALDO"
-                      ? "border-teal-500 bg-teal-50 text-teal-950 ring-1 ring-teal-500"
-                      : "border-slate-200 bg-white text-slate-700 hover:bg-slate-50"
+                      ? "border-teal-500 bg-teal-500/10 text-teal-600 dark:text-teal-300 ring-1 ring-teal-500"
+                      : "border-border bg-card text-muted-foreground hover:bg-muted/50"
                   }`}
                 >
-                  <CreditCard className="h-4 w-4 mb-1 text-teal-600" />
+                  <CreditCard className="h-4 w-4 mb-1 text-teal-500" />
                   Saldo Siswa
                 </button>
                 <button
                   type="button"
                   onClick={() => setPayMethod("QRIS")}
-                  className={`p-3 rounded-2xl border text-left text-xs font-bold transition-all ${
+                  className={`p-3 rounded-2xl border text-left text-xs font-semibold transition-all ${
                     payMethod === "QRIS"
-                      ? "border-teal-500 bg-teal-50 text-teal-950 ring-1 ring-teal-500"
-                      : "border-slate-200 bg-white text-slate-700 hover:bg-slate-50"
+                      ? "border-teal-500 bg-teal-500/10 text-teal-600 dark:text-teal-300 ring-1 ring-teal-500"
+                      : "border-border bg-card text-muted-foreground hover:bg-muted/50"
                   }`}
                 >
-                  <QrCode className="h-4 w-4 mb-1 text-teal-600" />
+                  <QrCode className="h-4 w-4 mb-1 text-teal-500" />
                   QRIS Instan
                 </button>
                 <button
                   type="button"
                   onClick={() => setPayMethod("CASH")}
-                  className={`p-3 rounded-2xl border text-left text-xs font-bold transition-all ${
+                  className={`p-3 rounded-2xl border text-left text-xs font-semibold transition-all ${
                     payMethod === "CASH"
-                      ? "border-teal-500 bg-teal-50 text-teal-950 ring-1 ring-teal-500"
-                      : "border-slate-200 bg-white text-slate-700 hover:bg-slate-50"
+                      ? "border-teal-500 bg-teal-500/10 text-teal-600 dark:text-teal-300 ring-1 ring-teal-500"
+                      : "border-border bg-card text-muted-foreground hover:bg-muted/50"
                   }`}
                 >
-                  <Clock className="h-4 w-4 mb-1 text-teal-600" />
+                  <Clock className="h-4 w-4 mb-1 text-teal-500" />
                   Kasir Lab ISP
                 </button>
               </div>
@@ -360,7 +356,7 @@ export default function IspVoucherPage() {
               <Button type="button" variant="outline" onClick={() => setSelectedPkg(null)}>
                 Batal
               </Button>
-              <Button type="button" variant="gradient" className="font-bold" onClick={handleBuy}>
+              <Button type="button" variant="default" className="bg-teal-600 hover:bg-teal-500 text-white font-semibold" onClick={handleBuy}>
                 Bayar & Terbitkan Kode
               </Button>
             </div>
@@ -401,13 +397,13 @@ export default function IspVoucherPage() {
           </div>
 
           <div className="space-y-1.5">
-            <label className="block text-xs font-semibold uppercase tracking-wider text-slate-600">
+            <label className="block text-xs font-semibold uppercase tracking-wider text-muted-foreground">
               Profil Bandwidth / Paket
             </label>
             <select
               value={batchProfile}
               onChange={(e) => setBatchProfile(e.target.value)}
-              className="w-full h-11 rounded-2xl border border-slate-200 bg-white px-3 text-sm text-slate-900"
+              className="w-full h-11 rounded-2xl border border-input bg-card px-3 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-teal-500"
             >
               <option value="1 Hari - Unlimited 15 Mbps">1 Hari - Unlimited 15 Mbps</option>
               <option value="3 Jam - Kuota 2 GB">3 Jam - Kuota 2 GB</option>
@@ -420,7 +416,7 @@ export default function IspVoucherPage() {
             <Button type="button" variant="outline" onClick={() => setIsBatchModalOpen(false)}>
               Batal
             </Button>
-            <Button type="submit" variant="gradient" className="font-bold">
+            <Button type="submit" variant="default" className="bg-teal-600 hover:bg-teal-500 text-white font-semibold">
               Generate & Cetak Lembar Voucher
             </Button>
           </div>

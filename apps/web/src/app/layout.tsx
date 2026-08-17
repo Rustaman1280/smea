@@ -1,11 +1,12 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { QueryProvider } from "@/components/providers/query-provider";
+import { ThemeProvider } from "@/components/providers/theme-provider";
 import { Inter } from 'next/font/google';
 
 const inter = Inter({
   subsets: ['latin'],
-  weight: ['300', '400', '500'],
+  weight: ['300', '400', '500', '600', '700'],
   variable: '--font-sans',
   display: 'swap',
 });
@@ -22,9 +23,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="id" className={`h-full ${inter.variable}`}>
-      <body className="min-h-screen bg-slate-50 font-sans text-slate-900 antialiased selection:bg-sky-100 selection:text-sky-900">
-        <QueryProvider>{children}</QueryProvider>
+    <html lang="id" className={`dark h-full ${inter.variable}`} suppressHydrationWarning>
+      <body className="min-h-screen bg-background font-sans text-foreground antialiased selection:bg-sky-500/30 selection:text-sky-200">
+        <ThemeProvider>
+          <QueryProvider>{children}</QueryProvider>
+        </ThemeProvider>
       </body>
     </html>
   );

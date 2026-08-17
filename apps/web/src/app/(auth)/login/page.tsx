@@ -57,8 +57,14 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-4 sm:p-6 bg-gradient-to-br from-slate-950 via-slate-900 to-sky-950 text-slate-100">
-      <div className="w-full max-w-5xl space-y-6">
+    <div className="relative min-h-screen flex items-center justify-center p-4 sm:p-6 bg-[#060b14] text-slate-100 overflow-hidden">
+      {/* Ambient background orbs */}
+      <div aria-hidden="true" className="pointer-events-none fixed inset-0 overflow-hidden">
+        <div className="absolute -top-40 -left-20 h-[500px] w-[500px] rounded-full bg-sky-500/10 blur-[120px]" />
+        <div className="absolute top-20 right-0 h-[400px] w-[400px] rounded-full bg-indigo-600/8 blur-[100px]" />
+        <div className="absolute bottom-0 left-1/3 h-[300px] w-[500px] rounded-full bg-sky-600/6 blur-[100px]" />
+      </div>
+        <div className="relative z-10 w-full max-w-5xl space-y-6">
         {/* Header Branding */}
         <div className="text-center space-y-3">
           <div className="inline-flex items-center justify-center p-2 rounded-2xl bg-slate-900/80 border border-sky-500/30 backdrop-blur-md shadow-lg shadow-sky-950/40">
@@ -74,7 +80,7 @@ export default function LoginPage() {
 
         <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
           {/* Manual Login Card */}
-          <Card className="md:col-span-5 border-slate-800 bg-slate-900/90 text-slate-100 backdrop-blur-md shadow-2xl shadow-black/40">
+          <Card className="md:col-span-5 border-white/[0.08] bg-[#0d1526]/80 text-slate-100 backdrop-blur-2xl shadow-[0_24px_64px_rgba(0,0,0,0.7),0_0_0_1px_rgba(14,165,233,0.06)]">
             <CardHeader>
               <CardTitle className="text-lg text-white">Masuk Akun SSO</CardTitle>
               <CardDescription className="text-xs text-slate-400">
@@ -97,7 +103,7 @@ export default function LoginPage() {
                     value={identifier}
                     onChange={(e) => setIdentifier(e.target.value)}
                     placeholder="siswa@smkn1garut.sch.id"
-                    className="w-full h-11 rounded-xl border border-slate-700 bg-slate-950 px-3.5 text-sm text-white focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-sky-500"
+                    className="w-full h-11 rounded-xl border border-white/[0.1] bg-white/[0.04] px-3.5 text-sm text-white placeholder:text-slate-600 focus:outline-none focus:ring-2 focus:ring-sky-500/50 focus:border-sky-500/50"
                     required
                   />
                 </div>
@@ -111,7 +117,7 @@ export default function LoginPage() {
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     placeholder="••••••••"
-                    className="w-full h-11 rounded-xl border border-slate-700 bg-slate-950 px-3.5 text-sm text-white focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-sky-500"
+                    className="w-full h-11 rounded-xl border border-white/[0.1] bg-white/[0.04] px-3.5 text-sm text-white placeholder:text-slate-600 focus:outline-none focus:ring-2 focus:ring-sky-500/50 focus:border-sky-500/50"
                     required
                   />
                 </div>
@@ -134,7 +140,7 @@ export default function LoginPage() {
           </Card>
 
           {/* Quick 1-Click Role Login Picker */}
-          <Card className="md:col-span-7 border-sky-900/60 bg-gradient-to-br from-slate-900/90 to-sky-950/40 text-slate-100 backdrop-blur-md shadow-2xl">
+          <Card className="md:col-span-7 border-sky-500/15 bg-gradient-to-br from-sky-500/6 via-[#0d1526]/80 to-indigo-500/5 text-slate-100 backdrop-blur-2xl shadow-[0_24px_64px_rgba(0,0,0,0.6),0_0_30px_rgba(14,165,233,0.06)]">
             <CardHeader className="pb-3">
               <div className="flex items-center gap-2">
                 <Sparkles className="h-4 w-4 text-amber-400" />
@@ -152,7 +158,7 @@ export default function LoginPage() {
                   <button
                     key={roleKey}
                     onClick={() => handleQuickRoleLogin(roleKey as UserRole)}
-                    className="flex flex-col items-start p-3 rounded-2xl border border-slate-800 bg-slate-950/80 hover:border-sky-500/80 hover:bg-slate-900 hover:shadow-lg transition-all text-left group"
+                    className="flex flex-col items-start p-3 rounded-2xl border border-white/[0.06] bg-white/[0.03] hover:border-sky-500/30 hover:bg-sky-500/8 hover:shadow-[0_0_16px_rgba(14,165,233,0.1)] transition-all text-left group"
                   >
                     <div className="flex items-center justify-between w-full">
                       <span className="text-xs font-bold text-white group-hover:text-sky-400 transition-colors">
@@ -171,7 +177,7 @@ export default function LoginPage() {
             </CardContent>
           </Card>
         </div>
-      </div>
+        </div>
     </div>
   );
 }

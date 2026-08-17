@@ -9,14 +9,9 @@ import {
   Plus,
   Flame,
   CheckCircle2,
-  XCircle,
-  Sparkles,
   Store,
-  Clock,
-  Filter,
   ShoppingBag,
   Check,
-  Percent,
 } from "lucide-react";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -123,6 +118,7 @@ export default function KantinPage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [cartCount, setCartCount] = useState(0);
   const [cartTotal, setCartTotal] = useState(0);
+  const [justOrderedId, setJustOrderedId] = useState<string | null>(null);
 
   // Form states
   const [nameInput, setNameInput] = useState("");
@@ -150,8 +146,10 @@ export default function KantinPage() {
   };
 
   const handleOrder = (menu: MenuItem) => {
-    setCartCount(cartCount + 1);
-    setCartTotal(cartTotal + menu.price);
+    setCartCount((prev) => prev + 1);
+    setCartTotal((prev) => prev + menu.price);
+    setJustOrderedId(menu.id);
+    setTimeout(() => setJustOrderedId(null), 1200);
   };
 
   const handleCreateMenu = (e: React.FormEvent) => {
@@ -182,19 +180,19 @@ export default function KantinPage() {
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
           <div className="flex items-center gap-2">
-            <h1 className="text-2xl font-bold tracking-tight text-slate-900">
+            <h1 className="text-2xl font-bold tracking-tight text-foreground">
               4. E-Kantin
             </h1>
             <Badge variant="warning">Modul 4</Badge>
           </div>
-          <p className="text-sm text-slate-500 mt-1">
+          <p className="text-sm text-muted-foreground mt-1">
             Katalog menu digital multi-stand, sajian produk Dapur TeFa Tata Boga, dan info stok real-time.
           </p>
         </div>
 
         <div className="flex items-center gap-2">
           {cartCount > 0 && (
-            <div className="rounded-2xl bg-amber-500 text-slate-950 font-bold px-3.5 py-1.5 text-xs flex items-center gap-2 shadow-sm">
+            <div className="rounded-2xl bg-amber-500 text-slate-950 font-bold px-3.5 py-2 text-xs flex items-center gap-2 shadow-sm animate-in zoom-in-95">
               <ShoppingBag className="h-4 w-4" />
               <span>{cartCount} Item · {formatCurrency(cartTotal)}</span>
             </div>
@@ -204,7 +202,7 @@ export default function KantinPage() {
             <Button
               variant="default"
               size="sm"
-              className="bg-amber-600 hover:bg-amber-700 font-bold shadow-amber-200"
+              className="bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold"
               onClick={() => setIsModalOpen(true)}
             >
               <Plus className="h-4 w-4" />
@@ -214,28 +212,28 @@ export default function KantinPage() {
         </div>
       </div>
 
-      {/* Today's Featured Specials Banner */}
-      <div className="rounded-3xl border border-amber-300/80 bg-gradient-to-r from-amber-500/15 via-orange-500/10 to-amber-500/5 p-5 shadow-sm">
+      {/* Today's Featured Specials Banner — High Contrast & Dark Surface */}
+      <div className="rounded-3xl border border-amber-500/30 bg-gradient-to-r from-amber-500/15 via-orange-500/10 to-amber-500/5 p-5">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div className="flex items-center gap-3.5">
-            <div className="h-12 w-12 rounded-2xl bg-gradient-to-tr from-amber-500 to-orange-500 text-white flex items-center justify-center shadow-md shadow-amber-500/20">
-              <Flame className="h-6 w-6 text-white" />
+            <div className="h-12 w-12 rounded-2xl bg-gradient-to-tr from-amber-500 to-orange-500 text-slate-950 font-bold flex items-center justify-center shadow-md">
+              <Flame className="h-6 w-6 text-slate-950" />
             </div>
             <div>
               <div className="flex items-center gap-2">
-                <h3 className="text-base font-black text-slate-900">Menu Spesial Rekomendasi Hari Ini</h3>
-                <Badge variant="warning" className="text-[10px] bg-amber-200 text-amber-900">
+                <h3 className="text-base font-bold text-foreground">Menu Spesial Rekomendasi Hari Ini</h3>
+                <Badge variant="warning" className="text-[10px]">
                   Chef's Pick
                 </Badge>
               </div>
-              <p className="text-xs text-slate-600 mt-0.5">
+              <p className="text-xs text-muted-foreground mt-0.5 leading-relaxed">
                 Pastry Croissant TeFa Tata Boga & Nasi Ayam Geprek Sambal Korek Stand Barokah.
               </p>
             </div>
           </div>
 
-          <div className="flex items-center gap-2 text-xs font-bold text-slate-700 bg-white/90 border border-amber-200 px-3.5 py-1.5 rounded-xl">
-            <Store className="h-4 w-4 text-amber-600" />
+          <div className="flex items-center gap-2 text-xs font-semibold text-amber-600 dark:text-amber-300 bg-amber-500/10 border border-amber-500/25 px-3.5 py-2 rounded-xl">
+            <Store className="h-4 w-4 text-amber-500" />
             <span>4 Stand Buka · 07:00 - 15:00 WIB</span>
           </div>
         </div>
@@ -255,9 +253,9 @@ export default function KantinPage() {
             <button
               key={cat.key}
               onClick={() => setSelectedCategory(cat.key)}
-              className={`px-3.5 py-1.5 rounded-xl text-xs font-bold whitespace-nowrap transition-all ${selectedCategory === cat.key
-                ? "bg-amber-600 text-white shadow-sm shadow-amber-300"
-                : "bg-white border border-slate-200 text-slate-600 hover:bg-slate-50"
+              className={`px-3.5 py-2 min-h-[38px] rounded-xl text-xs font-semibold whitespace-nowrap transition-all ${selectedCategory === cat.key
+                ? "bg-amber-500 text-slate-950 font-bold shadow-sm"
+                : "bg-card border border-border text-muted-foreground hover:bg-muted/60 hover:text-foreground"
                 }`}
             >
               {cat.label}
@@ -267,13 +265,13 @@ export default function KantinPage() {
 
         {/* Search */}
         <div className="relative w-full sm:w-64">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
           <input
             type="text"
             placeholder="Cari menu makanan / stand..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full h-9 pl-9 pr-3 rounded-xl border border-slate-200 bg-white text-xs font-medium text-slate-900 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-500"
+            className="w-full h-10 pl-9 pr-3 rounded-xl border border-input bg-card text-xs font-medium text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-amber-500"
           />
         </div>
       </div>
@@ -283,31 +281,32 @@ export default function KantinPage() {
         {filteredMenus.map((menu) => (
           <Card
             key={menu.id}
-            className={`relative overflow-hidden transition-all duration-200 flex flex-col justify-between ${!menu.isAvailable ? "opacity-75 bg-slate-50 border-slate-200" : "hover:border-amber-400 hover:shadow-md"
-              }`}
+            className={`relative overflow-hidden transition-all duration-200 flex flex-col justify-between ${
+              !menu.isAvailable ? "opacity-60 bg-muted/20 border-border" : "hover:border-amber-500/40"
+            }`}
           >
             <div>
               <div className="flex items-start justify-between gap-2 pb-2">
                 <Badge variant={menu.isAvailable ? "default" : "destructive"}>
                   {menu.isAvailable ? "Tersedia" : "Habis Hari Ini"}
                 </Badge>
-                <span className="text-[11px] font-bold text-slate-400">
+                <span className="text-[11px] font-medium text-muted-foreground">
                   {menu.standName}
                 </span>
               </div>
 
-              <h3 className="text-base font-extrabold text-slate-900 mt-1">
+              <h3 className="text-base font-bold text-foreground mt-1">
                 {menu.name}
               </h3>
-              <p className="text-xs text-slate-500 mt-1 leading-relaxed">
+              <p className="text-xs text-muted-foreground mt-1 leading-relaxed">
                 {menu.description}
               </p>
             </div>
 
-            <div className="pt-4 mt-4 border-t border-slate-100 flex items-center justify-between">
+            <div className="pt-4 mt-4 border-t border-border flex items-center justify-between">
               <div>
-                <span className="text-[10px] uppercase font-bold text-slate-400 block">Harga</span>
-                <span className="text-base font-black text-amber-800">
+                <span className="text-[10px] uppercase font-medium text-muted-foreground block">Harga</span>
+                <span className="text-base font-bold text-amber-500 dark:text-amber-300">
                   {formatCurrency(menu.price)}
                 </span>
               </div>
@@ -319,21 +318,35 @@ export default function KantinPage() {
                   onClick={() => handleToggleStock(menu.id)}
                   className={
                     menu.isAvailable
-                      ? "text-rose-600 hover:bg-rose-50 border-rose-200 text-xs font-bold"
-                      : "bg-emerald-600 hover:bg-emerald-700 text-xs font-bold"
+                      ? "text-rose-400 hover:bg-rose-500/10 border-rose-500/30 text-xs font-semibold"
+                      : "bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold"
                   }
                 >
                   {menu.isAvailable ? "Tandai Habis" : "Set Tersedia"}
                 </Button>
               ) : (
+                /* Order Button — High Contrast in Default, Hover, and Pressed States */
                 <Button
                   variant="default"
                   size="sm"
                   disabled={!menu.isAvailable}
                   onClick={() => handleOrder(menu)}
-                  className="bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold text-xs"
+                  className={`text-xs font-bold transition-all ${
+                    justOrderedId === menu.id
+                      ? "bg-emerald-500 text-slate-950"
+                      : "bg-amber-500 hover:bg-amber-400 active:bg-amber-600 text-slate-950 hover:shadow-[0_4px_14px_rgba(245,158,11,0.35)]"
+                  }`}
                 >
-                  {menu.isAvailable ? "+ Pesan Menu" : "Stok Habis"}
+                  {justOrderedId === menu.id ? (
+                    <>
+                      <Check className="h-3.5 w-3.5" />
+                      Ditambahkan!
+                    </>
+                  ) : menu.isAvailable ? (
+                    "+ Pesan Menu"
+                  ) : (
+                    "Stok Habis"
+                  )}
                 </Button>
               )}
             </div>
@@ -360,46 +373,37 @@ export default function KantinPage() {
 
           <div className="grid grid-cols-2 gap-3">
             <Input
-              label="Harga (Rp)"
+              label="Harga Menu (Rp)"
               type="number"
               value={priceInput}
               onChange={(e) => setPriceInput(e.target.value)}
-              placeholder="12000"
+              placeholder="Contoh: 12000"
               required
             />
-            <Input
-              label="Estimasi Stok Harian"
-              type="number"
-              value={stockInput}
-              onChange={(e) => setStockInput(e.target.value)}
-              placeholder="30"
-              required
-            />
+            <div className="space-y-1.5">
+              <label className="block text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                Kategori Menu
+              </label>
+              <select
+                value={categoryInput}
+                onChange={(e) => setCategoryInput(e.target.value as CanteenCategory)}
+                className="w-full h-11 rounded-2xl border border-input bg-card px-3 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-amber-500"
+              >
+                <option value={CanteenCategory.MAKANAN_BERAT}>Makanan Berat</option>
+                <option value={CanteenCategory.SNACK}>Snack & Cemilan</option>
+                <option value={CanteenCategory.MINUMAN}>Minuman Segar</option>
+                <option value={CanteenCategory.DESSERT}>Pastry & Dessert</option>
+              </select>
+            </div>
           </div>
 
           <div className="space-y-1.5">
-            <label className="block text-xs font-semibold uppercase tracking-wider text-slate-600">
-              Kategori Menu
-            </label>
-            <select
-              value={categoryInput}
-              onChange={(e) => setCategoryInput(e.target.value as CanteenCategory)}
-              className="w-full h-11 rounded-2xl border border-slate-200 bg-white px-3 text-sm text-slate-900"
-            >
-              <option value={CanteenCategory.MAKANAN_BERAT}>Makanan Berat</option>
-              <option value={CanteenCategory.SNACK}>Snack & Cemilan</option>
-              <option value={CanteenCategory.MINUMAN}>Minuman Segar</option>
-              <option value={CanteenCategory.DESSERT}>Dessert / Pastry</option>
-            </select>
-          </div>
-
-          <div className="space-y-1.5">
-            <label className="block text-xs font-semibold uppercase tracking-wider text-slate-600">
-              Deskripsi Singkat Komposisi
+            <label className="block text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+              Deskripsi Menu / Topping
             </label>
             <textarea
-              className="w-full rounded-2xl border border-slate-200 bg-white p-3 text-sm text-slate-900 min-h-[75px]"
-              placeholder="Jelaskan lauk, sambal pelengkap, atau keistimewaan rasa..."
+              className="w-full rounded-2xl border border-input bg-card p-3.5 text-sm text-foreground min-h-[85px] focus:outline-none focus:ring-2 focus:ring-amber-500"
+              placeholder="Jelaskan porsi, rasa, dan isi hidangan..."
               value={descInput}
               onChange={(e) => setDescInput(e.target.value)}
               required
@@ -410,8 +414,8 @@ export default function KantinPage() {
             <Button type="button" variant="outline" onClick={() => setIsModalOpen(false)}>
               Batal
             </Button>
-            <Button type="submit" variant="gradient">
-              Simpan & Publikasikan Menu
+            <Button type="submit" variant="default" className="bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold">
+              Simpan Menu Baru
             </Button>
           </div>
         </form>

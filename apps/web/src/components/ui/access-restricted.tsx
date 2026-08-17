@@ -26,34 +26,34 @@ export function AccessRestricted({
 
   return (
     <div className="py-8 max-w-2xl mx-auto">
-      <Card className="border-rose-200/80 bg-gradient-to-b from-rose-50/40 via-white to-white shadow-xl shadow-rose-950/5">
+      <Card className="border-rose-500/25 bg-[#0e1626]/80">
         <CardHeader className="text-center pb-2">
-          <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-rose-600 text-white shadow-lg shadow-rose-200">
+          <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-rose-500/15 border border-rose-500/30 text-rose-400">
             <LockKeyhole className="h-8 w-8" />
           </div>
-          <div className="mt-4 inline-flex items-center gap-1.5 rounded-full bg-rose-100 px-3 py-1 text-xs font-bold text-rose-800">
+          <div className="mt-4 inline-flex items-center gap-1.5 rounded-full bg-rose-500/15 border border-rose-500/30 px-3 py-1 text-xs font-semibold text-rose-300">
             <ShieldAlert className="h-3.5 w-3.5" />
             <span>Akses Terbatas (Role-Based Access Control)</span>
           </div>
-          <CardTitle className="text-xl sm:text-2xl mt-2 text-slate-900">
+          <CardTitle className="text-xl sm:text-2xl mt-2 text-white font-bold">
             Akses Dibatasi: {moduleTitle}
           </CardTitle>
-          <CardDescription className="text-sm text-slate-600 max-w-md mx-auto">
+          <CardDescription className="text-sm text-slate-300 max-w-md mx-auto leading-relaxed">
             {description}
           </CardDescription>
         </CardHeader>
 
         <CardContent className="space-y-6 pt-4">
           {/* Current Role Info */}
-          <div className="rounded-2xl bg-slate-50 border border-slate-200/80 p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div className="rounded-2xl bg-white/[0.03] border border-white/[0.08] p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
             <div>
-              <p className="text-[11px] font-bold uppercase tracking-wider text-slate-400">
+              <p className="text-[11px] font-semibold uppercase tracking-wider text-slate-400">
                 Akun & Peran Anda Saat Ini:
               </p>
-              <p className="text-sm font-bold text-slate-900 mt-0.5">
+              <p className="text-sm font-bold text-white mt-0.5">
                 {user?.name}
               </p>
-              <p className="text-xs text-slate-500 font-medium">
+              <p className="text-xs text-slate-400 font-medium">
                 {DEMO_ACCOUNTS[user?.role || UserRole.SISWA]?.subtitle}
               </p>
             </div>
@@ -64,14 +64,14 @@ export function AccessRestricted({
 
           {/* Permitted Roles List */}
           <div className="space-y-2">
-            <p className="text-xs font-bold uppercase tracking-wider text-slate-600">
+            <p className="text-xs font-semibold uppercase tracking-wider text-slate-300">
               Peran yang Memiliki Izin Mengakses:
             </p>
             <div className="flex flex-wrap gap-1.5">
               {allowedRoles.map((role) => (
                 <span
                   key={role}
-                  className="rounded-lg border border-slate-200 bg-white px-2.5 py-1 text-xs font-semibold text-slate-700 shadow-sm"
+                  className="rounded-lg border border-white/[0.08] bg-white/[0.04] px-2.5 py-1 text-xs font-medium text-slate-200"
                 >
                   {DEMO_ACCOUNTS[role]?.title || role}
                 </span>
@@ -81,14 +81,14 @@ export function AccessRestricted({
 
           {/* Quick Demo Switch Action */}
           {recommendedRole && (
-            <div className="rounded-2xl border border-sky-200 bg-gradient-to-br from-sky-50 to-indigo-50/50 p-4 space-y-3">
-              <div className="flex items-center gap-2 text-xs font-bold text-sky-900">
-                <Sparkles className="h-4 w-4 text-sky-600" />
+            <div className="rounded-2xl border border-sky-500/25 bg-sky-500/10 p-4 space-y-3">
+              <div className="flex items-center gap-2 text-xs font-semibold text-sky-300">
+                <Sparkles className="h-4 w-4 text-sky-400" />
                 <span>Uji Coba Cepat (Evaluasi RBAC):</span>
               </div>
-              <p className="text-xs text-slate-600 leading-relaxed">
+              <p className="text-xs text-slate-300 leading-relaxed">
                 Anda dapat berganti peran secara instan ke{" "}
-                <strong className="text-sky-950">
+                <strong className="text-white">
                   {DEMO_ACCOUNTS[recommendedRole]?.title} (
                   {DEMO_ACCOUNTS[recommendedRole]?.name})
                 </strong>{" "}
@@ -97,7 +97,7 @@ export function AccessRestricted({
               <Button
                 variant="gradient"
                 size="sm"
-                className="w-full sm:w-auto"
+                className="w-full sm:w-auto font-medium"
                 onClick={() => switchRole(recommendedRole)}
               >
                 <UserCheck2 className="h-4 w-4" />
@@ -107,7 +107,7 @@ export function AccessRestricted({
           )}
 
           {/* Navigation Back */}
-          <div className="flex justify-between items-center pt-2 border-t border-slate-100">
+          <div className="flex justify-between items-center pt-2 border-t border-white/[0.08]">
             <Link href="/">
               <Button variant="outline" size="sm">
                 <ArrowLeft className="h-4 w-4" />

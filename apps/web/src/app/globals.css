@@ -10,42 +10,42 @@
     --card-foreground: 222.2 84% 4.9%;
     --popover: 0 0% 100%;
     --popover-foreground: 222.2 84% 4.9%;
-    --primary: 201 96% 40%;
+    --primary: 199 89% 48%;
     --primary-foreground: 210 40% 98%;
     --secondary: 210 40% 96.1%;
     --secondary-foreground: 222.2 47.4% 11.2%;
     --muted: 210 40% 96.1%;
     --muted-foreground: 215.4 16.3% 46.9%;
-    --accent: 204 94% 94%;
-    --accent-foreground: 201 96% 32%;
+    --accent: 199 89% 48%;
+    --accent-foreground: 222.2 47.4% 11.2%;
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
     --border: 214.3 31.8% 91.4%;
     --input: 214.3 31.8% 91.4%;
-    --ring: 201 96% 42%;
+    --ring: 199 89% 48%;
     --radius: 0.875rem;
   }
 
   .dark {
-    --background: 222.2 84% 4.9%;
+    --background: 222 47% 5%;
     --foreground: 210 40% 98%;
-    --card: 222.2 84% 4.9%;
+    --card: 222 47% 7%;
     --card-foreground: 210 40% 98%;
-    --popover: 222.2 84% 4.9%;
+    --popover: 222 47% 6%;
     --popover-foreground: 210 40% 98%;
-    --primary: 201 96% 50%;
-    --primary-foreground: 222.2 47.4% 11.2%;
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 40% 98%;
-    --destructive: 0 62.8% 30.6%;
+    --primary: 199 89% 48%;
+    --primary-foreground: 222 47% 5%;
+    --secondary: 222 30% 12%;
+    --secondary-foreground: 210 40% 90%;
+    --muted: 222 30% 10%;
+    --muted-foreground: 215 16% 65%;
+    --accent: 199 89% 48%;
+    --accent-foreground: 222 47% 5%;
+    --destructive: 0 63% 50%;
     --destructive-foreground: 210 40% 98%;
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 201 96% 50%;
+    --border: 222 30% 14%;
+    --input: 222 30% 12%;
+    --ring: 199 89% 48%;
   }
 }
 
@@ -54,45 +54,94 @@
     @apply border-border;
   }
 
-  body {
-    @apply bg-slate-50/70 text-slate-900 antialiased;
-    font-feature-settings: "rlig" 1, "calt" 1;
-    background-image:
-      radial-gradient(at 100% 0%, rgba(2, 132, 199, 0.04) 0px, transparent 50%),
-      radial-gradient(at 0% 100%, rgba(15, 23, 42, 0.03) 0px, transparent 50%);
-    background-attachment: fixed;
+  html {
+    transition: background-color 0.2s ease, color 0.2s ease;
+  }
 
-    h1,
-    h2,
-    h3,
-    h4,
-    h5,
-    h6,
-    b,
-    strong {
-      font-weight: 500;
-    }
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-feature-settings: "rlig" 1, "calt" 1;
+    transition: background-color 0.2s ease, color 0.2s ease;
+
+    /* Subtle ambient mesh background */
+    background-attachment: fixed;
+  }
+
+  .dark body {
+    background-image:
+      radial-gradient(ellipse 70% 40% at 20% -5%, rgba(14, 165, 233, 0.08) 0px, transparent 60%),
+      radial-gradient(ellipse 50% 30% at 85% 105%, rgba(99, 102, 241, 0.06) 0px, transparent 50%),
+      radial-gradient(ellipse 60% 50% at 50% 50%, rgba(2, 6, 23, 0.4) 0px, transparent 100%);
+  }
+
+  body:not(.dark body) {
+    background-image:
+      radial-gradient(ellipse 70% 40% at 20% -5%, rgba(14, 165, 233, 0.05) 0px, transparent 60%),
+      radial-gradient(ellipse 50% 30% at 85% 105%, rgba(99, 102, 241, 0.04) 0px, transparent 50%);
   }
 }
 
-/* Custom Seabird Glassmorphism & Razor styling */
+/* ============================================================
+   GLASSMORPHISM — Theme Adaptive Panels
+   ============================================================ */
+
+/* Standard glass panel */
 .glass-panel {
-  background: rgba(255, 255, 255, 0.85);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(226, 232, 240, 0.8);
+  background: rgba(255, 255, 255, 0.75);
+  backdrop-filter: blur(16px) saturate(180%);
+  -webkit-backdrop-filter: blur(16px) saturate(180%);
+  border: 1px solid var(--border);
 }
 
-.razor-card {
+.dark .glass-panel {
+  background: rgba(11, 19, 34, 0.65);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+/* Heavy blur variant */
+.glass-heavy {
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(24px) saturate(160%);
+  -webkit-backdrop-filter: blur(24px) saturate(160%);
+  border: 1px solid var(--border);
+}
+
+.dark .glass-heavy {
+  background: rgba(8, 13, 25, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+/* Elevated glass card with restrained hover elevation */
+.glass-card {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--border);
   transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.razor-card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.08), 0 8px 10px -6px rgba(15, 23, 42, 0.04);
+.dark .glass-card {
+  background: rgba(11, 19, 34, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.08);
 }
 
-/* Custom sleek scrollbar */
+.glass-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px -3px rgba(0, 0, 0, 0.1);
+}
+
+.dark .glass-card:hover {
+  background: rgba(14, 25, 46, 0.8);
+  border-color: rgba(14, 165, 233, 0.3);
+  box-shadow:
+    0 12px 28px -4px rgba(0, 0, 0, 0.5),
+    0 0 20px rgba(14, 165, 233, 0.08);
+}
+
+/* ============================================================
+   SCROLLBAR — Modern Clean
+   ============================================================ */
+
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
@@ -103,10 +152,14 @@
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(148, 163, 184, 0.35);
+  background: rgba(148, 163, 184, 0.3);
   border-radius: 9999px;
 }
 
+.dark ::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.12);
+}
+
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(100, 116, 139, 0.6);
+  background: rgba(14, 165, 233, 0.4);
 }
